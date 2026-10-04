@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jahoss Enterprise Limited - Passport Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Saira:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F0F5FB;--card:#fff;--ink:#0b1b2e;--mut:#5b6b7d;--line:#d3deea;--acc:#E02454;--hd:#dce8f5;--bad:#c0392b;--ok:#1f7a5c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1626;--card:#0f2036;--ink:#e8f0fa;--mut:#9db3cc;--line:#253c58;--hd:#16304d}}
+:root[data-theme="dark"]{--bg:#0a1626;--card:#0f2036;--ink:#e8f0fa;--mut:#9db3cc;--line:#253c58;--hd:#16304d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hind Siliguri",system-ui,sans-serif;font-size:15px}
+header{background:#00294a;color:#fff;padding:12px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:3px solid var(--acc)}header img.lg{height:62px;width:auto;background:#fff;border-radius:12px;padding:4px 8px;flex:0 0 auto}
+header h1{margin:0;flex:1 1 200px;min-width:0}header h1 .cn{display:block;font-family:Saira,"Hind Siliguri",sans-serif;font-style:italic;font-weight:700;letter-spacing:.04em;font-size:clamp(18px,5vw,28px);line-height:1.1;color:#fff}header h1 small{display:block;margin-top:4px;font-size:12px;font-weight:500;color:#cfe0f2}
+#me{background:#003A66;border-radius:99px;padding:4px 12px;font-size:14px}
+select,input,button{font:inherit}
+select,input{padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);min-width:0}
+nav{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--line)}
+nav button{border:1px solid var(--line);background:transparent;color:var(--ink);padding:7px 14px;border-radius:99px;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+main{max-width:1250px;margin:0 auto;padding:16px}
+.note{background:#fff7dd;color:#5b4500;border:1px solid #f0d98a;padding:8px 12px;border-radius:8px;font-size:14px;margin-bottom:12px}
+#msg{min-height:22px;font-weight:600;margin-bottom:6px}
+.sh{text-align:center;margin:4px 0 12px;font-weight:700}.sh small{display:block;font-weight:500;color:var(--mut)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat b{display:block;font-size:22px}.stat small{color:var(--mut)}
+.bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line)}
+table.xl{border-collapse:collapse;width:100%}
+.xl th,.xl td{border:1px solid var(--line);padding:6px 9px;text-align:left;white-space:nowrap;font-size:14px}
+.xl th{background:var(--hd);font-weight:700}
+.xl td input,.xl td select{padding:4px 6px;font-size:13px;width:100%;min-width:110px}
+.xl tr.tot td{background:var(--hd);font-weight:700}
+.xl tr[data-act]{cursor:pointer}
+.pend{color:var(--bad);font-weight:700}.over{color:var(--ok);font-weight:700}
+form{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-bottom:12px}
+form label{font-size:13px;color:var(--mut);display:grid;gap:3px}
+form button,.btn{background:var(--acc);border:0;color:#fff;font-weight:700;padding:9px 14px;border-radius:8px;cursor:pointer}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn.red{background:#e8a39b}.btn.sm{padding:4px 10px;font-size:13px}
+.steps{display:flex;gap:4px;margin:12px 0;flex-wrap:wrap}
+.steps i{font-style:normal;padding:6px 12px;border-radius:99px;background:var(--line);color:var(--mut);font-size:14px}
+.steps i.d{background:var(--ok);color:#fff}
+#ov{position:fixed;inset:0;background:rgba(10,14,30,.7);display:flex;align-items:center;justify-content:center;padding:16px;z-index:9}
+#ov .box{background:var(--card);border-radius:14px;padding:18px;max-width:460px;width:100%}
+#ov .pick{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.hide{display:none!important}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+footer.ft{margin-top:24px;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));text-align:center;color:#c8d8ea;font-weight:500;font-size:13px;line-height:1.7;background:#00294a;border-top:3px solid var(--acc)}
+footer.ft a{color:#ff7a9c;text-decoration:none}
+@media print{footer.ft{display:none}header{background:#fff;color:#000}header h1 .cn{color:#000}}
+
+.xl tr.ret td{background:#fbd9d5;color:#8a1c12;font-weight:600}
+.xl tr.ret td input,.xl tr.ret td select{background:#fff0ee;color:#8a1c12;border-color:#e5a39b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .xl tr.ret td{background:#4a1f1f;color:#ffb4aa}:root:not([data-theme="light"]) .xl tr.ret td input,:root:not([data-theme="light"]) .xl tr.ret td select{background:#5a2626;color:#ffb4aa;border-color:#8a3a33}}
+:root[data-theme="dark"] .xl tr.ret td{background:#4a1f1f;color:#ffb4aa}
+.hero{position:relative;height:230px;border-radius:18px;overflow:hidden;background:linear-gradient(120deg,#00294a 0%,#003A66 55%,#0a5a9c 100%)}
+.hero .hpn{position:absolute;left:34%;top:16%;width:34%;height:64%;background:rgba(224,36,84,.92);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6px;border-radius:4px}
+.hpn b{font:italic 700 clamp(18px,6vw,26px)/1.1 Saira,sans-serif;letter-spacing:.06em;margin:4px 0}.hpn small{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;line-height:1.3}
+.hero .hw{position:absolute;left:1%;bottom:0;height:92%;width:auto}
+.hero .hpp{position:absolute;right:3%;top:50%;height:66%;width:auto;transform:translateY(-50%) rotate(8deg);filter:drop-shadow(0 8px 14px rgba(0,0,0,.5))}
+nav{position:sticky;top:0;z-index:5;gap:2px;padding:0 10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+nav button{border:0;border-radius:0;padding:14px 14px;font-weight:600;border-bottom:3px solid transparent;background:transparent}
+nav button:hover{color:#0a5a9c}nav button.on{background:transparent;color:var(--ink);border-bottom-color:var(--acc)}
+a.btn{text-decoration:none;display:inline-block}
+.bn{position:relative;height:96px;overflow:hidden;background:linear-gradient(110deg,#00294a,#003A66 60%,#0a5a9c)}
+.bn .bt{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;white-space:nowrap}
+.bt b{font:italic 700 clamp(15px,4vw,22px) Saira,sans-serif;letter-spacing:.1em}.bt small{display:block;color:#ff7a9c;font-size:11px;letter-spacing:.14em}
+.bn .hw{position:absolute;left:3%;bottom:0;height:90%}.bn .hpp{position:absolute;right:4%;top:50%;height:70%;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
+.hw{animation:fl 3.2s ease-in-out infinite}.hpp{animation:fp 3.6s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes fp{0%,100%{transform:translateY(-50%) rotate(8deg)}50%{transform:translateY(-62%) rotate(3deg)}}
+@media print{.bn{display:none}}
+.cfb{border:0;background:transparent;color:var(--mut);cursor:pointer;padding:0 5px;font-size:13px;border-radius:4px}.cfb.on{background:var(--acc);color:#fff}
+.cfl{max-height:46vh;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:6px;margin:6px 0}.cfl label{display:flex;gap:8px;align-items:center;padding:5px 2px;font-size:14px}.cfl small{color:var(--mut);margin-left:auto}
+</style>
+</head>
+<body>
+<header>
+  <img class="lg" id="hl" alt="Jahoss">
+  <h1><span class="cn">JAHOSS ENTERPRISE LIMITED</span><small>Passport Tracker · Govt. Approved Recruiting Licence No. RL-2177</small></h1>
+  <span id="me">...</span>
+  <a class="btn sm" href="index.html">ওয়েবসাইট</a>
+  <button class="btn sm hide" id="chg">নাম বদলান</button>
+</header>
+<div class="bn" id="bn"><div class="bt"><b>PASSPORT TRACKER</b><small>JAHOSS ENTERPRISE LIMITED</small></div></div>
+<nav id="nav"></nav>
+<main>
+  <div class="note">এই পেজে আসল তথ্য আছে। শুধু অফিসের লোককে দিন, গ্রাহককে এই লিংক দেবেন না। সব পরিবর্তন নিজে থেকে সেভ হয়।</div>
+  <div id="msg" role="status"></div>
+  <div id="v">লোড হচ্ছে...</div>
+</main>
+<footer class="ft">Suite : 22/7/8 (21<sup>st</sup> Floor), West China Town, 67/1, Naya Paltan, Dhaka-1000, Bangladesh<br>Cell: +88 01760 528 057, 01613 233 932, Tel: 02 222227331, 02 222227332, Email : <a href="mailto:Jahossent.ltd@gmail.com">Jahossent.ltd@gmail.com</a></footer>
+<div id="ov" class="hide"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// ===== সেটিংস: এখানে শুধু নিজের Firebase তথ্য বসান =====
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyAIpq_msEpBwpiHh7OcFuLkAllDIleRxIM",
+  authDomain:"jahoss-tracker.firebaseapp.com",
+  projectId:"jahoss-tracker",
+  appId:"1:1022603721449:web:3b6008b336fb045a344e78"
+};
+// অ্যাডমিন (মালিক) যাদের ইমেইল (নিজের ইমেইল দিন), ছোট হাতের অক্ষরে লিখুন
+const ADMIN_EMAILS=["azadsiroffice@gmail.com"];
+// ===== সেটিংস শেষ =====
+const LOGO="data:image/jpeg;base64,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";document.getElementById("hl").src=LOGO;
+const WORKER_SVG=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200"><path d="M24 200v-78q0-26 36-26t36 26v78z" fill="#F5C518"/><path d="M46 98l14 26 14-26z" fill="#f4f4ee"/><rect x="24" y="152" width="72" height="7" fill="#fff" opacity=".85"/><rect x="50" y="86" width="20" height="14" rx="6" fill="#b9794a"/><circle cx="60" cy="68" r="21" fill="#b9794a"/><circle cx="52" cy="70" r="2.2" fill="#2a1a0e"/><circle cx="68" cy="70" r="2.2" fill="#2a1a0e"/><path d="M52 79q8 7 16 0" stroke="#2a1a0e" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M36 58a24 22 0 0 1 48 0z" fill="#F5C518"/><rect x="31" y="56" width="58" height="7" rx="3.5" fill="#C99A00"/><rect x="56" y="30" width="8" height="26" rx="3" fill="#C99A00"/><rect x="88" y="152" width="28" height="22" rx="4" fill="#E02454"/><path d="M95 152v-7h14v7" stroke="#00294a" stroke-width="3" fill="none"/></svg>`;
+const PASSPORT_SVG=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 170"><rect x="2" y="2" width="116" height="166" rx="8" fill="#0b6b4b"/><rect x="2" y="2" width="12" height="166" rx="6" fill="#084d36"/><g fill="none" stroke="#e6c75a" stroke-width="2"><circle cx="66" cy="70" r="26"/><path d="M66 50c8 8 8 24 0 32c-8-8-8-24 0-32zM50 62c12 0 22 8 24 20c-12 0-22-8-24-20zM82 62c-12 0-22 8-24 20c12 0 22-8 24-20z"/></g><g fill="#e6c75a" font-family="sans-serif" text-anchor="middle"><text x="66" y="30" font-size="9" letter-spacing="2">BANGLADESH</text><text x="66" y="124" font-size="13" font-weight="700" letter-spacing="2">PASSPORT</text></g><rect x="56" y="140" width="20" height="14" rx="3" fill="none" stroke="#e6c75a" stroke-width="2"/><circle cx="66" cy="147" r="3" fill="#e6c75a"/></svg>`;
+function artImg(n,svg,cls){const i=new Image(),ex=[n+".png",n+".jpg",n+".jpeg"];let k=0;i.className=cls;i.alt="";
+  i.onerror=()=>{if(k<ex.length)i.src=ex[k++];else{i.onerror=null;i.src="data:image/svg+xml;utf8,"+encodeURIComponent(svg)}};i.onerror();return i}
+{const b=document.getElementById("bn");b.prepend(artImg("worker",WORKER_SVG,"hw"));b.append(artImg("passport",PASSPORT_SVG,"hpp"))}
+const fbReady=!FIREBASE_CONFIG.apiKey.startsWith("YOUR_");
+let fbDb=null,fbUser=null;
+window.claude={use:async n=>{
+  if(n==="db"){if(!fbDb)return null;return{collection:c=>{const col=fbDb.collection(c);return{
+    doc:id=>{const r=col.doc(id);return{get:()=>r.get(),set:d=>r.set(d),update:d=>r.set(d,{merge:true}),delete:()=>r.delete()}},
+    onSnapshot:(a,b)=>col.onSnapshot(a,b)}}}}
+  if(n==="user"){if(!fbUser)return null;const adm=ADMIN_EMAILS.includes((fbUser.email||"").toLowerCase());
+    return{isOwner:async()=>adm,canEdit:async()=>adm,can:async()=>true,id:async()=>fbUser.uid}}
+  if(n==="downloads")return{save:async({filename,data})=>{const b=new Blob([data],{type:"application/octet-stream"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=filename;document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}};
+  return null}};
+function fbBoot(start){
+  const box=document.createElement("div");box.id="login";
+  box.style.cssText="position:fixed;inset:0;background:linear-gradient(160deg,#00294a 0%,#003A66 60%,#0a5a9c 100%);display:flex;padding:16px;z-index:20;overflow:auto";
+  box.innerHTML='<div style="max-width:460px;width:100%;margin:auto;display:grid;gap:16px"><div id="ha" class="hero"><div class="hpn"><small>Passport Tracker</small><b>RL-2177</b><small>Govt. approved<br>recruiting licence</small></div></div><form id="lf" style="display:grid;gap:10px;grid-template-columns:1fr"><div style=\"display:flex;align-items:center;gap:12px;background:#00294a;border-bottom:3px solid #E02454;border-radius:14px;padding:12px\"><img src=\"'+LOGO+'\" alt=\"\" style=\"height:56px;width:auto;background:#fff;border-radius:10px;padding:3px 6px\"><div style=\"color:#fff;font:italic 700 20px/1.1 Saira,Hind Siliguri,sans-serif;letter-spacing:.04em\">JAHOSS ENTERPRISE LIMITED</div></div><h2 style=\"margin:0;text-align:center\">Passport Tracker<br><small style=\"font-size:13px;color:var(--mut);font-weight:500\">Govt. Approved Recruiting Licence No. RL-2177</small></h2><label>ইউজারনেম (অ্যাডমিন হলে ইমেইল)<input id="le" type="text" autocapitalize="none" autocomplete="username" required></label><label>পাসওয়ার্ড<input id="lp" type="password" autocomplete="current-password" required></label><button type="submit">লগইন</button><div id="lm" style="color:var(--bad);min-height:20px;font-weight:600"></div></form><form id="sf" style="display:grid;gap:8px;grid-template-columns:1fr;border-top:1px solid var(--line,#ccc);padding-top:14px"><b>পাসপোর্টের অবস্থা দেখুন (কাস্টমার/এজেন্ট)</b><input id="sp" placeholder="পাসপোর্ট নম্বর লিখুন" required><button type="submit">দেখুন</button><div id="sm" style="min-height:20px;font-weight:600"></div></form></div>';
+  document.body.appendChild(box);{const ha=box.querySelector("#ha");ha.prepend(artImg("worker",WORKER_SVG,"hw"));ha.append(artImg("passport",PASSPORT_SVG,"hpp"))}
+  const lm=box.querySelector("#lm");
+  if(!fbReady){lm.textContent="Firebase সেটআপ করা হয়নি। ফাইলের শুরুতে FIREBASE_CONFIG বসান।";return}
+  firebase.initializeApp(FIREBASE_CONFIG);fbDb=firebase.firestore();
+  box.querySelector("#lf").onsubmit=async e=>{e.preventDefault();lm.textContent="";
+    try{await firebase.auth().signInWithEmailAndPassword((v=>v.includes("@")?v:v+"@jahoss.local")(box.querySelector("#le").value.trim().toLowerCase()),box.querySelector("#lp").value)}
+    catch(er){lm.textContent="ইউজারনেম বা পাসওয়ার্ড ঠিক নেই।"}};
+  const BN={"WAITING":"অপেক্ষায় আছে","NOT SENDING":"পাঠানো হচ্ছে না","SENDING & PROCESSING":"পাঠানো ও প্রসেসিং চলছে","WORK PERMIT RECEIVED":"ওয়ার্ক পারমিট এসেছে","PPZ RECEIVED":"PPZ এসেছে","APPROVAL RECEIVED":"অ্যাপ্রুভাল এসেছে","VISA RECEIVED":"ভিসা এসেছে","FLIGHT DONE":"ফ্লাইট হয়ে গেছে","CANCEL & RETURNS":"ক্যান্সেল/ফেরত"};
+  box.querySelector("#sf").onsubmit=async e=>{e.preventDefault();const sm=box.querySelector("#sm");sm.textContent="খুঁজছি...";
+    const k=box.querySelector("#sp").value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+    try{const d=await fbDb.collection("status").doc(k).get();
+      if(!d.exists){sm.textContent="এই নম্বরে কোনো তথ্য নেই। নম্বর আবার দেখুন।";return}
+      const x=d.data(),u=String(x.u||"").split("-").reverse().join("/");
+      sm.textContent=(BN[x.s]||x.s)+" ("+x.s+") | মেডিক্যাল: "+x.m+" | পুলিশ ক্লিয়ারেন্স: "+x.c+(u?" | আপডেট: "+u:"")}
+    catch(er){sm.textContent="এখন দেখা যাচ্ছে না। একটু পরে চেষ্টা করুন।"}};
+  let started=false;
+  firebase.auth().onAuthStateChanged(u=>{fbUser=u;
+    if(!u){box.classList.remove("hide");box.style.display="flex";return}
+    box.style.display="none";
+    if(!document.getElementById("lo")){const b=document.createElement("button");b.id="lo";b.className="btn sm";b.textContent="লগআউট";
+      b.onclick=()=>{logA("LOGOUT","");setTimeout(()=>firebase.auth().signOut().then(()=>location.reload()),500)};document.querySelector("header").appendChild(b)}
+    if(!started){started=true;start()}})}
+</script>
+<script>
+//<PURE
+const nk=c=>String(c??"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+const up=s=>String(s??"").replace(/\s+/g," ").trim().toUpperCase();
+const MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+const fmtD=v=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(v||"");return m?`${m[3]}-${MON[+m[2]-1]}-${m[1]}`:(v||"")};
+const slashD=v=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(v||"");return m?`${m[3]}/${m[2]}/${m[1]}`:(v||"")};
+function parseD(t){t=String(t||"").trim().toUpperCase();if(!t)return"";
+  let m=/^(\d{4})-(\d\d)-(\d\d)(?:[T ].*)?$/.exec(t),d,mo,y;
+  if(m){y=+m[1];mo=+m[2];d=+m[3]}else{
+    m=/^(\d{1,2})[\/\-. ](\d{1,2}|[A-Z]{3})[\/\-. ](\d{2}|\d{4})$/.exec(t);if(!m)return null;
+    d=+m[1];mo=/^\d+$/.test(m[2])?+m[2]:MON.indexOf(m[2])+1;y=+m[3];if(y<100)y+=2000}
+  if(mo<1||mo>12||d<1||d>31)return null;if(new Date(Date.UTC(y,mo-1,d)).getUTCMonth()!==mo-1)return null;
+  return y+"-"+String(mo).padStart(2,"0")+"-"+String(d).padStart(2,"0")}
+const serialISO=v=>new Date(Math.round((v-25569)*864e5)).toISOString().slice(0,10);
+function dateVal(v){if(v==null||v==="")return"";if(v instanceof Date)return v.toISOString().slice(0,10);
+  if(typeof v==="number")return v>20000&&v<80000?serialISO(v):String(v);
+  const t=String(v).replace(/\s+/g," ").trim();return parseD(t)||t}
+const ISO=/^\d{4}-\d\d-\d\d$/;
+const ADMINS=["THANOS","LOKI"];
+const HEROES=["IRON MAN","CAPTAIN AMERICA","THOR","HULK","BLACK WIDOW","HAWKEYE","SPIDER-MAN","BLACK PANTHER","DOCTOR STRANGE","ANT-MAN","CAPTAIN MARVEL","SCARLET WITCH","FALCON","WINTER SOLDIER","STAR-LORD"];
+const WORKMAP={SHIHAB:"IRON MAN",SONIA:"BLACK WIDOW",EMRAN:"CAPTAIN AMERICA"};
+const ALIAS={ASIKURSYLHET:"ASIQURSYLHET",BASHERVAIAZAD:"ABULBASARSYHLET",FLAMENCO:"FLAMINCO",BENGALGLUF:"BENGALGULFALAM",BENGALGULF:"BENGALGULFALAM",BENGALGALF:"BENGALGULFALAM",MONIRAZADSUMAIYAINT:"MONIRAZADSUMAIYAINTERNATIONAL",GAZIAIRINTERNATIONAL:"GAZIAIRINT",MOLLAHENTERPRIZE:"MOLLAHENTERPRIZEJONY","711ROPOM":"711RUPOM",SADEKULROMANIA:"SADIKULROMANIA",JSEXCLUSION:"JSEXCURSIONS",KASHEMNARSHINGDI:"KASEMNARSINGDI",KAWSER:"KAWSEREASTERN",RUBELASIS:"RUBELASAS"};
+const CANCEL_RE=/CANCEL|RETURN|RETUN/i;
+function normProc(p){p=up(p);return /^(CANCEL(LED)?( AND| &)? ?RETURNS?|CANCEL(LED)?|RETURNS?|RETUN)$/.test(p)?"CANCEL & RETURNS":p}
+const EH={DATE:"date",PASSPORTNAME:"name",PNUMBER:"pn",PEXPIRY:"exp",COUNTRY:"country",AGENT:"agent",AGENTNAME:"agent",STATUS:"status",REC:"rec",MED:"med",MEDYESNO:"med",PC:"pc",POLICECLEARANCEDATE:"pc",PROCESS:"process",RDATE:"rdate",WORK:"work"};
+const RH={RETURNSDATE:"rdate",PASSPORTNAME:"name",PNUMBER:"pn",PEXPIRY:"exp",COUNTRY:"country",AGENT:"agent",AGENTNAME:"agent",STATUS:"status",SHOW:"rec",MEDICAL:"med",MSTATUS:"pc",PROCESS:"process"};
+const DATEK=["date","exp","med","pc","rdate"];
+function parseTable(aoa,map){
+  const h=aoa.findIndex(r=>r&&["PASSPORTNAME","PNUMBER"].every(m=>r.some(c=>nk(c)===m)));if(h<0)return null;
+  const idx={};aoa[h].forEach((c,i)=>{const k=map[nk(c)];if(k&&!(k in idx))idx[k]=i});
+  const rows=[];let skipped=0;
+  for(let i=h+1;i<aoa.length;i++){const r=aoa[i];if(!r||!r.some((c,j)=>j>0&&c!=null&&String(c).trim()!==""))continue;
+    const o={};for(const k in idx){const v=r[idx[k]];o[k]=DATEK.includes(k)?dateVal(v):String(v??"").replace(/\s+/g," ").trim()}
+    if(!o.name||!o.pn){skipped++;continue}
+    o.name=up(o.name);o.pn=up(o.pn);o.country=up(o.country);o.agent=up(o.agent);o.status=up(o.status)==="NEW/OLD"?"OLD/NEW":up(o.status);
+    o.process=normProc(o.process);if(o.work!==undefined){o.work=up(o.work);o.work=WORKMAP[o.work]||o.work}
+    rows.push(o)}
+  return{rows,skipped}}
+function cleanAgent(t){return up(String(t||"").replace(/DE?I?POSIT\s*LIST/ig,"").replace(/E[MN]?ERGENCY|EMARGENCY|[()]/gi,"").replace(/^\s*\d{1,2}\s*[.\-)]\s+|^\s*\d{1,2}\s+(?=\D)/,"").replace(/^[\s\-]+|[\s\-]+$/g,""))}
+function parseDepSheet(aoa,sn,fn){
+  const h=aoa.findIndex(r=>r&&r.some(c=>nk(c)==="SL")&&r.some(c=>nk(c)==="TKDEPOSIT"));if(h<0)return null;
+  const starts=[];aoa[h].forEach((c,i)=>{if(nk(c)==="SL")starts.push(i)});
+  let title="";for(let i=0;i<h;i++){const c=(aoa[i]||[]).find(c=>/DE?I?POSIT\s*LIST/i.test(String(c||"")));if(c){title=String(c);break}}
+  const em=/E[MN]?ERGENCY|EMARGENCY/i.test(sn+" "+title);
+  const sm=/^\s*(\d{1,3})(?=[_\s.\-])/.exec(String(fn||""))||/^\s*(\d{1,3})\s/.exec(sn)||/^\s*(\d{1,2})\s*[.\-)]\s+/.exec(title);
+  const serial=sm?+sm[1]:0;
+  let agent=cleanAgent(title);
+  if(!agent){const cnt={};for(let i=h+1;i<aoa.length;i++){const r=aoa[i]||[];const a=up(r[starts[0]+2]);if(a)cnt[a]=(cnt[a]||0)+1}
+    agent=Object.keys(cnt).sort((x,y)=>cnt[y]-cnt[x])[0]||cleanAgent(sn)}
+  const deps=[];let badDates=0;
+  for(let i=h+1;i<aoa.length;i++){const r=aoa[i]||[];starts.forEach((s,bi)=>{const sl=r[s],amt=r[s+4];
+    if(sl==null||/BALANCE/i.test(String(sl))||typeof amt!=="number")return;
+    let d=dateVal(r[s+1]);if(!ISO.test(d)){if(d)badDates++;d=""}
+    deps.push({date:d,part:up(r[s+3]),amt,acct:(em||bi>0)?"EMARGENCY":"MAIN"})})}
+  return{agent,serial,deps,badDates}}
+//PURE>
+const AGENCY="JAHOSS ENTERPRISE LIMITED";
+const $=id=>document.getElementById(id),V=$("v");
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fm=n=>Number(n).toLocaleString("en-IN");
+const today=()=>new Date().toISOString().slice(0,10);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const PROC=["","WAITING","NOT SENDING","SENDING & PROCESSING","WORK PERMIT RECEIVED","PPZ RECEIVED","APPROVAL RECEIVED","VISA RECEIVED","FLIGHT DONE","CANCEL & RETURNS"];
+const STATUSES=["NEW","OLD","OLD/NEW"],STAGES=["Received","Medical","PC","Visa","Flight"],PER=100;
+const COLS=["SL","DATE","PASSPORT NAME","P. NUMBER","P. EXPIRY","COUNTRY","AGENT","STATUS","REC.","MED (YES/NO)","POLICE CLEARANCE DATE","PROCESS","R. DATE","WORK"];
+const RCOLS=["SI. No","RETURNS DATE","PASSPORT NAME","P. NUMBER","P. EXPIRY","COUNTRY","AGENT","STATUS","SHOW","MEDICAL","M. STATUS","PROCESS"];
+const DCOLS=["SL","DATE","Agent Name","Particulars","Tk Deposit"];
+const SCOLS=["SL","AGENT","MAIN DEPOSIT (Tk)","EMARGENCY (Tk)","NOW BALANCE (Tk)"];
+const BCOLS=["SL","AGENT","PASSPORTS (excl. returns)","TOTAL DUE (Tk)","TOTAL DEPOSIT (Tk)","PENDING (Tk)","EXTRA (Tk)"];
+const KEYS=["","date","name","pn","exp","country","agent","status","rec","med","pc","process","rdate","work"];
+// ---------- state
+let db=null,U=null,canW=true,isAdm=false,myId=null,myName="",pending=false;const got=new Set();
+const S={entries:new Map(),deposits:new Map(),returns:new Map(),agents:[],staff:{},settings:{},dues:{},alias:{},ign:{}};
+let ppl=[],deps=[],rets=[],agents=[],SER={},rpn=new Set(),staffNames=[];
+let tab="dash",q="",pg=0,rq="",rpg=0,depAgent="",depInit=true,IMP=null,dupOK="";
+const RB=()=>+S.settings.base||100000,RS=()=>+S.settings.send||200000;
+const isRet=p=>CANCEL_RE.test(p.process||"")||rpn.has(nk(p.pn));
+const isSend=p=>/^SERBIA/.test(p.country||"")&&/SENDING|APPROVE/i.test(p.process||"");
+const fly=p=>/FLIGHT DONE|1ST FLIGHT/i.test(p.process||"");
+const medYes=p=>!!p.med&&String(p.med).toUpperCase()!=="NO";
+const stIdx=p=>fly(p)?4:/VISA/i.test(p.process||"")?3:p.pc?2:medYes(p)?1:0;
+function flat(m){const out=[];m.forEach((rows,cid)=>{for(const id in rows){const r=rows[id];if(r&&!r.del)out.push({...r,_id:id,_c:cid})}});out.sort((a,b)=>(a.ord||0)-(b.ord||0));return out}
+function derive(){
+  ppl=flat(S.entries);deps=flat(S.deposits);rets=flat(S.returns);
+  rpn=new Set(rets.map(r=>nk(r.pn)));SER={};
+  const set=new Set(S.agents.map(a=>a.n));S.agents.forEach(a=>{if(a.s)SER[a.n]=a.s});
+  ppl.forEach(p=>p.agent&&set.add(p.agent));deps.forEach(d=>d.a&&set.add(d.a));rets.forEach(r=>r.agent&&set.add(r.agent));
+  agents=[...set].sort();
+  staffNames=[...new Set([...ADMINS,...HEROES,...ppl.map(p=>p.work).filter(Boolean)])];
+}
+const pad=n=>String(n).padStart(2,"0"),lab=a=>(SER[a]?pad(SER[a])+". ":"")+a+" DEPOSIT LIST";
+const nextSer=()=>Math.max(0,...Object.values(SER))+1;
+const depAgents=()=>{const h=new Set(deps.map(d=>d.a));return agents.filter(a=>h.has(a)).sort((x,y)=>(SER[x]||999)-(SER[y]||999)||x.localeCompare(y))};
+function resolveAgent(raw){const k0=nk(raw),k=ALIAS[k0]||S.alias[k0]||k0;return agents.find(a=>nk(a)===k)||up(raw)}
+// ---------- writes
+const queue=new Map();
+function wr(path,fn){const p=(queue.get(path)||Promise.resolve()).catch(()=>{}).then(fn);queue.set(path,p);return p}
+function say(t){const m=$("msg");m.textContent=t;clearTimeout(say.t);say.t=setTimeout(()=>{m.textContent=""},7000)}
+function errMsg(e){return e&&e.code==="quota_exceeded"?"ডেটাবেসের জায়গা ভরে গেছে।":e&&e.code==="resource_exhausted"?"একসাথে অনেক কাজ হচ্ছে, একটু পরে আবার চেষ্টা করুন।":e&&e.code==="invalid_argument"?"আপনার লেখার অনুমতি নেই বা তথ্য ঠিক নেই।":"সেভ করা যায়নি। আবার চেষ্টা করুন।"}
+async function put(col,cid,rows){
+  const ref=db.collection(col).doc(cid);
+  return wr(col+"/"+cid,async()=>{
+    for(let t=0;t<4;t++){try{
+      if(S[col].has(cid)){try{await ref.update({rows});return}catch(e){if(e.code!=="invalid_argument")throw e}}
+      await ref.set({rows});return}
+    catch(e){if(e.code==="unavailable"||e.code==="resource_exhausted"){await sleep(700*(t+1));continue}throw e}}
+    throw {code:"unavailable"}})}
+const myChunk=()=>"n"+String(myId||"x").replace(/[^A-Za-z0-9]/g,"").slice(0,10)+"_"+today().slice(0,7).replace("-","");
+const rid=()=>"r"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+async function addRow(col,obj){const id=rid();try{await put(col,myChunk(),{[id]:{...obj,ord:Date.now()}});return true}catch(e){say(errMsg(e));return false}}
+async function patch(col,row,fields){try{await put(col,row._c,{[row._id]:fields});return true}catch(e){say(errMsg(e));return false}}
+async function setMeta(id,data){return wr("meta/"+id,async()=>{const ref=db.collection("meta").doc(id);try{await ref.update(data)}catch(e){await ref.set(data)}})}
+async function saveAgents(list){try{await setMeta("agents",{list});return true}catch(e){say(errMsg(e));return false}}
+// ---------- rendering helpers
+const sheetTitle=t=>`<div class="sh">${AGENCY}<small>Suite 22/7/8, West China Town, 67/1 Naya Paltan, Dhaka-1000 | 01760 528 057</small><small>${esc(t)}</small></div>`;
+const table=(cols,rows,extra="")=>`<div class="tw"><table class="xl"><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr>${rows}${extra}</table></div>`;
+const opts=(o,v)=>o.map(x=>`<option${x===v?" selected":""}>${esc(x)}</option>`).join("");
+const rowOf=(p,i)=>[i+1,fmtD(p.date),p.name,p.pn,fmtD(p.exp),p.country,p.agent,p.status,p.rec,fmtD(p.med),fmtD(p.pc),p.process,fmtD(p.rdate),p.work];
+const retRow=(r,i)=>[i+1,fmtD(r.rdate),r.name,r.pn,fmtD(r.exp),r.country,r.agent,r.status,r.rec,fmtD(r.med),fmtD(r.pc),r.process];
+const roLabel=()=>ROLE_BN[ROLE]||"";
+const dis=k=>fok(k)?"":" disabled";
+// ---------- views
+function aggr(){
+  const m=new Map(agents.map(a=>[a,{a,n:0,send:0,due:0,paid:0}]));
+  for(const p of ppl){if(isRet(p))continue;const x=m.get(p.agent);if(!x)continue;x.n++;}
+  for(const d of deps){const x=m.get(d.a);if(x)x.paid+=d.amt}
+  m.forEach(x=>{const v=calc(S.dues[nk(x.a)],x.n);x.due=isNaN(v)?0:v});
+  return[...m.values()].map(x=>({...x,diff:x.due-x.paid})).sort((x,y)=>y.diff-x.diff)}
+const calc=(e,n)=>{let t=String(e==null?"":e).trim().replace(/^=/,"");if(!t)return 0;t=t.replace(/,/g,"").replace(/[×xX]/g,"*").replace(/÷/g,"/").replace(/\bN\b/gi,String(n));if(!/^[0-9+\-*\/(). ]+$/.test(t))return NaN;try{const v=Function('"use strict";return ('+t+')')();return isFinite(v)?v:NaN}catch(er){return NaN}};
+const dueCell=x=>{const raw=S.dues[nk(x.a)]||"",bad=raw&&isNaN(calc(raw,x.n));return (canDep()?`<input data-due="${esc(x.a)}" value="${esc(raw)}" placeholder="টাকা বা =N*100000" style="width:150px"> `:"")+(bad?"<b class=\"pend\">ভুল সূত্র</b>":fm(x.due))};
+async function setDue(t){if(!canDep())return;const a=t.dataset.due,v=t.value.trim(),n=(aggr().find(x=>x.a===a)||{}).n||0;if(v&&isNaN(calc(v,n))){say("সূত্র ঠিক নেই। যেমন: 150000 বা =N*100000 বা =(5*100000)+2000");return}try{await setMeta("dues",{f:{[nk(a)]:v}});say("সেভ হয়েছে।")}catch(e){say(errMsg(e))}}
+const lev=(a,b)=>{const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=Array.from({length:n+1},(_,j)=>j);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]};
+function simPairs(){const out=[],ks=agents.map(a=>[a,nk(a)]);for(let i=0;i<ks.length;i++)for(let j=i+1;j<ks.length;j++){const [a,x]=ks[i],[b,y]=ks[j];if(!x||!y||S.ign[x+"|"+y]||S.ign[y+"|"+x])continue;const L=Math.max(x.length,y.length),d=lev(x,y);if(d<=Math.max(1,Math.floor(L*0.2))||(Math.min(x.length,y.length)>=5&&(x.includes(y)||y.includes(x))))out.push([a,b,d])}return out.sort((p,q)=>p[2]-q[2]).slice(0,6)}
+const simHTML=()=>{const P=simPairs();return P.length?`<div class="note"><b>একই রকম দেখতে এজেন্টের নাম</b> (বানান ভুল হলে এক করে দিন, এক হলে এখান থেকে নিজেই চলে যাবে)</div>`+P.map(([a,b])=>`<div class="bar"><span>${esc(a)} ↔ ${esc(b)}</span><button class="btn sm" data-act="mg" data-f="${esc(b)}" data-t="${esc(a)}">${esc(b)} → ${esc(a)}</button><button class="btn sm" data-act="mg" data-f="${esc(a)}" data-t="${esc(b)}">${esc(a)} → ${esc(b)}</button><button class="btn red sm" data-act="ign" data-a="${esc(a)}" data-b="${esc(b)}">আলাদা</button></div>`).join(""):""};
+const stDoc=p=>({s:isRet(p)?"CANCEL & RETURNS":(p.process||"WAITING"),m:medYes(p)?"YES":"NO",c:p.pc?"YES":"NO",u:today()});
+function mirror(p){try{if(!fbDb)return;const k=nk(p.pn);if(!k)return;const r=fbDb.collection("status").doc(k);return p.del?r.delete():r.set(stDoc(p))}catch(er){}}
+function dash(){
+  const A=aggr(),pend=A.filter(x=>x.diff>0).reduce((s,x)=>s+x.diff,0),over=A.filter(x=>x.diff<0).reduce((s,x)=>s-x.diff,0);
+  const live=ppl.filter(p=>!isRet(p)).length;
+  V.innerHTML=sheetTitle("AGENT BALANCE (TOTAL / PENDING / EXTRA)")+`<div class="stats">
+  <div class="stat"><small>TOTAL PASSPORT ENTRY</small><b>${fm(ppl.length)}</b></div>
+  <div class="stat"><small>RETURNS / CANCEL</small><b>${fm(ppl.length-live)}</b></div>
+  <div class="stat"><small>FLIGHT DONE</small><b>${fm(ppl.filter(fly).length)}</b></div>
+  <div class="stat"><small>TOTAL PENDING (Tk)</small><b class="pend">${fm(pend)}</b></div>
+  <div class="stat"><small>TOTAL EXTRA (Tk)</small><b class="over">${fm(over)}</b></div></div>
+  <div class="note">প্রতি এজেন্টের TOTAL DUE ঘরে নিজে টাকা লিখুন, যেমন 150000। যোগ-বিয়োগ-গুণ-ভাগও চলবে: =N*100000 বা =(5*100000)+2000 (N = পাসপোর্ট সংখ্যা)।</div>
+  <div class="bar"><button class="btn" data-act="xBal">AGENT BALANCE Excel</button></div>`+
+  (isAdm?`${simHTML()}<form id="fm"><label>এই নামটি (ভুল/আলাদা নাম)<select name="f">${opts(["",...agents])}</select></label><label>এই এজেন্টের সাথে এক হবে<select name="t">${opts(["",...agents])}</select></label><button>এক করুন</button></form>`:"")+
+  table(BCOLS,A.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.a)}</td><td>${x.n}</td><td>${dueCell(x)}</td><td>${fm(x.paid)}</td><td class="pend">${x.diff>0?fm(x.diff):""}</td><td class="over">${x.diff<0?fm(-x.diff):""}</td></tr>`).join(""),
+  `<tr class="tot"><td></td><td>TOTAL</td><td>${A.reduce((s,x)=>s+x.n,0)}</td><td>${fm(A.reduce((s,x)=>s+x.due,0))}</td><td>${fm(A.reduce((s,x)=>s+x.paid,0))}</td><td class="pend">${fm(pend)}</td><td class="over">${fm(over)}</td></tr>`);
+}
+function entryCell(k,i,p){
+  const so=(o,v)=>`<td><select data-k="${k}" data-i="${i}"${dis(k)}>${opts(o.includes(v)?o:[...o,v],v)}</select></td>`;
+  if(k==="status")return so(STATUSES,p.status);
+  if(k==="process")return so(ROLE==="reception"?PROC.filter(x=>x===p.process||CANCEL_RE.test(x)):PROC,p.process);
+  if(k==="med"){const mv=String(p.med||"").toUpperCase();return so(["","YES","NO"],mv==="YES"||mv==="NO"?mv:(p.med?"YES":""))}
+  if(k==="work")return so(staffNames,p.work||"");
+  const v=DATEK.includes(k)?slashD(p[k]):(p[k]||"");
+  return`<td><input data-k="${k}" data-i="${i}" value="${esc(v)}"${DATEK.includes(k)&&k!=="med"?' placeholder="DD/MM/YYYY"':""}${dis(k)}></td>`}
+function drawList(){
+  const f=[];ppl.forEach((p,i)=>{if((!q||(p.name+" "+p.pn+" "+p.agent).toUpperCase().includes(q))&&cfOK("list",rowOf(p,i)))f.push(i)});
+  const pages=Math.max(1,Math.ceil(f.length/PER));pg=Math.min(Math.max(pg,0),pages-1);
+  const sl=f.slice(pg*PER,pg*PER+PER);
+  $("lt").innerHTML=table(COLS.concat(isAdm?[""]:[]),sl.map(i=>{const p=ppl[i];return`<tr class="${isRet(p)?"ret":""}">${rowOf(p,i).map((v,j)=>j>=7?entryCell(KEYS[j],i,p):`<td>${esc(v)}</td>`).join("")}${isAdm?`<td><button class="btn red sm" data-act="delE" data-i="${i}">মুছুন</button></td>`:""}</tr>`}).join(""));
+  cfHead("lt","list",COLS);
+  $("pn").innerHTML=`${fm(f.length)} টি এন্ট্রি, পেজ ${pg+1}/${pages} <button class="btn" data-act="pgP"${pg?"":" disabled"}>আগের</button> <button class="btn" data-act="pgN"${pg<pages-1?"":" disabled"}>পরের</button> ${cfBtn("list")}`;
+}
+function list(){
+  V.innerHTML=sheetTitle("TOTAL PASSPORT ENTRY (ALL COUNTRY)")+`<datalist id="agl">${agents.map(a=>`<option value="${esc(a)}">`).join("")}</datalist><datalist id="cl">${[...new Set(ppl.map(p=>p.country))].filter(Boolean).sort().map(a=>`<option value="${esc(a)}">`).join("")}</datalist>`+
+  (canEnt()?`<form id="fe"><input name="n" placeholder="PASSPORT NAME" required><input name="pn" placeholder="P. NUMBER" required><label>P. EXPIRY<input name="exp" placeholder="DD/MM/YYYY"></label><input name="a" list="agl" placeholder="AGENT (নতুন নামও লেখা যাবে)" required><input name="c" list="cl" placeholder="COUNTRY / GROUP" required><select name="st" aria-label="STATUS">${opts(STATUSES)}</select><input name="rec" placeholder="REC."><select name="w" aria-label="WORK">${opts(staffNames,staffNames.includes(myName)?myName:"")}</select><button>এন্ট্রি যোগ করুন</button></form>`:"")+
+  `<div class="bar"><input data-in="sq" placeholder="নাম, পাসপোর্ট নম্বর বা এজেন্ট খুঁজুন" value="${esc(q)}" style="flex:1;min-width:200px"><input id="dd" value="${slashD(today())}" placeholder="DD/MM/YYYY" aria-label="Date" style="width:130px"><button class="btn" data-act="xDay">এই তারিখের এন্ট্রি Excel</button><button class="btn" data-act="xAll">ALL ENTRY Excel</button></div><div id="pn" class="bar"></div><div id="lt"></div>`;
+  drawList();
+}
+function drawRets(){
+  const f=rets.filter((r,i)=>(!rq||(r.name+" "+r.pn+" "+r.agent).toUpperCase().includes(rq))&&cfOK("ret",retRow(r,i)));
+  const pages=Math.max(1,Math.ceil(f.length/PER));rpg=Math.min(Math.max(rpg,0),pages-1);
+  $("rt").innerHTML=table(RCOLS,f.slice(rpg*PER,rpg*PER+PER).map((r,i)=>`<tr class="ret">${retRow(r,rpg*PER+i).map(v=>`<td>${esc(v)}</td>`).join("")}</tr>`).join(""));
+  cfHead("rt","ret",RCOLS);
+  $("rp").innerHTML=`${fm(f.length)} টি, পেজ ${rpg+1}/${pages} <button class="btn" data-act="rpP"${rpg?"":" disabled"}>আগের</button> <button class="btn" data-act="rpN"${rpg<pages-1?"":" disabled"}>পরের</button> ${cfBtn("ret")}`;
+}
+function rets_(){
+  V.innerHTML=sheetTitle("RETURNS (ALL ENTRY-তে PROCESS = CANCEL & RETURNS দিলে এখানে নিজে থেকে যোগ হয়)")+`<div class="bar"><input data-in="rq" placeholder="নাম, পাসপোর্ট নম্বর বা এজেন্ট খুঁজুন" value="${esc(rq)}" style="flex:1;min-width:200px"><button class="btn" data-act="xRet">RETURNS Excel</button></div><div id="rp" class="bar"></div><div id="rt"></div>`;drawRets();
+}
+function dep(){
+  const wd=depAgents(),nd=agents.filter(a=>!wd.includes(a));
+  if(depInit&&agents.length){depInit=false;depAgent=wd[0]||agents[0]}
+  if(!agents.length){V.innerHTML=sheetTitle("DEPOSIT LIST")+(canDep()?`<form id="fa"><label>নতুন এজেন্টের নাম<input name="n" required></label><button>এজেন্ট যোগ করুন</button></form>`:"")+`<div class="note">এখনো কোনো এজেন্ট নেই। "EXCEL আপলোড" ট্যাব থেকে আপনার Excel ফাইল দিন, অথবা এজেন্ট যোগ করুন।</div>`;return}
+  const sum=(a,ac)=>deps.filter(d=>d.a===a&&d.acct===ac).reduce((s,d)=>s+d.amt,0);
+  const srows=wd.map(a=>[SER[a]?pad(SER[a]):"NEW",a,sum(a,"MAIN"),sum(a,"EMARGENCY"),sum(a,"MAIN")+sum(a,"EMARGENCY")]);
+  const mine=ac=>deps.filter(d=>d.a===depAgent&&d.acct===ac);
+  const tbl=(ac,t)=>{const r=mine(ac);if(!r.length&&ac!=="MAIN")return"";
+    return`<div class="sh"><small>${esc(t)}</small></div>`+table(DCOLS.concat(isAdm?[""]:[]),r.map((d,i)=>`<tr><td>${pad(i+1)}</td><td>${esc(fmtD(d.date)||"(তারিখ নেই)")}</td><td>${esc(depAgent)}</td><td>${esc(d.part)}</td><td>${fm(d.amt)}</td>${isAdm?`<td><button class="btn red sm" data-act="delD" data-id="${esc(d._id)}" data-c="${esc(d._c)}">মুছুন</button></td>`:""}</tr>`).join(""),
+      `<tr class="tot"><td colspan="4">NOW BALANCE</td><td>${fm(r.reduce((s,d)=>s+d.amt,0))}</td>${isAdm?"<td></td>":""}</tr>`)};
+  V.innerHTML=sheetTitle("DEPOSIT LIST")+(canDep()?`<form id="fa"><label>নতুন এজেন্টের নাম<input name="n" required></label><button>এজেন্ট যোগ করুন</button></form>`:"")+
+  `<div class="sh"><small>ALL AGENTS DEPOSIT SUMMARY (${wd.length} জন এজেন্টের জমা আছে। সারিতে চাপলে নিচে তার শিট খুলবে)</small></div><div class="bar"><button class="btn" data-act="xSum">সারাংশ Excel</button><button class="btn" data-act="xDepAll">সব এজেন্টের জমা Excel</button></div>`+
+  table(SCOLS,srows.map(r=>`<tr data-act="pick" data-a="${esc(r[1])}"><td>${r[0]}</td><td>${esc(r[1])}</td><td>${fm(r[2])}</td><td>${r[3]?fm(r[3]):""}</td><td><b>${fm(r[4])}</b></td></tr>`).join(""),
+   `<tr class="tot"><td></td><td>TOTAL</td><td>${fm(srows.reduce((s,r)=>s+r[2],0))}</td><td>${fm(srows.reduce((s,r)=>s+r[3],0))}</td><td>${fm(srows.reduce((s,r)=>s+r[4],0))}</td></tr>`)+
+  `<div class="sh" id="det" style="margin-top:22px"><small>এজেন্ট অনুযায়ী আলাদা শিট</small></div><div class="bar"><label>Agent <select data-ch="ag"><optgroup label="জমা আছে">${wd.map(a=>`<option value="${esc(a)}"${a===depAgent?" selected":""}>${esc(lab(a))}</option>`).join("")}</optgroup><optgroup label="জমা নেই">${opts(nd,depAgent)}</optgroup></select></label><button class="btn" data-act="xDep">এই এজেন্টের Excel</button></div>`+
+  (canDep()?`<form id="fd"><label>DATE<input name="d" value="${slashD(today())}" placeholder="DD/MM/YYYY" required></label><label>Particulars<input name="p" placeholder="CASH-SERBIA" required></label><label>Tk Deposit (ফেরত হলে মাইনাস)<input name="m" type="number" required></label><label>List<select name="t"><option>MAIN</option><option>EMARGENCY</option></select></label><button>জমা যোগ করুন</button></form>`:"")+
+  (wd.includes(depAgent)?"":`<div class="note">${esc(depAgent)}-এর নামে কোনো জমা এন্ট্রি নেই।</div>`)+tbl("MAIN",lab(depAgent))+tbl("EMARGENCY","EMARGENCY "+lab(depAgent));
+}
+function track(){
+  V.innerHTML=sheetTitle("পাসপোর্টের অবস্থা খুঁজুন")+`<div class="bar"><input data-in="tq" placeholder="পাসপোর্ট নম্বর বা নাম" style="flex:1;min-width:200px"></div><div id="tr"></div>`+(isAdm?`<div class="bar"><button class="btn" data-act="syncSt">কাস্টমারদের জন্য স্ট্যাটাস আপডেট (একবার চাপুন)</button></div>`:"");
+}
+function trackGo(k){
+  k=k.trim().toUpperCase();if(!k){$("tr").innerHTML="";return}
+  const r=ppl.filter(p=>(p.pn+" "+p.name).toUpperCase().includes(k)).slice(0,10);
+  $("tr").innerHTML=r.length?r.map(p=>`<div class="stat" style="margin-bottom:8px"><b>${esc(p.name)}</b><small>${esc(p.pn)} | ${esc(p.country)} | ${esc(p.agent)}</small><div><b>${esc(isRet(p)?"CANCEL & RETURNS":(p.process||"WAITING"))}</b></div><div class="steps">${STAGES.map((s,i)=>`<i class="${!isRet(p)&&i<=stIdx(p)?"d":""}">${s}</i>`).join("")}</div>${isRet(p)?"<b class='pend'>পাসপোর্ট ফেরত/ক্যান্সেল</b>":""}</div>`).join(""):"<p>কিছু পাওয়া যায়নি। নাম বা নম্বর আবার দেখুন।</p>"}
+function excel(){
+  V.innerHTML=sheetTitle("EXCEL আপলোড ও ডাউনলোড")+
+  `<div class="stat" style="margin-bottom:12px"><b>ডাউনলোড</b><small>সব তথ্যের ব্যাকআপ Excel। এটা আবার এখানেই আপলোড করা যায়। প্রতিটি পেজ থেকে আলাদা Excel-ও নামানো যায়।</small><div class="bar" style="margin-top:8px"><button class="btn" data-act="xBackup">সব তথ্যের ব্যাকআপ Excel</button></div></div>`+
+  (isAdm?`<div class="stat"><b>আপলোড</b><small>আপনার Excel ফাইল বেছে নিন। ইম্পোর্টের আগে কী কী যোগ হবে দেখানো হবে। যে পাসপোর্ট নম্বর বা জমা আগেই আছে, সেটা আবার যোগ হবে না।</small>
+  <div class="bar" style="margin-top:8px"><select id="ik"><option value="entries">ALL ENTRY (পাসপোর্ট এন্ট্রি)</option><option value="returns">RETURNS</option><option value="deposits">DEPOSIT LIST (এক বা একাধিক ফাইল)</option></select><input id="fi" type="file" accept=".xlsx,.xls" multiple><button class="btn" data-act="readF">ফাইল পড়ুন</button></div><div id="ip"></div></div>`:`<div class="note">আপলোডের অনুমতি আপনার নেই।</div>`);
+  drawImp();
+}
+const VIEWS={dash,list,rets:rets_,dep,track,excel,adm:admin};
+const TABS=[["dash","AGENT BALANCE"],["list","ALL ENTRY"],["rets","RETURNS"],["dep","DEPOSIT LIST"],["track","অবস্থা খুঁজুন"],["excel","EXCEL আপলোড/ডাউনলোড"]];
+function render(){nav();if(got.size<4){V.textContent="লোড হচ্ছে...";return}VIEWS[tab]()}
+function nav(){$("nav").innerHTML=(isAdm?[...TABS,["adm","ADMIN"]]:TABS).map(([k,l])=>`<button class="${k===tab?"on":""}" data-act="tab" data-k="${k}">${l}</button>`).join("")}
+const inField=()=>{const a=document.activeElement;return!!a&&V.contains(a)&&/INPUT|SELECT|TEXTAREA/.test(a.tagName)&&a.type!=="button"&&a.type!=="file"};
+function sched(){derive();syncSoon();if(inField()){pending=true;return}render()}
+document.addEventListener("focusout",()=>{if(pending)setTimeout(()=>{if(!inField()){pending=false;render()}},80)});
+// ---------- exports
+const sn=(n,used)=>{let b=String(n).replace(/[\\\/?*\[\]:]/g,"-").slice(0,31)||"Sheet",x=b,i=2;while(used.has(x.toUpperCase())){x=b.slice(0,28)+"~"+i++}used.add(x.toUpperCase());return x};
+async function dl(sheets,name){
+  sheets=sheets.filter(s=>s.r.length);if(!sheets.length){say("এই তালিকায় কোনো এন্ট্রি নেই।");return}
+  try{const d=await claude.use("downloads");if(!d){say("এই ভিউতে ডাউনলোড চালু নেই।");return}
+    const wb=XLSX.utils.book_new(),used=new Set();
+    sheets.forEach(s=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([[s.t||AGENCY],[""],s.c,...s.r]),sn(s.n,used)));
+    await d.save({filename:name,data:XLSX.write(wb,{type:"array",bookType:"xlsx"})});logA("DOWNLOAD",name);say("ডাউনলোড হয়েছে।")}
+  catch(e){say(e&&e.code==="declined"?"ডাউনলোড বাতিল করা হয়েছে।":"ডাউনলোড করা যায়নি। আবার চেষ্টা করুন।")}}
+const depSheets=(list,ls)=>{const out=[];list.forEach(a=>["MAIN","EMARGENCY"].forEach(ac=>{const r=deps.filter(d=>d.a===a&&d.acct===ac);if(!r.length)return;
+  out.push({n:(SER[a]?pad(SER[a])+" ":"")+a+(ac==="MAIN"?"":" (EMARGENCY)"),t:(ac==="MAIN"?"":"EMARGENCY ")+lab(a),c:DCOLS,r:r.map((d,i)=>[i+1,fmtD(d.date),a,d.part,d.amt])})}));return out};
+const entRows=()=>ppl.map(rowOf),retRows=()=>rets.map(retRow);
+const X={
+  xBal(){const A=aggr();dl([{n:"AGENT BALANCE",c:BCOLS,r:A.map((x,i)=>[i+1,x.a,x.n,x.due,x.paid,x.diff>0?x.diff:"",x.diff<0?-x.diff:""])}],"AGENT BALANCE.xlsx")},
+  xDay(){const k=parseD($("dd").value);if(!k){say("তারিখ DD/MM/YYYY লিখুন, যেমন 01/10/2026।");return}dl([{n:"ENTRY",c:COLS,r:entRows().filter((r,i)=>ppl[i].date===k)}],"passport-entry-"+fmtD(k)+".xlsx")},
+  xAll(){dl([{n:"All ENTRY",c:COLS,r:entRows().filter(r=>cfOK("list",r))}],"1 ALL PASSPORT ENTRY LIST.xlsx")},
+  xRet(){dl([{n:"RETURNS",c:RCOLS,r:retRows().filter(r=>cfOK("ret",r))}],"2 RETURN LIST.xlsx")},
+  xSum(){const wd=depAgents(),s=(a,ac)=>deps.filter(d=>d.a===a&&d.acct===ac).reduce((x,d)=>x+d.amt,0);dl([{n:"DEPOSIT SUMMARY",c:SCOLS,r:wd.map(a=>[SER[a]?pad(SER[a]):"NEW",a,s(a,"MAIN"),s(a,"EMARGENCY"),s(a,"MAIN")+s(a,"EMARGENCY")])}],"ALL AGENTS DEPOSIT SUMMARY.xlsx")},
+  xDepAll(){dl(depSheets(depAgents()),"ALL DEPOSIT LIST.xlsx")},
+  xDep(){dl(depSheets([depAgent]),lab(depAgent).replace(/[\\\/:*?"<>|]/g,"-").slice(0,90)+".xlsx")},
+  xBackup(){dl([{n:"All ENTRY",c:COLS,r:entRows()},{n:"RETURNS",c:RCOLS,r:retRows()},...depSheets(depAgents())],"JAHOSS ENTERPRISE BACKUP "+today()+".xlsx")}
+};
+// ---------- import
+const aoaOf=ws=>XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null,blankrows:false});
+async function readF(){
+  const kind=$("ik").value,files=[...$("fi").files];if(!files.length){say("আগে ফাইল বেছে নিন।");return}
+  const info={kind,items:[],notes:[]};
+  try{
+    for(const f of files){const wb=XLSX.read(await f.arrayBuffer(),{type:"array"});
+      if(kind==="deposits"){for(const n of wb.SheetNames){const r=parseDepSheet(aoaOf(wb.Sheets[n]),n,f.name);if(r&&r.deps.length)info.items.push({file:f.name,sheet:n,...r})}}
+      else{const cands=[];for(const n of wb.SheetNames){const r=parseTable(aoaOf(wb.Sheets[n]),kind==="entries"?EH:RH);if(r&&r.rows.length)cands.push({file:f.name,sheet:n,...r})}
+        if(!cands.length){info.notes.push(f.name+": মিলে যাওয়া শিট পাওয়া যায়নি।");continue}
+        const want=kind==="entries"?/ALL.?ENTRY|^ENTRY/i:/RETURN/i;
+        info.items.push(cands.find(c=>want.test(c.sheet))||cands.sort((a,b)=>b.rows.length-a.rows.length)[0])}}
+  }catch(e){say("ফাইল পড়া যায়নি। এটা .xlsx ফাইল কিনা দেখুন।");return}
+  if(!info.items.length&&!info.notes.length)info.notes.push("কোনো তথ্য পাওয়া যায়নি। ঠিক ধরনের ফাইল বেছেছেন কিনা দেখুন।");
+  IMP=info;drawImp()}
+function planImport(){
+  const I=IMP,plan={add:[],dup:0,skip:0,agentsNew:new Set()};
+  const known=new Set(agents.map(nk));
+  if(I.kind==="deposits"){
+    const have=new Set(deps.map(d=>[d.date,nk(d.a),nk(d.part),d.amt,d.acct].join("|")));
+    I.items.forEach(it=>{const a=resolveAgent(it.agent);if(!known.has(nk(a)))plan.agentsNew.add(a);
+      it.deps.forEach(d=>{const k=[d.date,nk(a),nk(d.part),d.amt,d.acct].join("|");if(have.has(k)){plan.dup++;return}have.add(k);plan.add.push({a,date:d.date,part:d.part,amt:d.amt,acct:d.acct,_ser:it.serial})})})}
+  else{
+    const have=new Set((I.kind==="entries"?ppl:rets).map(p=>nk(p.pn)));
+    I.items.forEach(it=>{plan.skip+=it.skipped;it.rows.forEach(o=>{if(have.has(nk(o.pn))){plan.dup++;return}
+      const a=resolveAgent(o.agent);if(o.agent&&!known.has(nk(a)))plan.agentsNew.add(a);o.agent=a;plan.add.push(o)})})}
+  return plan}
+function drawImp(){
+  const el=$("ip");if(!el)return;if(!IMP){el.innerHTML="";return}
+  const p=planImport(),I=IMP;
+  const lines=I.items.map(it=>`<li>${esc(it.file)} → শিট "${esc(it.sheet)}": ${I.kind==="deposits"?`${esc(it.agent)}${it.serial?" (নম্বর "+it.serial+")":""}, ${it.deps.length}টি জমা${it.badDates?`, ${it.badDates}টি ভুল তারিখ ফাঁকা রাখা হবে`:""}`:`${it.rows.length}টি সারি${it.skipped?`, ${it.skipped}টি নাম/নম্বর ছাড়া সারি বাদ`:""}`}</li>`).join("")+I.notes.map(n=>`<li class="pend">${esc(n)}</li>`).join("");
+  el.innerHTML=`<ul>${lines}</ul><div class="note"><b>${fm(p.add.length)}</b>টি নতুন যোগ হবে, <b>${fm(p.dup)}</b>টি আগেই আছে বলে বাদ যাবে${p.agentsNew.size?`, নতুন এজেন্ট ${p.agentsNew.size}জন`:""}।</div><div class="bar"><button class="btn" data-act="doImp"${p.add.length?"":" disabled"}>ইম্পোর্ট করুন</button><button class="btn red" data-act="cancelImp">বাতিল</button><span id="ipg"></span></div>`}
+async function doImport(){
+  const p=planImport(),I=IMP,col=I.kind,tag="i"+Date.now().toString(36),base=Date.now();
+  const btn=V.querySelector('[data-act="doImp"]');if(btn)btn.disabled=true;
+  let done=0;
+  try{
+    for(let c=0,k=0;c<p.add.length;c+=100,k++){
+      const rows={};p.add.slice(c,c+100).forEach((o,j)=>{const {_ser,...r}=o;rows[rid()+j]={...r,ord:base+c+j}});
+      await put(col,tag+"_"+k,rows);done=Math.min(c+100,p.add.length);const g=$("ipg");if(g)g.textContent=fm(done)+"/"+fm(p.add.length)+" হয়েছে...";await sleep(150)}
+    if(col==="deposits"){const list=S.agents.map(a=>({...a}));const by=new Map(list.map(a=>[a.n,a]));
+      I.items.forEach(it=>{const a=resolveAgent(it.agent);const x=by.get(a);if(x){if(!x.s&&it.serial)x.s=it.serial}else{const n={n:a,s:it.serial||0};list.push(n);by.set(a,n)}});
+      await saveAgents(list)}
+    logA("IMPORT",col+": "+p.add.length);IMP=null;say(fm(p.add.length)+"টি যোগ হয়েছে।");sched()}
+  catch(e){say(errMsg(e)+" ("+fm(done)+"টি সেভ হয়েছিল, আবার ইম্পোর্ট করলে বাকিগুলো যোগ হবে)");if(btn)btn.disabled=false}}
+// ---------- events
+const ACT={
+  tab(b){tab=b.dataset.k;logA("VIEW",b.dataset.k);render()},
+  mg(b){const fd=new FormData();fd.set("f",b.dataset.f);fd.set("t",b.dataset.t);FORM.fm(fd)},
+  ign(b){setMeta("ignore",{pairs:{[nk(b.dataset.a)+"|"+nk(b.dataset.b)]:true}}).catch(()=>{})},
+  async syncSt(b){if(!fbDb)return;b.disabled=true;try{for(let c=0;c<ppl.length;c+=400){const w=fbDb.batch();ppl.slice(c,c+400).forEach(p=>{const k=nk(p.pn);if(k)w.set(fbDb.collection("status").doc(k),stDoc(p))});await w.commit()}say("কাস্টমার স্ট্যাটাস আপডেট হয়েছে।")}catch(e){say("আপডেট হয়নি। Firebase Rules-এ status অংশ বসানো হয়েছে কি না দেখুন।")}b.disabled=false},
+  pgP(){pg--;drawList()},pgN(){pg++;drawList()},rpP(){rpg--;drawRets()},rpN(){rpg++;drawRets()},
+  pick(b){depAgent=b.dataset.a;dep();$("det").scrollIntoView()},
+  delE(b){if(b.dataset.s!=="1"){b.dataset.s="1";b.textContent="নিশ্চিত?";setTimeout(()=>{b.dataset.s="";b.textContent="মুছুন"},4000);return}logA("DELETE ENTRY",ppl[+b.dataset.i].name+" "+ppl[+b.dataset.i].pn);mirror({pn:ppl[+b.dataset.i].pn,del:true});patch("entries",ppl[+b.dataset.i],{del:true})},
+  delD(b){if(b.dataset.s!=="1"){b.dataset.s="1";b.textContent="নিশ্চিত?";setTimeout(()=>{b.dataset.s="";b.textContent="মুছুন"},4000);return}logA("DELETE DEPOSIT",b.dataset.id);patch("deposits",{_id:b.dataset.id,_c:b.dataset.c},{del:true})},
+  readF,doImp(){doImport()},cancelImp(){IMP=null;drawImp()},
+  ...Object.fromEntries(Object.keys(X).map(k=>[k,X[k]]))
+};
+const INP={sq(t){q=t.value.trim().toUpperCase();pg=0;logS("SEARCH ENTRY",q);drawList()},rq(t){rq=t.value.trim().toUpperCase();rpg=0;logS("SEARCH RETURN",rq);drawRets()},tq(t){logS("SEARCH STATUS",t.value);trackGo(t.value)}};
+const CH={ag(t){depAgent=t.value;dep()}};
+async function cellEdit(t){
+  const p=ppl[+t.dataset.i],k=t.dataset.k;if(!p||!fok(k))return;let v=t.value.trim();if(k==="process"&&ROLE==="reception"&&v&&!CANCEL_RE.test(v))return;
+  if(["pc","rdate"].includes(k)){const d=parseD(v);if(d===null){say("তারিখ DD/MM/YYYY লিখুন, যেমন 01/10/2026।");t.value=slashD(p[k]);return}if(d)v=d}
+  if(k==="process")v=normProc(v);
+  if(!(await patch("entries",p,{[k]:v})))return;mirror({...p,[k]:v});logA("EDIT",p.name+" ("+p.pn+") "+k+": "+(p[k]||"")+" -> "+v);
+  if(k==="process"&&CANCEL_RE.test(v)&&!rpn.has(nk(p.pn)))await addRow("returns",{rdate:p.rdate||today(),name:p.name,pn:p.pn,exp:p.exp,country:p.country,agent:p.agent,status:p.status,rec:p.rec,med:p.med,pc:p.pc,process:v})}
+const FORM={
+  async fe(fd,f){
+    const pn=up(fd.get("pn")),ex=parseD(fd.get("exp"));if(ex===null){say("P. EXPIRY: তারিখ DD/MM/YYYY লিখুন, যেমন 01/10/2026।");return}
+    const old=ppl.find(p=>nk(p.pn)===nk(pn));
+    if(old&&dupOK!==pn){dupOK=pn;say("এই পাসপোর্ট নম্বর আগেই আছে ("+old.name+", "+old.agent+")। তবু যোগ করতে আবার চাপুন।");return}
+    dupOK="";const a=resolveAgent(fd.get("a"));
+    if(await addRow("entries",{date:today(),name:up(fd.get("n")),pn,exp:ex,country:up(fd.get("c")),agent:a,status:fd.get("st"),rec:String(fd.get("rec")).trim(),med:"",pc:"",process:"",rdate:"",work:fd.get("w")||myName})){mirror({pn,process:""});logA("ENTRY ADD",up(fd.get("n"))+" "+pn+" / "+a);f.reset();pg=1e6;say("এন্ট্রি যোগ হয়েছে।")}},
+  async fd(fd,f){
+    const dt=parseD(fd.get("d"));if(dt===null||dt===""){say("তারিখ DD/MM/YYYY লিখুন, যেমন 01/10/2026।");return}
+    if(!depAgent){say("আগে এজেন্ট বাছুন।");return}
+    if(await addRow("deposits",{a:depAgent,date:dt,part:up(fd.get("p")),amt:Number(fd.get("m")),acct:fd.get("t")})){
+      if(!SER[depAgent]){const list=S.agents.map(a=>({...a}));const x=list.find(a=>a.n===depAgent);if(x)x.s=nextSer();else list.push({n:depAgent,s:nextSer()});await saveAgents(list)}
+      logA("DEPOSIT ADD",depAgent+" | "+fd.get("p")+" | Tk "+fd.get("m"));say("জমা যোগ হয়েছে।")}},
+  async fa(fd){const a=resolveAgent(fd.get("n"));if(!a)return;
+    if(!agents.includes(a)||!SER[a]){const list=S.agents.map(x=>({...x}));const x=list.find(y=>y.n===a);if(x)x.s=x.s||nextSer();else list.push({n:a,s:nextSer()});if(!(await saveAgents(list)))return}
+    depAgent=a;say(a+" যোগ হয়েছে।")},
+  async fs(fd){try{await setMeta("settings",{base:Number(fd.get("b")),send:Number(fd.get("s"))});say("রেট সেভ হয়েছে।")}catch(e){say(errMsg(e))}},
+  async fm(fd){
+    const f=fd.get("f"),t=fd.get("t");if(!f||!t){say("দুটো ঘরেই এজেন্ট বাছুন।");return}if(f===t){say("দুটো আলাদা এজেন্ট বাছুন।");return}
+    try{
+      for(const [col,fld,m] of [["entries","agent",S.entries],["returns","agent",S.returns],["deposits","a",S.deposits]]){
+        for(const [cid,rows] of m){const ch={};for(const id in rows)if(rows[id]&&rows[id][fld]===f)ch[id]={[fld]:t};if(Object.keys(ch).length)await put(col,cid,ch)}}
+      const list=S.agents.map(a=>({...a})).filter(a=>a.n!==f);const old=S.agents.find(a=>a.n===f);
+      const x=list.find(a=>a.n===t);if(x){if(!x.s&&old&&old.s)x.s=old.s}else list.push({n:t,s:(old&&old.s)||SER[f]||0});
+      await saveAgents(list);try{await setMeta("alias",{m:{[nk(f)]:t}})}catch(er){}if(depAgent===f)depAgent=t;say(f+" এখন "+t+"-এর সাথে এক হয়েছে।")}
+    catch(e){say(errMsg(e))}}
+};
+V.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(b&&ACT[b.dataset.act])ACT[b.dataset.act](b)});
+$("nav").addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(b)ACT.tab(b)});
+V.addEventListener("submit",e=>{e.preventDefault();const f=e.target;if(FORM[f.id])FORM[f.id](new FormData(f),f)});
+V.addEventListener("change",e=>{const t=e.target;if(t.dataset.k)cellEdit(t);else if(t.dataset.ch&&CH[t.dataset.ch])CH[t.dataset.ch](t);else if(t.dataset.due!==undefined)setDue(t)});
+V.addEventListener("input",e=>{const t=e.target;if(t.dataset.in&&INP[t.dataset.in])INP[t.dataset.in](t)});
+// ---------- identity
+function showPicker(){
+    if(!isAdm&&myName){say("নাম একবার বেছে নিলে আর বদলানো যায় না। বদলাতে হলে অ্যাডমিনকে বলুন।");return}
+  const taken=new Set(Object.entries(S.staff).filter(([id])=>id!==myId).map(([,u])=>u.name));
+  const pool=(isAdm?ADMINS:HEROES).filter(n=>!taken.has(n));
+  const ov=$("ov");ov.classList.remove("hide");
+  ov.innerHTML=`<div class="box"><b>আপনি কে?</b><div class="note" style="margin-top:8px">${isAdm?"অ্যাডমিন হিসেবে আপনার নাম বাছুন।":"কর্মী হিসেবে আপনার মার্ভেল নাম বাছুন।"} এই নাম এন্ট্রির WORK ঘরে ব্যবহার হবে।</div><div class="pick">${pool.map(n=>`<button class="btn" data-n="${esc(n)}">${esc(n)}</button>`).join("")||"<span>সব নাম নেওয়া হয়ে গেছে। অ্যাডমিনকে জানান।</span>"}</div>${myName?'<button class="btn red sm" id="pc">থাক</button>':""}</div>`;
+  ov.onclick=async e=>{const b=e.target.closest("[data-n]");if(b){if(!isAdm&&myName){ov.classList.add("hide");return}const n=b.dataset.n;try{await setMeta("staff",{users:{[myId]:{name:n}}});myName=n;ov.classList.add("hide");header();say("স্বাগতম, "+n+"!")}catch(er){say(errMsg(er))}}
+    if(e.target.id==="pc")ov.classList.add("hide")}}
+function header(){$("me").textContent=(myName?myName+" · ":"")+roLabel();$("chg").classList.add("hide")}
+$("chg").onclick=showPicker;
+// ---------- start
+function sub(col,fn){db.collection(col).onSnapshot(s=>{fn(s);got.add(col);sched()},e=>{if(e&&e.code!=="unavailable")say("ডেটা লোড হয়নি।")})}
+async function start(){
+  try{db=await claude.use("db")}catch(e){db=null}
+  if(!db){V.innerHTML=`<div class="note">এই ভিউতে ডেটাবেস চালু নেই। claude.ai-তে সাইন ইন করে লিংকটা খুলুন।</div>`;return}
+  {const em=(fbUser.email||"").toLowerCase();let pr=null;
+   try{const d=await fbDb.collection("users").doc(fbUser.uid).get();pr=d.exists?d.data():null}catch(e){}
+   if(ADMIN_EMAILS.includes(em))ROLE="admin";
+   else if(pr&&!pr.disabled&&ROLES.includes(pr.role))ROLE=pr.role;
+   else{kickOut(pr&&pr.disabled?"আপনার অ্যাক্সেস বন্ধ করা হয়েছে। অ্যাডমিনের সাথে কথা বলুন।":"আপনার অ্যাকাউন্ট এখনো চালু হয়নি। অ্যাডমিনকে জানান।");return}
+   PROF=pr||{};if(!PROF.name)PROF.name=ROLE==="admin"?"অ্যাডমিন":em;
+   isAdm=ROLE==="admin";canW=ROLE!=="agent";myId=fbUser.uid;
+   const ur=fbDb.collection("users").doc(fbUser.uid);
+   ur.set(isAdm?{name:PROF.name,role:"admin",email:em,last:Date.now()}:{last:Date.now()},{merge:true}).catch(()=>{});
+   ur.onSnapshot(s=>{const x=s.data();if(!isAdm&&(!x||x.disabled))kickOut("আপনাকে সাইট থেকে বের করে দেওয়া হয়েছে।")},()=>{});
+   logA("LOGIN","")}
+  if(ROLE==="agent"){agentPortal();return}
+  nav();
+  const chunk=m=>s=>{m.clear();s.docs.forEach(d=>m.set(d.id,(d.data()||{}).rows||{}))};
+  sub("entries",chunk(S.entries));sub("deposits",chunk(S.deposits));sub("returns",chunk(S.returns));
+  db.collection("meta").onSnapshot(s=>{s.docs.forEach(d=>{const x=d.data()||{};if(d.id==="agents")S.agents=x.list||[];if(d.id==="staff")S.staff=x.users||{};if(d.id==="settings")S.settings=x;if(d.id==="dues")S.dues=x.f||{};if(d.id==="alias")S.alias=x.m||{};if(d.id==="ignore")S.ign=x.pairs||{}});
+    myName=PROF.name||"";header();got.add("meta");sched();
+    if(canW&&myId&&!myName&&!start.asked){start.asked=true;showPicker()}},()=>{});
+  setTimeout(()=>{if(got.size<4){["entries","deposits","returns","meta"].forEach(k=>got.add(k));sched()}},5000);
+  header()}
+// ---------- roles, logs, admin, agent portal
+const ROLES=["admin","accountant","reception","staff","agent"];
+const ROLE_BN={admin:"অ্যাডমিন",accountant:"অ্যাকাউন্টস ম্যানেজার",reception:"রিসেপশনিস্ট",staff:"প্রসেসিং স্টাফ",agent:"এজেন্ট"};
+let ROLE="",PROF={};
+const canDep=()=>isAdm||ROLE==="accountant",canEnt=()=>isAdm||ROLE==="reception";
+const PROCF=["status","med","pc","process"];
+const fok=k=>isAdm||(k==="process"&&ROLE==="reception")||(PROCF.includes(k)?ROLE==="staff":ROLE==="reception");
+function kickOut(m){alert(m);const go=()=>location.reload();firebase.auth().signOut().then(go,go)}
+function logA(a,d){try{if(!fbDb||!fbUser)return;fbDb.collection("logs").add({t:Date.now(),u:(fbUser.email||"").toLowerCase(),n:myName||"",r:ROLE,a,d:String(d||"").slice(0,300)}).catch(()=>{})}catch(e){}}
+let _ls;const logS=(a,v)=>{clearTimeout(_ls);if(v)_ls=setTimeout(()=>logA(a,v),1500)};
+const un=e=>String(e||"").replace("@jahoss.local","");
+const fT=t=>{const d=new Date(t);return pad(d.getDate())+"/"+pad(d.getMonth()+1)+"/"+d.getFullYear()+" "+pad(d.getHours())+":"+pad(d.getMinutes())};
+let USERS=[],LOGS=[],LF={u:"",d:"",k:""},admOn=false;
+function admSub(){if(admOn||!fbDb)return;admOn=true;
+  fbDb.collection("users").onSnapshot(s=>{USERS=s.docs.map(d=>({id:d.id,...d.data()}));sched()},()=>{});
+  fbDb.collection("logs").orderBy("t","desc").limit(1000).onSnapshot(s=>{LOGS=s.docs.map(d=>d.data());sched()},()=>{})}
+const logRows=()=>LOGS.filter(l=>(!LF.u||l.u===LF.u)&&(!LF.k||l.a===LF.k)&&(!LF.d||fT(l.t).startsWith(LF.d)));
+function admin(){
+  admSub();const L=logRows(),us=[...new Set(LOGS.map(l=>l.u))],ks=[...new Set(LOGS.map(l=>l.a))];
+  V.innerHTML=sheetTitle("ADMIN (শুধু অ্যাডমিন দেখতে পারবে)")+
+  `<div class="sh"><small>নতুন ব্যবহারকারী তৈরি করুন</small></div><form id="fu"><input name="n" placeholder="নাম" required><input name="e" placeholder="ইউজারনেম, যেমন nabil (ইংরেজি ছোট অক্ষর)" pattern="[a-z0-9._]{3,}" title="ইংরেজি ছোট অক্ষর, সংখ্যা, . বা _ ; কমপক্ষে ৩ অক্ষর" autocapitalize="none" required><input name="p" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" minlength="6" required><label>পদ<select name="r"><option value="accountant">অ্যাকাউন্টস ম্যানেজার</option><option value="reception">রিসেপশনিস্ট</option><option value="staff">প্রসেসিং স্টাফ</option><option value="agent">এজেন্ট</option></select></label><label>এজেন্ট হলে কোন এজেন্ট<select name="a">${opts(["",...agents])}</select></label><button>তৈরি করুন</button></form>`+
+  `<div class="bar"><button class="btn" data-act="sync">এজেন্টদের তথ্য এখনই আপডেট করুন</button></div>`+
+  table(["নাম","ইউজারনেম","পদ","এজেন্ট","শেষ লগইন","অবস্থা",""],USERS.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(un(u.email))}</td><td>${esc(ROLE_BN[u.role]||u.role)}</td><td>${esc(u.agent||"")}</td><td>${u.last?fT(u.last):""}</td><td>${u.disabled?'<b class="pend">বন্ধ</b>':"চালু"}</td><td>${u.role==="admin"?"":(u.disabled?`<button class="btn sm" data-act="unkick" data-id="${u.id}">আবার চালু</button>`:`<button class="btn red sm" data-act="kick" data-id="${u.id}">বের করুন</button>`)}${u.role==="admin"?"":` <button class="btn red sm" data-act="rmu" data-id="${u.id}">সরিয়ে দিন</button>`}${/@jahoss\.local$/.test(u.email||"")||u.role==="admin"?"":` <button class="btn sm" data-act="rst" data-e="${esc(u.email)}">পাসওয়ার্ড রিসেট মেইল</button>`}</td></tr>`).join(""))+
+  `<div class="sh" style="margin-top:22px"><small>ACTIVITY LOG (কে কখন কী করেছে)</small></div><div class="bar"><select data-ch="lu">${opts(["",...us],LF.u)}</select><select data-ch="lk">${opts(["",...ks],LF.k)}</select><input data-ch="ld" value="${esc(LF.d)}" placeholder="তারিখ DD/MM/YYYY" style="width:150px"><button class="btn" data-act="lx">Excel</button><button class="btn" data-act="lp">PDF</button><button class="btn" data-act="li">ছবি (PNG)</button></div><div id="lgt">`+
+  table(["TIME","USER","ROLE","ACTION","DETAIL"],L.slice(0,200).map(l=>`<tr><td>${fT(l.t)}</td><td>${esc(l.n||"")} ${esc(un(l.u))}</td><td>${esc(l.r)}</td><td>${esc(l.a)}</td><td style="white-space:normal">${esc(l.d)}</td></tr>`).join(""))+
+  `</div><div class="note">${fm(L.length)} টি লগ (সর্বশেষ ১০০০টির মধ্যে)। টেবিলে প্রথম ২০০টি দেখানো হয়েছে, Excel-এ সব আসবে।</div>`}
+FORM.fu=async(fd,f)=>{
+  const n=String(fd.get("n")).trim(),u0=String(fd.get("e")).trim().toLowerCase(),e=u0.includes("@")?u0:u0+"@jahoss.local",pw=String(fd.get("p")),r=fd.get("r"),a=fd.get("a");
+  if(r==="agent"&&!a){say("এজেন্ট বাছুন।");return}
+  say("তৈরি হচ্ছে...");let sec;
+  try{sec=firebase.initializeApp(FIREBASE_CONFIG,"s"+Date.now());
+    const c=await sec.auth().createUserWithEmailAndPassword(e,pw);
+    await fbDb.collection("users").doc(c.user.uid).set({name:n,username:u0,email:e,role:r,agent:r==="agent"?a:"",agentKey:r==="agent"?nk(a):"",created:Date.now()});
+    await sec.auth().signOut();logA("USER CREATE",n+" ("+r+") "+u0);f.reset();say(n+" তৈরি হয়েছে।")}
+  catch(er){say(er&&er.code==="auth/email-already-in-use"?"এই ইউজারনেম আগেই নেওয়া হয়েছে (সরানো হলেও আবার ব্যবহার করা যায় না)। নতুন একটা ইউজারনেম দিন, যেমন nabil2।":er&&er.code==="auth/weak-password"?"পাসওয়ার্ড কমপক্ষে ৬ অক্ষর দিন।":"তৈরি করা যায়নি।")}
+  try{if(sec)sec.delete()}catch(x){}};
+Object.assign(CH,{lu(t){LF.u=t.value;admin()},lk(t){LF.k=t.value;admin()},ld(t){LF.d=t.value.trim();admin()}});
+const uRef=id=>fbDb.collection("users").doc(id),uOf=id=>USERS.find(x=>x.id===id)||{};
+Object.assign(ACT,{
+  async kick(b){await uRef(b.dataset.id).set({disabled:true,kicked:Date.now()},{merge:true});logA("KICK",uOf(b.dataset.id).email);say("বের করে দেওয়া হয়েছে।")},
+  async unkick(b){await uRef(b.dataset.id).set({disabled:false},{merge:true});logA("UNKICK",uOf(b.dataset.id).email)},
+  async rmu(b){if(b.dataset.s!=="1"){b.dataset.s="1";b.textContent="নিশ্চিত?";setTimeout(()=>{b.dataset.s="";b.textContent="সরিয়ে দিন"},4000);return}
+    await uRef(b.dataset.id).delete();logA("USER REMOVE",un(uOf(b.dataset.id).email));say("সরিয়ে দেওয়া হয়েছে। নতুন ইউজারনেম ও পাসওয়ার্ড দিয়ে আবার বানাতে পারবেন।")},
+  rst(b){firebase.auth().sendPasswordResetEmail(b.dataset.e).then(()=>say("রিসেট মেইল পাঠানো হয়েছে।"),()=>say("পাঠানো যায়নি।"))},
+  sync(){syncAgents(true).then(()=>say("এজেন্টদের তথ্য আপডেট হয়েছে।"))},
+  lx(){dl([{n:"ACTIVITY LOG",t:"ACTIVITY LOG",c:["TIME","NAME","EMAIL","ROLE","ACTION","DETAIL"],r:logRows().map(l=>[fT(l.t),l.n||"",un(l.u),l.r,l.a,l.d])}],"ACTIVITY LOG "+today()+".xlsx")},
+  lp(){const w=window.open("","_blank");if(!w){say("পপআপ বন্ধ আছে, অনুমতি দিন।");return}w.document.write('<title>Activity Log</title><style>body{font:12px sans-serif}table{border-collapse:collapse;width:100%}td,th{border:1px solid #888;padding:3px 5px;text-align:left}</style><h3>JAHOSS ENTERPRISE LIMITED - Activity Log</h3>'+$("lgt").innerHTML);w.document.close();w.focus();w.print()},
+  li(){if(!window.html2canvas){say("ছবি তৈরির টুল লোড হয়নি।");return}html2canvas($("lgt"),{backgroundColor:"#ffffff"}).then(c=>c.toBlob(bl=>{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="activity-log.png";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}))}
+});
+// ---- agent data mirror (agents see only their own doc)
+const lastH={};let _sy;
+function syncSoon(){if(got.size<4||!(isAdm||ROLE==="accountant"))return;clearTimeout(_sy);_sy=setTimeout(()=>syncAgents(false),8000)}
+async function syncAgents(force){
+  if(!fbDb||!(isAdm||ROLE==="accountant"))return;
+  const m=new Map(aggr().map(x=>[x.a,x]));
+  for(const a of agents){const k=nk(a);if(!k)continue;const x=m.get(a)||{n:0,due:0,paid:0,diff:0};
+    const doc={name:a,n:x.n,due:x.due,paid:x.paid,diff:x.diff,
+      list:ppl.filter(p=>p.agent===a).map(p=>({name:p.name||"",pn:p.pn||"",country:p.country||"",s:isRet(p)?"CANCEL & RETURNS":(p.process||"WAITING")})),
+      deps:deps.filter(d=>d.a===a).map(d=>({date:d.date||"",part:d.part||"",amt:d.amt||0,acct:d.acct||""})),u:today()};
+    const h=JSON.stringify({...doc,u:0});if(!force&&lastH[k]===h)continue;
+    try{await fbDb.collection("agentview").doc(k).set(doc);lastH[k]=h}catch(e){}}}
+function agentPortal(){
+  header();$("nav").classList.add("hide");document.querySelector("main .note").classList.add("hide");
+  let D=null,aq="";
+  const drawA=()=>{const el=$("al");if(!D||!el)return;const f=D.list.filter(p=>!aq||(p.name+" "+p.pn).toUpperCase().includes(aq));
+    el.innerHTML=table(["SL","NAME","PASSPORT","COUNTRY","এখন কোন অবস্থায়"],f.map((p,i)=>`<tr class="${CANCEL_RE.test(p.s)?"ret":""}"><td>${i+1}</td><td>${esc(p.name)}</td><td>${esc(p.pn)}</td><td>${esc(p.country)}</td><td><b>${esc(p.s)}</b></td></tr>`).join(""))};
+  INP.aq=t=>{aq=t.value.trim().toUpperCase();drawA()};
+  fbDb.collection("agentview").doc(PROF.agentKey||"-").onSnapshot(s=>{D=s.exists?s.data():null;
+    V.innerHTML=D?`<div class="sh">${esc(D.name)}<small>তথ্য আপডেট: ${slashD(D.u)}</small></div><div class="stats"><div class="stat"><small>মোট পাসপোর্ট (রিটার্ন বাদে)</small><b>${fm(D.n)}</b></div><div class="stat"><small>মোট পাওনা (Tk)</small><b>${fm(D.due)}</b></div><div class="stat"><small>মোট জমা (Tk)</small><b>${fm(D.paid)}</b></div><div class="stat"><small>বাকি (Tk)</small><b class="pend">${fm(Math.max(D.diff,0))}</b></div><div class="stat"><small>অতিরিক্ত জমা (Tk)</small><b class="over">${fm(Math.max(-D.diff,0))}</b></div></div><div class="sh"><small>আপনার পাসপোর্ট ও অবস্থান</small></div><div class="bar"><input data-in="aq" placeholder="নাম বা পাসপোর্ট নম্বর খুঁজুন" value="${esc(aq)}" style="flex:1;min-width:200px"></div><div id="al"></div><div class="sh" style="margin-top:20px"><small>আপনার জমার তালিকা</small></div>`+table(["DATE","PARTICULARS","Tk"],(D.deps||[]).map(d=>`<tr><td>${esc(fmtD(d.date))}</td><td>${esc(d.part)}</td><td>${fm(d.amt)}</td></tr>`).join("")):`<div class="note">আপনার তথ্য এখনো আপডেট হয়নি। অফিসে যোগাযোগ করুন।</div>`;
+    drawA()},()=>{V.innerHTML='<div class="note">তথ্য লোড হয়নি।</div>'})}
+// ---- excel-style column filters
+const CF={list:{},ret:{}};
+const cfRows=t=>t==="list"?ppl.map(rowOf):rets.map(retRow),cfCols=t=>t==="list"?COLS:RCOLS;
+function cfOK(t,row){const f=CF[t];for(const c in f){if(!f[c].has(String(row[c]==null?"":row[c])))return false}return true}
+function cfHead(id,t,cols){$(id).querySelectorAll("th").forEach((th,i)=>{if(!i||i>=cols.length)return;th.insertAdjacentHTML("beforeend",` <button type="button" class="cfb${CF[t][i]?" on":""}" data-act="cf" data-t="${t}" data-c="${i}" aria-label="filter">▾</button>`)})}
+function cfBtn(t){const n=Object.keys(CF[t]).length;return n?`<button class="btn red sm" data-act="cfx" data-t="${t}">ফিল্টার মুছুন (${n})</button>`:""}
+function cfOpen(t,c){
+  const vals=new Map();cfRows(t).forEach(r=>{const v=String(r[c]==null?"":r[c]);vals.set(v,(vals.get(v)||0)+1)});
+  const all=[...vals.keys()].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})),cur=CF[t][c],sel=new Set(cur||all);let qs="";
+  const vis=()=>all.filter(v=>!qs||v.toUpperCase().includes(qs)).slice(0,500);
+  const ov=$("ov"),shut=()=>ov.classList.add("hide");ov.classList.remove("hide");
+  ov.innerHTML=`<div class="box"><b>${esc(cfCols(t)[c])} — ফিল্টার</b><input id="cfq" placeholder="খুঁজুন" style="width:100%;margin:10px 0 6px"><div class="bar"><button class="btn sm" data-z="all">সব বাছুন</button><button class="btn sm" data-z="none">সব বাদ</button></div><div class="cfl" id="cfl"></div><div class="bar"><button class="btn" data-z="ok">ফিল্টার করুন</button><button class="btn red" data-z="clr">মুছুন</button><button class="btn sm" data-z="x">বন্ধ</button></div></div>`;
+  const fill=()=>{$("cfl").innerHTML=vis().map(v=>`<label><input type="checkbox" data-v="${esc(v)}"${sel.has(v)?" checked":""}> ${esc(v)||"(ফাঁকা)"} <small>${vals.get(v)}</small></label>`).join("")||"<small>কিছু পাওয়া যায়নি</small>"};fill();
+  ov.onclick=e=>{const z=e.target.dataset&&e.target.dataset.z;if(e.target===ov||z==="x"){shut();return}if(!z)return;
+    if(z==="clr"){delete CF[t][c];shut();render();return}
+    if(z==="all"||z==="none"){vis().forEach(v=>z==="all"?sel.add(v):sel.delete(v));fill();return}
+    if(z==="ok"){const set=qs?new Set(vis().filter(v=>sel.has(v))):new Set(sel);if(all.every(v=>set.has(v)))delete CF[t][c];else CF[t][c]=set;shut();render()}};
+  ov.oninput=e=>{if(e.target.id==="cfq"){qs=e.target.value.trim().toUpperCase();fill()}};
+  ov.onchange=e=>{const x=e.target;if(x.dataset&&x.dataset.v!==undefined){x.checked?sel.add(x.dataset.v):sel.delete(x.dataset.v)}}}
+Object.assign(ACT,{cf(b){cfOpen(b.dataset.t,+b.dataset.c)},cfx(b){CF[b.dataset.t]={};render()}});
+fbBoot(start);
+</script>
+</body>
+</html>
