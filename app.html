@@ -238,7 +238,7 @@ const STATUSES=["NEW","OLD","OLD/NEW"],STAGES=["Received","Medical","PC","Visa",
 const COLS=["SL","DATE","PASSPORT NAME","P. NUMBER","P. EXPIRY","COUNTRY","AGENT","STATUS","REC.","MED (YES/NO)","POLICE CLEARANCE DATE","PROCESS","R. DATE","WORK"];
 const RCOLS=["SI. No","RETURNS DATE","PASSPORT NAME","P. NUMBER","P. EXPIRY","COUNTRY","AGENT","STATUS","SHOW","MEDICAL","M. STATUS","PROCESS"];
 const DCOLS=["SL","DATE","Agent Name","Particulars","Tk Deposit"];
-const SCOLS=["SL","AGENT","MAIN DEPOSIT (Tk)","EMARGENCY (Tk)","NOW BALANCE (Tk)"];
+const SCOLS=["SL","AGENT NAME","TOTAL BALANCE"];
 const BCOLS=["SL","AGENT","PASSPORTS (excl. returns)","TOTAL DUE (Tk)","TOTAL DEPOSIT (Tk)","PENDING (Tk)","EXTRA (Tk)"];
 const KEYS=["","date","name","pn","exp","country","agent","status","rec","med","pc","process","rdate","work"];
 // ---------- state
@@ -308,26 +308,27 @@ const simHTML=()=>{const P=simPairs();return P.length?`<div class="note"><b>এ�
 const stDoc=p=>({s:isRet(p)?"CANCEL & RETURNS":(p.process||"WAITING"),m:medYes(p)?"YES":"NO",c:p.pc?"YES":"NO",u:today()});
 function mirror(p){try{if(!fbDb)return;const k=nk(p.pn);if(!k)return;const r=fbDb.collection("status").doc(k);return p.del?r.delete():r.set(stDoc(p))}catch(er){}}
 function dash(){
-  const A=aggr(),pend=A.filter(x=>x.diff>0).reduce((s,x)=>s+x.diff,0),over=A.filter(x=>x.diff<0).reduce((s,x)=>s-x.diff,0);
-  const live=ppl.filter(p=>!isRet(p)).length;
-  V.innerHTML=sheetTitle("AGENT BALANCE (TOTAL / PENDING / EXTRA)")+`<div class="stats">
+  const A=aggr(),live=ppl.filter(p=>!isRet(p)),open=live.filter(p=>!fly(p)),pr=p=>p.process||"";
+  const B={w:open.filter(p=>!pr(p)||/^(WAITING|NOT SENDING)/i.test(pr(p))),s:open.filter(p=>/^(SENDING|WORK PERMIT|PPZ)/i.test(pr(p))),a:open.filter(p=>/APPROVAL/i.test(pr(p))),v:open.filter(p=>/VISA/i.test(pr(p)))};
+  const ft=(t,l,hd,ex)=>`<div class="sh" style="margin-top:20px"><small>${t} (${fm(l.length)})</small></div>`+table(["SL","NAME","PP. NO","PP. EXP","COUNTRY","AGENT NAME","ENTRY DATE",...hd],l.map((p,i)=>`<tr><td>${i+1}</td>${[p.name,p.pn,fmtD(p.exp),p.country,p.agent,fmtD(p.date),...ex(p)].map(v=>`<td>${esc(v)}</td>`).join("")}</tr>`).join(""));
+  const cty=a=>{const m={};live.filter(p=>p.agent===a).forEach(p=>{const c=cn(p.country)||"-";m[c]=(m[c]||0)+1});return Object.entries(m).sort().map(([c,n])=>esc(c)+" - "+n).join("<br>")};
+  V.innerHTML=sheetTitle("TOTAL AGENT")+`<div class="stats">
   <div class="stat"><small>TOTAL PASSPORT ENTRY</small><b>${fm(ppl.length)}</b></div>
-  <div class="stat"><small>RETURNS / CANCEL</small><b>${fm(ppl.length-live)}</b></div>
-  <div class="stat"><small>FLIGHT DONE</small><b>${fm(ppl.filter(fly).length)}</b></div>
-  <div class="stat"><small>TOTAL PENDING (Tk)</small><b class="pend">${fm(pend)}</b></div>
-  <div class="stat"><small>TOTAL EXTRA (Tk)</small><b class="over">${fm(over)}</b></div></div>
-  <div class="bar"><button class="btn" data-act="xBal">AGENT BALANCE Excel</button></div>`+
-  (isAdm?`${simHTML()}<form id="fm"><label>এই নামটি (ভুল/আলাদা নাম)<select name="f">${opts(["",...agents])}</select></label><label>এই এজেন্টের সাথে এক হবে<select name="t">${opts(["",...agents])}</select></label><button>এক করুন</button></form>`:"")+
-  table(BCOLS,A.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.a)}</td><td>${x.n}</td><td>${dueCell(x)}</td><td>${fm(x.paid)}</td><td class="pend">${x.diff>0?fm(x.diff):""}</td><td class="over">${x.diff<0?fm(-x.diff):""}</td></tr>`).join(""),
-  `<tr class="tot"><td></td><td>TOTAL</td><td>${A.reduce((s,x)=>s+x.n,0)}</td><td>${fm(A.reduce((s,x)=>s+x.due,0))}</td><td>${fm(A.reduce((s,x)=>s+x.paid,0))}</td><td class="pend">${fm(pend)}</td><td class="over">${fm(over)}</td></tr>`);
+  <div class="stat"><small>RETURNS / CANCEL PASSPORT</small><b>${fm(ppl.length-live.length)}</b></div>
+  <div class="stat"><small>TOTAL AGENT</small><b>${fm(agents.length)}</b></div>
+  <div class="stat"><small>TOTAL FLIGHT DONE</small><b>${fm(ppl.filter(fly).length)}</b></div></div>
+  <div class="bar"><button class="btn" data-act="xBal">TOTAL AGENT Excel</button></div>`+
+  ft("WAITING FILE",B.w,[],()=>[])+ft("SENDING FILE",B.s,[],()=>[])+ft("APPROVE FILE",B.a,["SENDING DATE"],p=>[fmtD(p.sdate)])+ft("VISA OK",B.v,["SENDING DATE","APPROVED DATE"],p=>[fmtD(p.sdate),fmtD(p.adate)])+
+  (isAdm?`<form id="fm" style="margin-top:20px"><label>এই নামটি (ভুল/আলাদা নাম)<select name="f">${opts(["",...agents])}</select></label><label>এই এজেন্টের সাথে এক হবে<select name="t">${opts(["",...agents])}</select></label><button>এক করুন</button></form>`:"")+
+  `<div class="sh" style="margin-top:22px"><small>AGENT</small></div>`+table(["SL","AGENT","PP COUNT (দেশ অনুযায়ী ও মোট)","TOTAL DUE (Tk)","TOTAL DEPOSIT (Tk)"],A.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.a)}</td><td>${cty(x.a)}${cty(x.a)?"<br>":""}<b>TOTAL PP - ${x.n}</b></td><td>${dueCell(x)}</td><td>${fm(x.paid)}</td></tr>`).join(""),`<tr class="tot"><td></td><td>TOTAL</td><td>${A.reduce((s,x)=>s+x.n,0)}</td><td>${fm(A.reduce((s,x)=>s+x.due,0))}</td><td>${fm(A.reduce((s,x)=>s+x.paid,0))}</td></tr>`);
 }
 function entryCell(k,i,p){
   if(RO())return`<td>${esc(DATEK.includes(k)?slashD(p[k]):(p[k]||""))}</td>`;
   const so=(o,v)=>`<td><select data-k="${k}" data-i="${i}"${dis(k)}>${opts(o.includes(v)?o:[...o,v],v)}</select></td>`;
   if(k==="status")return so(STATUSES,p.status);
-  if(k==="process")return so(ROLE==="reception"?PROC.filter(x=>x===p.process||CANCEL_RE.test(x)):PROC,p.process);
+  if(k==="process")return so(ROLE==="reception"?PROC.filter(x=>x===p.process||x==="WAITING"||CANCEL_RE.test(x)):PROC,p.process);
   if(k==="med"){const mv=String(p.med||"").toUpperCase();return so(["","YES","NO"],mv==="YES"||mv==="NO"?mv:(p.med?"YES":""))}
-  if(k==="work")return so(staffNames,p.work||"");
+  if(k==="work")return`<td>${esc(p.work||"")}</td>`;
   const v=DATEK.includes(k)?slashD(p[k]):(p[k]||"");
   return`<td><input data-k="${k}" data-i="${i}" value="${esc(v)}"${DATEK.includes(k)&&k!=="med"?' placeholder="DD/MM/YYYY"':""}${dis(k)}></td>`}
 function drawList(){
@@ -340,14 +341,14 @@ function drawList(){
 }
 function list(){
   V.innerHTML=sheetTitle("TOTAL PASSPORT ENTRY ("+(curC||"ALL COUNTRY")+")")+`<datalist id="agl">${agents.map(a=>`<option value="${esc(a)}">`).join("")}</datalist><datalist id="cl">${[...new Set(ppl.map(p=>p.country))].filter(Boolean).sort().map(a=>`<option value="${esc(a)}">`).join("")}</datalist>`+
-  (canEnt()&&!curC?`<form id="fe"><input name="n" placeholder="PASSPORT NAME" required><input name="pn" placeholder="P. NUMBER" required><label>P. EXPIRY<input name="exp" placeholder="DD/MM/YYYY"></label><input name="a" list="agl" placeholder="AGENT (নতুন নামও লেখা যাবে)" required><input name="c" list="cl" placeholder="COUNTRY / GROUP" required><select name="st" aria-label="STATUS">${opts(STATUSES)}</select><input name="rec" placeholder="REC."><select name="w" aria-label="WORK">${opts(staffNames,staffNames.includes(myName)?myName:"")}</select><button>এন্ট্রি যোগ করুন</button></form>`:"")+
+  (canEnt()&&!curC?`<form id="fe"><input name="n" placeholder="PASSPORT NAME" required><input name="pn" placeholder="P. NUMBER" required><label>P. EXPIRY<input name="exp" placeholder="DD/MM/YYYY"></label><input name="a" list="agl" placeholder="AGENT (নতুন নামও লেখা যাবে)" required><input name="c" list="cl" placeholder="COUNTRY / GROUP" required><select name="st" aria-label="STATUS">${opts(STATUSES)}</select><input name="rec" placeholder="REC."><select name="med" aria-label="MED"><option value="">MED (YES/NO)</option><option>YES</option><option>NO</option></select><label>POLICE CLEARANCE DATE<input name="pc" placeholder="DD/MM/YYYY"></label><select name="pr" aria-label="PROCESS">${opts(ROLE==="reception"?["WAITING"]:PROC.filter(Boolean),"WAITING")}</select><label>R. DATE<input name="rd" placeholder="DD/MM/YYYY"></label><button>এন্ট্রি যোগ করুন</button></form>`:"")+
   `<div class="bar"><input data-in="sq" placeholder="নাম, পাসপোর্ট নম্বর বা এজেন্ট খুঁজুন" value="${esc(q)}" style="flex:1;min-width:200px"><input id="dd" value="${slashD(today())}" placeholder="DD/MM/YYYY" aria-label="Date" style="width:130px"><button class="btn" data-act="xDay">এই তারিখের এন্ট্রি Excel</button><button class="btn" data-act="xAll">ALL ENTRY Excel</button></div><div id="pn" class="bar"></div><div id="lt"></div>`;
   drawList();
 }
 function drawRets(){
   const f=rets.filter((r,i)=>(!rq||(r.name+" "+r.pn+" "+r.agent).toUpperCase().includes(rq))&&cfOK("ret",retRow(r,i)));
   const pages=Math.max(1,Math.ceil(f.length/PER));rpg=Math.min(Math.max(rpg,0),pages-1);
-  $("rt").innerHTML=table(RCOLS,f.slice(rpg*PER,rpg*PER+PER).map((r,i)=>`<tr class="ret">${retRow(r,rpg*PER+i).map(v=>`<td>${esc(v)}</td>`).join("")}</tr>`).join(""));
+  $("rt").innerHTML=table(RCOLS.concat(isAdm?[""]:[]),f.slice(rpg*PER,rpg*PER+PER).map((r,i)=>`<tr class="ret">${retRow(r,rpg*PER+i).map(v=>`<td>${esc(v)}</td>`).join("")}${isAdm?`<td><button class="btn red sm" data-act="delR" data-i="${rets.indexOf(r)}">মুছুন</button></td>`:""}</tr>`).join(""));
   cfHead("rt","ret",RCOLS);
   $("rp").innerHTML=`${fm(f.length)} টি, পেজ ${rpg+1}/${pages} <button class="btn" data-act="rpP"${rpg?"":" disabled"}>আগের</button> <button class="btn" data-act="rpN"${rpg<pages-1?"":" disabled"}>পরের</button> ${cfBtn("ret")}`;
 }
@@ -358,19 +359,18 @@ function dep(){
   const wd=depAgents(),nd=agents.filter(a=>!wd.includes(a));
   if(depInit&&agents.length){depInit=false;depAgent=wd[0]||agents[0]}
   if(!agents.length){V.innerHTML=sheetTitle("DEPOSIT LIST")+(canDep()?`<form id="fa"><label>নতুন এজেন্টের নাম<input name="n" required></label><button>এজেন্ট যোগ করুন</button></form>`:"")+`<div class="note">এখনো কোনো এজেন্ট নেই। "EXCEL আপলোড" ট্যাব থেকে আপনার Excel ফাইল দিন, অথবা এজেন্ট যোগ করুন।</div>`;return}
-  const sum=(a,ac)=>deps.filter(d=>d.a===a&&d.acct===ac).reduce((s,d)=>s+d.amt,0);
-  const srows=wd.map(a=>[SER[a]?pad(SER[a]):"NEW",a,sum(a,"MAIN"),sum(a,"EMARGENCY"),sum(a,"MAIN")+sum(a,"EMARGENCY")]);
-  const mine=ac=>deps.filter(d=>d.a===depAgent&&d.acct===ac);
-  const tbl=(ac,t)=>{const r=mine(ac);if(!r.length&&ac!=="MAIN")return"";
+  const sum=a=>deps.filter(d=>d.a===a).reduce((s,d)=>s+d.amt,0);
+  const srows=wd.map(a=>[SER[a]?pad(SER[a]):"NEW",a,sum(a)]);
+  const tbl=(ac,t)=>{const r=deps.filter(d=>d.a===depAgent);
     return`<div class="sh"><small>${esc(t)}</small></div>`+table(DCOLS.concat(isAdm?[""]:[]),r.map((d,i)=>`<tr><td>${pad(i+1)}</td><td>${esc(fmtD(d.date)||"(তারিখ নেই)")}</td><td>${esc(depAgent)}</td><td>${esc(d.part)}</td><td>${fm(d.amt)}</td>${isAdm?`<td><button class="btn red sm" data-act="delD" data-id="${esc(d._id)}" data-c="${esc(d._c)}">মুছুন</button></td>`:""}</tr>`).join(""),
-      `<tr class="tot"><td colspan="4">NOW BALANCE</td><td>${fm(r.reduce((s,d)=>s+d.amt,0))}</td>${isAdm?"<td></td>":""}</tr>`)};
+      `<tr class="tot"><td colspan="4">TOTAL BALANCE</td><td>${fm(r.reduce((s,d)=>s+d.amt,0))}</td>${isAdm?"<td></td>":""}</tr>`)};
   V.innerHTML=sheetTitle("DEPOSIT LIST")+(canDep()?`<form id="fa"><label>নতুন এজেন্টের নাম<input name="n" required></label><button>এজেন্ট যোগ করুন</button></form>`:"")+
   `<div class="sh"><small>ALL AGENTS DEPOSIT SUMMARY (${wd.length} জন এজেন্টের জমা আছে। সারিতে চাপলে নিচে তার শিট খুলবে)</small></div><div class="bar"><button class="btn" data-act="xSum">সারাংশ Excel</button><button class="btn" data-act="xDepAll">সব এজেন্টের জমা Excel</button></div>`+
-  table(SCOLS,srows.map(r=>`<tr data-act="pick" data-a="${esc(r[1])}"><td>${r[0]}</td><td>${esc(r[1])}</td><td>${fm(r[2])}</td><td>${r[3]?fm(r[3]):""}</td><td><b>${fm(r[4])}</b></td></tr>`).join(""),
-   `<tr class="tot"><td></td><td>TOTAL</td><td>${fm(srows.reduce((s,r)=>s+r[2],0))}</td><td>${fm(srows.reduce((s,r)=>s+r[3],0))}</td><td>${fm(srows.reduce((s,r)=>s+r[4],0))}</td></tr>`)+
+  table(SCOLS,srows.map(r=>`<tr data-act="pick" data-a="${esc(r[1])}"><td>${r[0]}</td><td>${esc(r[1])}</td><td><b>${fm(r[2])}</b></td></tr>`).join(""),
+   `<tr class="tot"><td></td><td>TOTAL</td><td>${fm(srows.reduce((s,r)=>s+r[2],0))}</td></tr>`)+
   `<div class="sh" id="det" style="margin-top:22px"><small>এজেন্ট অনুযায়ী আলাদা শিট</small></div><div class="bar"><label>Agent <select data-ch="ag"><optgroup label="জমা আছে">${wd.map(a=>`<option value="${esc(a)}"${a===depAgent?" selected":""}>${esc(lab(a))}</option>`).join("")}</optgroup><optgroup label="জমা নেই">${opts(nd,depAgent)}</optgroup></select></label><button class="btn" data-act="xDep">এই এজেন্টের Excel</button></div>`+
-  (canDep()?`<form id="fd"><label>DATE<input name="d" value="${slashD(today())}" placeholder="DD/MM/YYYY" required></label><label>Particulars<input name="p" placeholder="CASH-SERBIA" required></label><label>Tk Deposit (ফেরত হলে মাইনাস)<input name="m" type="number" required></label><label>List<select name="t"><option>MAIN</option><option>EMARGENCY</option></select></label><button>জমা যোগ করুন</button></form>`:"")+
-  (wd.includes(depAgent)?"":`<div class="note">${esc(depAgent)}-এর নামে কোনো জমা এন্ট্রি নেই।</div>`)+tbl("MAIN",lab(depAgent))+tbl("EMARGENCY","EMARGENCY "+lab(depAgent));
+  (canDep()?`<form id="fd"><label>DATE<input name="d" value="${slashD(today())}" placeholder="DD/MM/YYYY" required></label><label>Particulars<input name="p" placeholder="CASH-SERBIA" required></label><label>Tk Deposit (ফেরত হলে মাইনাস)<input name="m" type="number" required></label><button>জমা যোগ করুন</button></form>`:"")+
+  (wd.includes(depAgent)?"":`<div class="note">${esc(depAgent)}-এর নামে কোনো জমা এন্ট্রি নেই।</div>`)+tbl("MAIN",lab(depAgent));
 }
 function track(){
   V.innerHTML=sheetTitle("পাসপোর্টের অবস্থা খুঁজুন")+`<div class="bar"><input data-in="tq" placeholder="পাসপোর্ট নম্বর বা নাম" style="flex:1;min-width:200px"></div><div id="tr"></div>`+(isAdm?`<div class="bar"><button class="btn" data-act="syncSt">কাস্টমারদের জন্য স্ট্যাটাস আপডেট (একবার চাপুন)</button></div>`:"");
@@ -402,15 +402,14 @@ async function dl(sheets,name){
     sheets.forEach(s=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([[s.t||AGENCY],[""],s.c,...s.r]),sn(s.n,used)));
     await d.save({filename:name,data:XLSX.write(wb,{type:"array",bookType:"xlsx"})});logA("DOWNLOAD",name);say("ডাউনলোড হয়েছে।")}
   catch(e){say(e&&e.code==="declined"?"ডাউনলোড বাতিল করা হয়েছে।":"ডাউনলোড করা যায়নি। আবার চেষ্টা করুন।")}}
-const depSheets=(list,ls)=>{const out=[];list.forEach(a=>["MAIN","EMARGENCY"].forEach(ac=>{const r=deps.filter(d=>d.a===a&&d.acct===ac);if(!r.length)return;
-  out.push({n:(SER[a]?pad(SER[a])+" ":"")+a+(ac==="MAIN"?"":" (EMARGENCY)"),t:(ac==="MAIN"?"":"EMARGENCY ")+lab(a),c:DCOLS,r:r.map((d,i)=>[i+1,fmtD(d.date),a,d.part,d.amt])})}));return out};
+const depSheets=(list,ls)=>{const out=[];list.forEach(a=>{const r=deps.filter(d=>d.a===a);if(!r.length)return;out.push({n:(SER[a]?pad(SER[a])+" ":"")+a,t:lab(a),c:DCOLS,r:r.map((d,i)=>[i+1,fmtD(d.date),a,d.part,d.amt])})});return out};
 const entRows=()=>ppl.map(rowOf),retRows=()=>rets.map(retRow);
 const X={
   xBal(){const A=aggr();dl([{n:"AGENT BALANCE",c:BCOLS,r:A.map((x,i)=>[i+1,x.a,x.n,x.due,x.paid,x.diff>0?x.diff:"",x.diff<0?-x.diff:""])}],"AGENT BALANCE.xlsx")},
   xDay(){const k=parseD($("dd").value);if(!k){say("তারিখ DD/MM/YYYY লিখুন, যেমন 01/10/2026।");return}dl([{n:"ENTRY",c:COLS,r:entRows().filter((r,i)=>ppl[i].date===k)}],"passport-entry-"+fmtD(k)+".xlsx")},
   xAll(){dl([{n:"All ENTRY",c:COLS,r:entRows().filter(r=>cfOK("list",r))}],"1 ALL PASSPORT ENTRY LIST.xlsx")},
   xRet(){dl([{n:"RETURNS",c:RCOLS,r:retRows().filter(r=>cfOK("ret",r))}],"2 RETURN LIST.xlsx")},
-  xSum(){const wd=depAgents(),s=(a,ac)=>deps.filter(d=>d.a===a&&d.acct===ac).reduce((x,d)=>x+d.amt,0);dl([{n:"DEPOSIT SUMMARY",c:SCOLS,r:wd.map(a=>[SER[a]?pad(SER[a]):"NEW",a,s(a,"MAIN"),s(a,"EMARGENCY"),s(a,"MAIN")+s(a,"EMARGENCY")])}],"ALL AGENTS DEPOSIT SUMMARY.xlsx")},
+  xSum(){const wd=depAgents();dl([{n:"DEPOSIT SUMMARY",c:SCOLS,r:wd.map(a=>[SER[a]?pad(SER[a]):"NEW",a,deps.filter(d=>d.a===a).reduce((x,d)=>x+d.amt,0)])}],"ALL AGENTS DEPOSIT SUMMARY.xlsx")},
   xDepAll(){dl(depSheets(depAgents()),"ALL DEPOSIT LIST.xlsx")},
   xDep(){dl(depSheets([depAgent]),lab(depAgent).replace(/[\\\/:*?"<>|]/g,"-").slice(0,90)+".xlsx")},
   xBackup(){dl([{n:"All ENTRY",c:COLS,r:entRows()},{n:"RETURNS",c:RCOLS,r:retRows()},...depSheets(depAgents())],"JAHOSS ENTERPRISE BACKUP "+today()+".xlsx")}
@@ -476,22 +475,22 @@ const ACT={
 const INP={sq(t){q=t.value.trim().toUpperCase();pg=0;logS("SEARCH ENTRY",q);drawList()},rq(t){rq=t.value.trim().toUpperCase();rpg=0;logS("SEARCH RETURN",rq);drawRets()},tq(t){logS("SEARCH STATUS",t.value);trackGo(t.value)}};
 const CH={ag(t){depAgent=t.value;dep()}};
 async function cellEdit(t){
-  const p=ppl[+t.dataset.i],k=t.dataset.k;if(!p||!fok(k))return;let v=t.value.trim();if(k==="process"&&ROLE==="reception"&&v&&!CANCEL_RE.test(v))return;
+  const p=ppl[+t.dataset.i],k=t.dataset.k;if(!p||!fok(k))return;let v=t.value.trim();if(k==="process"&&ROLE==="reception"&&v&&!CANCEL_RE.test(v)&&v!=="WAITING")return;
   if(["pc","rdate"].includes(k)){const d=parseD(v);if(d===null){say("তারিখ DD/MM/YYYY লিখুন, যেমন 01/10/2026।");t.value=slashD(p[k]);return}if(d)v=d}
   if(k==="process")v=normProc(v);
-  if(!(await patch("entries",p,{[k]:v})))return;mirror({...p,[k]:v});logA("EDIT",p.name+" ("+p.pn+") "+k+": "+(p[k]||"")+" -> "+v);
+  const exf={[k]:v};if(k==="process"){if(/^(SENDING|WORK PERMIT|PPZ)/i.test(v)&&!p.sdate)exf.sdate=today();if(/APPROVAL/i.test(v)&&!p.adate)exf.adate=today()}if(!(await patch("entries",p,exf)))return;mirror({...p,[k]:v});logA("EDIT",p.name+" ("+p.pn+") "+k+": "+(p[k]||"")+" -> "+v);
   if(k==="process"&&CANCEL_RE.test(v)&&!rpn.has(nk(p.pn)))await addRow("returns",{rdate:p.rdate||today(),name:p.name,pn:p.pn,exp:p.exp,country:p.country,agent:p.agent,status:p.status,rec:p.rec,med:p.med,pc:p.pc,process:v})}
 const FORM={
   async fe(fd,f){
     const pn=up(fd.get("pn")),ex=parseD(fd.get("exp"));if(ex===null){say("P. EXPIRY: তারিখ DD/MM/YYYY লিখুন, যেমন 01/10/2026।");return}
     const old=ppl.find(p=>nk(p.pn)===nk(pn));
     if(old&&dupOK!==pn){dupOK=pn;say("এই পাসপোর্ট নম্বর আগেই আছে ("+old.name+", "+old.agent+")। তবু যোগ করতে আবার চাপুন।");return}
-    dupOK="";const a=resolveAgent(fd.get("a"));
-    if(await addRow("entries",{date:today(),name:up(fd.get("n")),pn,exp:ex,country:up(fd.get("c")),agent:a,status:fd.get("st"),rec:String(fd.get("rec")).trim(),med:"",pc:"",process:"",rdate:"",work:fd.get("w")||myName})){mirror({pn,process:""});logA("ENTRY ADD",up(fd.get("n"))+" "+pn+" / "+a);f.reset();pg=1e6;say("এন্ট্রি যোগ হয়েছে।")}},
+    dupOK="";const a=resolveAgent(fd.get("a")),pcv=parseD(fd.get("pc")),rdv=parseD(fd.get("rd"));if(pcv===null||rdv===null){say("তারিখ DD/MM/YYYY লিখুন, যেমন 01/10/2026।");return}let prc=normProc(fd.get("pr")||"WAITING");if(ROLE==="reception"&&prc!=="WAITING")prc="WAITING";const medv=String(fd.get("med")||"");
+    if(await addRow("entries",{date:today(),name:up(fd.get("n")),pn,exp:ex,country:up(fd.get("c")),agent:a,status:fd.get("st"),rec:String(fd.get("rec")).trim(),med:medv,pc:pcv,process:prc,rdate:rdv,work:(myName||"").toUpperCase()})){mirror({pn,process:prc,med:medv,pc:pcv});logA("ENTRY ADD",up(fd.get("n"))+" "+pn+" / "+a);f.reset();pg=1e6;say("এন্ট্রি যোগ হয়েছে।")}},
   async fd(fd,f){
     const dt=parseD(fd.get("d"));if(dt===null||dt===""){say("তারিখ DD/MM/YYYY লিখুন, যেমন 01/10/2026।");return}
     if(!depAgent){say("আগে এজেন্ট বাছুন।");return}
-    if(await addRow("deposits",{a:depAgent,date:dt,part:up(fd.get("p")),amt:Number(fd.get("m")),acct:fd.get("t")})){
+    if(await addRow("deposits",{a:depAgent,date:dt,part:up(fd.get("p")),amt:Number(fd.get("m")),acct:"MAIN"})){
       if(!SER[depAgent]){const list=S.agents.map(a=>({...a}));const x=list.find(a=>a.n===depAgent);if(x)x.s=nextSer();else list.push({n:depAgent,s:nextSer()});await saveAgents(list)}
       logA("DEPOSIT ADD",depAgent+" | "+fd.get("p")+" | Tk "+fd.get("m"));say("জমা যোগ হয়েছে।")}},
   async fa(fd){const a=resolveAgent(fd.get("n"));if(!a)return;
@@ -641,7 +640,7 @@ function cfOpen(t,c){
     if(z==="ok"){const set=qs?new Set(vis().filter(v=>sel.has(v))):new Set(sel);if(all.every(v=>set.has(v)))delete CF[t][c];else CF[t][c]=set;shut();render()}};
   ov.oninput=e=>{if(e.target.id==="cfq"){qs=e.target.value.trim().toUpperCase();fill()}};
   ov.onchange=e=>{const x=e.target;if(x.dataset&&x.dataset.v!==undefined){x.checked?sel.add(x.dataset.v):sel.delete(x.dataset.v)}}}
-Object.assign(ACT,{cf(b){cfOpen(b.dataset.t,+b.dataset.c)},cfx(b){CF[b.dataset.t]={};render()}});
+Object.assign(ACT,{delR(b){if(b.dataset.s!=="1"){b.dataset.s="1";b.textContent="নিশ্চিত?";setTimeout(()=>{b.dataset.s="";b.textContent="মুছুন"},4000);return}const r=rets[+b.dataset.i];if(!r)return;logA("DELETE RETURN",r.name+" "+r.pn);patch("returns",r,{del:true})},cf(b){cfOpen(b.dataset.t,+b.dataset.c)},cfx(b){CF[b.dataset.t]={};render()}});
 fbBoot(start);
 </script>
 </body>
