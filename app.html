@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="bn">
-<head>
+<head><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0F2765"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Jahoss">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Jahoss Enterprise Limited - Passport Tracker</title>
@@ -98,7 +98,7 @@ footer.ft{background:#1E2227;border-top:4px solid #DA0F32}
   <h1><span class="cn">JAHOSS ENTERPRISE LIMITED</span><small>Passport Tracker · Govt. Approved Recruiting Licence No. RL-2177</small></h1>
   <div class="hc"><small>24/7 Response Time</small><b>+88 01760 528 057</b></div><div class="hc"><small>Send Your Query</small><b>Jahossent.ltd@gmail.com</b></div>
   <span id="me">...</span>
-  <a class="btn sm" href="index.html">ওয়েবসাইট</a>
+  <a class="btn sm" href="index.html?site=1">ওয়েবসাইট</a>
   <button class="btn sm hide" id="chg">নাম বদলান</button>
 </header>
 <nav id="nav"></nav>
@@ -167,7 +167,7 @@ function fbBoot(start){
     if(!u){box.classList.remove("hide");box.style.display="flex";return}
     box.style.display="none";
     if(!document.getElementById("lo")){const b=document.createElement("button");b.id="lo";b.className="btn sm";b.textContent="লগআউট";
-      b.onclick=()=>{logA("LOGOUT","");setTimeout(()=>firebase.auth().signOut().then(()=>location.reload()),500)};document.querySelector("header").appendChild(b)}
+      b.onclick=()=>{logA("LOGOUT","");try{localStorage.removeItem("jstaff")}catch(e){}setTimeout(()=>firebase.auth().signOut().then(()=>location.reload()),500)};document.querySelector("header").appendChild(b)}
     if(!started){started=true;start()}})}
 </script>
 <script>
@@ -538,7 +538,7 @@ async function start(){
    const ur=fbDb.collection("users").doc(fbUser.uid);
    ur.set(isAdm?{name:PROF.name,role:"admin",email:em,last:Date.now()}:{last:Date.now()},{merge:true}).catch(()=>{});
    ur.onSnapshot(s=>{const x=s.data();if(!isAdm&&(!x||x.disabled))kickOut("আপনাকে সাইট থেকে বের করে দেওয়া হয়েছে।")},()=>{});
-   logA("LOGIN","")}
+   logA("LOGIN","");try{localStorage.setItem("jstaff","1")}catch(e){}}
   if(ROLE==="agent"){agentPortal();return}
   nav();
   const chunk=m=>s=>{m.clear();s.docs.forEach(d=>m.set(d.id,(d.data()||{}).rows||{}))};
@@ -555,7 +555,7 @@ let ROLE="",PROF={};
 const canDep=()=>isAdm||ROLE==="accountant",canEnt=()=>isAdm||ROLE==="reception";
 const PROCF=["status","med","pc","process"];
 const fok=k=>curC?(isAdm||(ROLE==="staff"&&PROCF.includes(k))):(isAdm||(k==="process"&&ROLE==="reception")||(PROCF.includes(k)?ROLE==="staff":ROLE==="reception"));
-function kickOut(m){alert(m);const go=()=>location.reload();firebase.auth().signOut().then(go,go)}
+function kickOut(m){try{localStorage.removeItem("jstaff")}catch(e){}alert(m);const go=()=>location.reload();firebase.auth().signOut().then(go,go)}
 function logA(a,d){try{if(!fbDb||!fbUser)return;fbDb.collection("logs").add({t:Date.now(),u:(fbUser.email||"").toLowerCase(),n:myName||"",r:ROLE,a,d:String(d||"").slice(0,300)}).catch(()=>{})}catch(e){}}
 let _ls;const logS=(a,v)=>{clearTimeout(_ls);if(v)_ls=setTimeout(()=>logA(a,v),1500)};
 const un=e=>String(e||"").replace("@jahoss.local","");
@@ -643,5 +643,5 @@ function cfOpen(t,c){
 Object.assign(ACT,{delR(b){if(b.dataset.s!=="1"){b.dataset.s="1";b.textContent="নিশ্চিত?";setTimeout(()=>{b.dataset.s="";b.textContent="মুছুন"},4000);return}const r=rets[+b.dataset.i];if(!r)return;logA("DELETE RETURN",r.name+" "+r.pn);patch("returns",r,{del:true})},cf(b){cfOpen(b.dataset.t,+b.dataset.c)},cfx(b){CF[b.dataset.t]={};render()}});
 fbBoot(start);
 </script>
-</body>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script></body>
 </html>
