@@ -90,6 +90,14 @@ nav button{color:#fff;text-transform:uppercase;font:700 13px "Fira Sans","Hind S
 nav button:hover{color:#ff6b84}nav button.on{color:#fff;background:rgba(255,255,255,.05);border-bottom-color:#DA0F32}
 button,.btn,input,select,.stat,form{border-radius:3px}
 footer.ft{background:#1E2227;border-top:4px solid #DA0F32}
+
+.tbg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px}
+.tbc{display:flex;flex-direction:column;gap:5px;text-align:left;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-top:3px solid #DA0F32;padding:12px;cursor:pointer;font:inherit;transition:transform .2s,box-shadow .2s}
+.tbc:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(15,39,101,.15)}
+.tbi{font-size:26px;line-height:1}.tbc b{font-size:15px}.tbd{font-size:13px;color:var(--mut);line-height:1.45}
+.tbb{margin-top:auto;font-size:11px;font-weight:700;padding:2px 8px;align-self:flex-start;background:#e3f4ea;color:#17703f}.tbb.x{background:#eceef3;color:#566}
+.tbform{display:grid;gap:12px;max-width:560px}.tbform label{display:grid;gap:4px}
+nav a.tbx{color:#fff;text-transform:uppercase;font:700 13px "Fira Sans","Hind Siliguri",sans-serif;padding:22px 16px;text-decoration:none;border-bottom:4px solid transparent;background:rgba(218,15,50,.9)}nav a.tbx:hover{background:#DA0F32}
 </style>
 </head>
 <body>
@@ -388,8 +396,8 @@ function excel(){
 }
 const VIEWS={dash,list,rets:rets_,dep,track,excel,adm:admin};
 const TABS=[["dash","AGENT BALANCE"],["list","ALL ENTRY"],["rets","RETURNS"],["dep","DEPOSIT LIST"],["track","অবস্থা খুঁজুন"],["excel","EXCEL আপলোড/ডাউনলোড"]];
-function render(){if(tab.startsWith("c:")&&!countries().includes(tab.slice(2)))tab="list";nav();if(got.size<4){V.textContent="লোড হচ্ছে...";return}if(tab.startsWith("c:")){curC=tab.slice(2);list()}else{curC=null;VIEWS[tab]()}}
-function nav(){$("nav").innerHTML=tabsList().map(([k,l])=>`<button class="${k===tab?"on":""}" data-act="tab" data-k="${k}">${l}</button>`).join("")}
+function render(){if(tab.startsWith("c:")&&!countries().includes(tab.slice(2)))tab="list";nav();if(tab==="tools"){if(V.dataset.t!=="tools"){V.dataset.t="tools";toolbox()}return}V.dataset.t="";if(got.size<4){V.textContent="লোড হচ্ছে...";return}if(tab.startsWith("c:")){curC=tab.slice(2);list()}else{curC=null;VIEWS[tab]()}}
+function nav(){$("nav").innerHTML=tabsList().map(([k,l])=>`<button class="${k===tab?"on":""}" data-act="tab" data-k="${k}">${l}</button>`).join("")+'<a class="tbx" href="tools.html">টুলস বক্স</a>'}
 const inField=()=>{const a=document.activeElement;return!!a&&V.contains(a)&&/INPUT|SELECT|TEXTAREA/.test(a.tagName)&&a.type!=="button"&&a.type!=="file"};
 function sched(){derive();syncSoon();if(inField()){pending=true;return}render()}
 document.addEventListener("focusout",()=>{if(pending)setTimeout(()=>{if(!inField()){pending=false;render()}},80)});
@@ -621,7 +629,7 @@ function agentPortal(){
 // ---- excel-style column filters
 const RO=()=>ROLE==="viewer",cn=c=>String(c||"").trim().toUpperCase();let curC=null;
 const countries=()=>[...new Set(ppl.map(p=>cn(p.country)).filter(Boolean))].sort();
-function tabsList(){const t=[["list","ALL ENTRY"],["rets","RETURNS"],...countries().map(c=>["c:"+c,c]),["dep","DEPOSIT LIST"],["dash","TOTAL AGENT"],["track","অবস্থা খুঁজুন"]];if(!RO())t.push(["excel","EXCEL আপলোড/ডাউনলোড"]);if(isAdm)t.push(["adm","ADMIN"]);return t}
+function tabsList(){const t=[["list","ALL ENTRY"],["rets","RETURNS"],...countries().map(c=>["c:"+c,c]),["dep","DEPOSIT LIST"],["dash","TOTAL AGENT"],["track","অবস্থা খুঁজুন"],["tools","টুলস বক্স"]];if(!RO())t.push(["excel","EXCEL আপলোড/ডাউনলোড"]);if(isAdm)t.push(["adm","ADMIN"]);return t}
 const CF={list:{},ret:{}};
 const cfRows=t=>t==="list"?ppl.map((p,i)=>rowOf(p,i)).filter((r,i)=>!curC||cn(ppl[i].country)===curC):rets.map(retRow),cfCols=t=>t==="list"?COLS:RCOLS;
 function cfOK(t,row){const f=CF[t];for(const c in f){if(!f[c].has(String(row[c]==null?"":row[c])))return false}return true}
@@ -641,6 +649,116 @@ function cfOpen(t,c){
   ov.oninput=e=>{if(e.target.id==="cfq"){qs=e.target.value.trim().toUpperCase();fill()}};
   ov.onchange=e=>{const x=e.target;if(x.dataset&&x.dataset.v!==undefined){x.checked?sel.add(x.dataset.v):sel.delete(x.dataset.v)}}}
 Object.assign(ACT,{delR(b){if(b.dataset.s!=="1"){b.dataset.s="1";b.textContent="নিশ্চিত?";setTimeout(()=>{b.dataset.s="";b.textContent="মুছুন"},4000);return}const r=rets[+b.dataset.i];if(!r)return;logA("DELETE RETURN",r.name+" "+r.pn);patch("returns",r,{del:true})},cf(b){cfOpen(b.dataset.t,+b.dataset.c)},cfx(b){CF[b.dataset.t]={};render()}});
+// ---------- টুলস বক্স
+const TBL={pdf:"https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js",pjs:"https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js",zip:"https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js",qr:"https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"},tbP={};
+function tbNeed(k){if(!tbP[k])tbP[k]=new Promise((ok,no)=>{const e=document.createElement("script");e.src=TBL[k];e.onload=()=>{if(k==="pjs")pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";ok()};e.onerror=()=>{tbP[k]=null;no(new Error("দরকারি অংশ লোড হয়নি, ইন্টারনেট দেখুন"))};document.head.appendChild(e)});return tbP[k]}
+const tbRead=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(new Uint8Array(r.result));r.onerror=no;r.readAsArrayBuffer(f)});
+const tbSave=(b,n,m)=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([b],{type:m}));a.download=n;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)};
+const tbSize=n=>n>1048576?(n/1048576).toFixed(1)+" MB":Math.round(n/1024)+" KB",tbSet=m=>{const e=$("tbs");if(e)e.textContent=m};
+const TBPS={A4:[595.28,841.89],A5:[419.53,595.28],Letter:[612,792]},PDFA=".pdf,application/pdf";
+const tbBlob=(c,t,q)=>new Promise(r=>c.toBlob(r,t,q));
+function tbList(t,n,keepOrder){const out=[];String(t).split(",").forEach(p=>{p=p.trim();const m=p.match(/^(\d+)\s*-\s*(\d+)$/);if(m){for(let i=+m[1];i<=+m[2];i++)if(i>=1&&i<=n)out.push(i-1)}else if(/^\d+$/.test(p)&&+p>=1&&+p<=n)out.push(+p-1)});return keepOrder?out:[...new Set(out)].sort((a,b)=>a-b)}
+async function tbMerge(fs,o){await tbNeed("pdf");const {PDFDocument}=PDFLib,out=await PDFDocument.create(),[W,H]=TBPS[o.size]||TBPS.A4;
+  for(const f of fs){const src=await PDFDocument.load(await tbRead(f),{ignoreEncryption:true});
+    if(o.size==="orig"){(await out.copyPages(src,src.getPageIndices())).forEach(p=>out.addPage(p))}
+    else for(const e of await out.embedPdf(src)){const land=e.width>e.height,pw=land?H:W,ph=land?W:H,sc=Math.min(pw/e.width,ph/e.height),w=e.width*sc,h=e.height*sc,pg=out.addPage([pw,ph]);pg.drawPage(e,{x:(pw-w)/2,y:(ph-h)/2,width:w,height:h})}}
+  return{bytes:await out.save(),name:o.name||"merged.pdf",mime:"application/pdf"}}
+async function tbImg(fs,o){await tbNeed("pdf");const {PDFDocument}=PDFLib,out=await PDFDocument.create(),[W,H]=TBPS.A4,mg=+o.margin;
+  for(const f of fs){const bmp=await createImageBitmap(f),k=Math.min(1,2600/Math.max(bmp.width,bmp.height)),c=document.createElement("canvas");c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(bmp,0,0,c.width,c.height);
+    const im=await out.embedJpg(await tbRead(await tbBlob(c,"image/jpeg",.92)));
+    if(o.size==="fit"){out.addPage([im.width,im.height]).drawImage(im,{x:0,y:0,width:im.width,height:im.height})}
+    else{const land=im.width>im.height,pw=land?H:W,ph=land?W:H,sc=Math.min((pw-2*mg)/im.width,(ph-2*mg)/im.height),w=im.width*sc,h=im.height*sc;out.addPage([pw,ph]).drawImage(im,{x:(pw-w)/2,y:(ph-h)/2,width:w,height:h})}}
+  return{bytes:await out.save(),name:"images.pdf",mime:"application/pdf"}}
+async function tbP2I(fs,o){await tbNeed("pjs");await tbNeed("zip");const pdf=await pdfjsLib.getDocument({data:await tbRead(fs[0])}).promise,z=new JSZip();
+  for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i),v=pg.getViewport({scale:(+o.dpi)/72}),c=document.createElement("canvas");c.width=Math.round(v.width);c.height=Math.round(v.height);await pg.render({canvasContext:c.getContext("2d"),viewport:v}).promise;z.file("page-"+String(i).padStart(3,"0")+".jpg",await tbBlob(c,"image/jpeg",.9));tbSet(i+"/"+pdf.numPages+" পাতা...")}
+  return{bytes:await z.generateAsync({type:"uint8array"}),name:"pdf-pages.zip",mime:"application/zip"}}
+async function tbComp(fs,o){await tbNeed("pjs");await tbNeed("pdf");const raw=await tbRead(fs[0]),pdf=await pdfjsLib.getDocument({data:raw.slice()}).promise,out=await PDFLib.PDFDocument.create();
+  for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i),v1=pg.getViewport({scale:1}),v=pg.getViewport({scale:(+o.dpi)/72}),c=document.createElement("canvas");c.width=Math.round(v.width);c.height=Math.round(v.height);await pg.render({canvasContext:c.getContext("2d"),viewport:v}).promise;
+    const im=await out.embedJpg(await tbRead(await tbBlob(c,"image/jpeg",+o.q)));out.addPage([v1.width,v1.height]).drawImage(im,{x:0,y:0,width:v1.width,height:v1.height});tbSet(i+"/"+pdf.numPages+" পাতা...")}
+  const bytes=await out.save();return{bytes,name:"compressed.pdf",mime:"application/pdf",note:bytes.length>=raw.length?"(ফাইল ছোট হয়নি, মূল ফাইলই রাখুন)":"(আগে ছিল "+tbSize(raw.length)+")"}}
+async function tbPages(fs,o){await tbNeed("pdf");const {PDFDocument,degrees}=PDFLib,src=await PDFDocument.load(await tbRead(fs[0]),{ignoreEncryption:true,updateMetadata:false}),n=src.getPageCount(),all=src.getPageIndices();
+  const make=async ix=>{const d=await PDFDocument.create();(await d.copyPages(src,ix)).forEach(p=>d.addPage(p));return d.save()};
+  if(o.mode==="split"){await tbNeed("zip");const z=new JSZip();let groups;const r=o.pages.trim();
+    if(/^\d+$/.test(r)&&+r>0){groups=[];for(let i=0;i<n;i+=+r)groups.push(all.slice(i,i+ +r))}else groups=r.split(";").map(g=>tbList(g,n,true)).filter(g=>g.length);
+    if(!groups.length)throw new Error("ভাগের নিয়ম বুঝতে পারিনি");for(let i=0;i<groups.length;i++)z.file("part-"+(i+1)+".pdf",await make(groups[i]));
+    return{bytes:await z.generateAsync({type:"uint8array"}),name:"split.zip",mime:"application/zip"}}
+  if(o.mode==="extract"){const ix=tbList(o.pages,n);if(!ix.length)throw new Error("পাতার নম্বর ঠিক নেই (মোট "+n+" পাতা)");return{bytes:await make(ix),name:"extracted.pdf",mime:"application/pdf"}}
+  if(o.mode==="remove"){const rm=new Set(tbList(o.pages,n)),ix=all.filter(i=>!rm.has(i));if(!rm.size)throw new Error("কোন পাতা মুছবেন লিখুন (মোট "+n+" পাতা)");if(!ix.length)throw new Error("সব পাতা মোছা যাবে না");return{bytes:await make(ix),name:"removed.pdf",mime:"application/pdf"}}
+  if(o.mode==="sort"){let ix=tbList(o.pages,n,true);ix=ix.concat(all.filter(i=>!ix.includes(i)));return{bytes:await make(ix),name:"sorted.pdf",mime:"application/pdf",note:"(মোট "+n+" পাতা)"}}
+  if(o.mode==="rotate"){const sel=o.pages.trim()?new Set(tbList(o.pages,n)):new Set(all),a=+o.angle;src.getPages().forEach((p,i)=>{if(sel.has(i))p.setRotation(degrees(((p.getRotation().angle+a)%360+360)%360))});return{bytes:await src.save(),name:"rotated.pdf",mime:"application/pdf"}}}
+async function tbWm(fs,o){await tbNeed("pdf");if(!o.text.trim())throw new Error("ওয়াটারমার্কের লেখা দিন");const d=await PDFLib.PDFDocument.load(await tbRead(fs[0]),{ignoreEncryption:true,updateMetadata:false}),fn="bold 120px 'Fira Sans','Hind Siliguri',sans-serif";
+  try{await document.fonts.load(fn,o.text)}catch(e){}const c=document.createElement("canvas"),x=c.getContext("2d");x.font=fn;c.width=Math.ceil(x.measureText(o.text).width)+40;c.height=200;x.font=fn;x.fillStyle=o.color;x.textBaseline="middle";x.fillText(o.text,20,100);
+  const im=await d.embedPng(await tbRead(await tbBlob(c,"image/png"))),th=Math.PI/4,co=Math.cos(th),si=Math.sin(th);
+  d.getPages().forEach(p=>{const {width:W,height:H}=p.getSize(),w=Math.min(W,H)*.85,h=w*c.height/c.width;p.drawImage(im,{x:W/2-w/2*co+h/2*si,y:H/2-w/2*si-h/2*co,width:w,height:h,rotate:PDFLib.degrees(45),opacity:+o.op})});
+  return{bytes:await d.save(),name:"watermarked.pdf",mime:"application/pdf"}}
+async function tbNum(fs,o){await tbNeed("pdf");const {PDFDocument,StandardFonts,rgb}=PDFLib,d=await PDFDocument.load(await tbRead(fs[0]),{ignoreEncryption:true,updateMetadata:false}),ft=await d.embedFont(StandardFonts.Helvetica),ps=d.getPages();
+  ps.forEach((p,i)=>{const W=p.getSize().width,t=o.fmt==="of"?(i+1)+" / "+ps.length:String(i+1),w=ft.widthOfTextAtSize(t,11);p.drawText(t,{x:o.pos==="r"?W-w-30:o.pos==="l"?30:(W-w)/2,y:22,size:11,font:ft,color:rgb(.2,.2,.2)})});
+  return{bytes:await d.save(),name:"numbered.pdf",mime:"application/pdf"}}
+async function tbMeta(fs,o){await tbNeed("pdf");const d=await PDFLib.PDFDocument.load(await tbRead(fs[0]),{ignoreEncryption:true,updateMetadata:false}),c=o.clear;
+  d.setTitle(c?"":o.title);d.setAuthor(c?"":o.author);d.setSubject(c?"":o.subject);d.setKeywords(c?[]:o.kw.split(",").map(v=>v.trim()).filter(Boolean));d.setProducer("");d.setCreator("");
+  return{bytes:await d.save(),name:"metadata.pdf",mime:"application/pdf"}}
+async function tbQr(_,o){await tbNeed("qr");if(!o.text.trim())throw new Error("লেখা বা লিংক দিন");qrcode.stringToBytes=qrcode.stringToBytesFuncs["UTF-8"];const q=qrcode(0,"M");q.addData(o.text);q.make();
+  const n=q.getModuleCount(),s=10,m=4,c=document.createElement("canvas");c.width=c.height=(n+2*m)*s;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.fillStyle="#000";for(let r=0;r<n;r++)for(let k=0;k<n;k++)if(q.isDark(r,k))x.fillRect((k+m)*s,(r+m)*s,s,s);
+  return{bytes:await tbRead(await tbBlob(c,"image/png")),name:"qr-code.png",mime:"image/png"}}
+const tbfF=(k,l,acc,multi)=>({k,ty:"file",l,acc,multi}),tbfS=(k,l,o,v)=>({k,ty:"sel",l,o,v}),tbfT=(k,l,ph,v)=>({k,ty:"txt",l,ph,v}),tbfC=(k,l)=>({k,ty:"chk",l});
+const P24="https://tools.pdf24.org/en/",SZ=[["A4","সব A4 (সমান)"],["A5","সব A5"],["Letter","সব Letter"],["orig","মূল মাপ"]];
+const TBG=["PDF সাজানো ও পাতা","PDF তৈরি ও কনভার্ট","সম্পাদনা ও অতিরিক্ত সুবিধা","নিরাপত্তা ও মেরামত","ছবি ঠিক করা ও AI"];
+const TOOLS=[
+{g:0,id:"merge",i:"🧩",t:"Merge PDF",d:"কয়েকটা PDF জোড়া লাগান। সব পাতা একই মাপে বসে, তাই কোনোটা বড় কোনোটা ছোট দেখায় না। ফাইলের নামের ক্রমে (A-Z) জোড়া হয়।",f:[tbfF("files","PDF ফাইল (একসাথে অনেকগুলো বাছুন)",PDFA,1),tbfS("size","পাতার মাপ",SZ,"A4")],run:tbMerge},
+{g:0,id:"split",i:"✂️",t:"Split PDF",d:"একটা PDF-কে কয়েক ভাগে ভাগ করুন (ZIP হয়ে নামে)।",f:[tbfF("files","PDF ফাইল",PDFA),tbfT("pages","ভাগের নিয়ম","যেমন 3 (প্রতি ৩ পাতায় ভাগ) বা 1-3;4-6;7","3")],run:(a,o)=>tbPages(a,{...o,mode:"split"})},
+{g:0,id:"extract",i:"📤",t:"Extract PDF pages",d:"শুধু যে পাতাগুলো লাগবে সেগুলো আলাদা PDF করুন।",f:[tbfF("files","PDF ফাইল",PDFA),tbfT("pages","পাতার নম্বর","যেমন 1,3,5-7")],run:(a,o)=>tbPages(a,{...o,mode:"extract"})},
+{g:0,id:"remove",i:"🗑️",t:"Remove PDF pages",d:"অপ্রয়োজনীয় পাতা মুছে ফেলুন।",f:[tbfF("files","PDF ফাইল",PDFA),tbfT("pages","মোছার পাতার নম্বর","যেমন 2,4-5")],run:(a,o)=>tbPages(a,{...o,mode:"remove"})},
+{g:0,id:"rotate",i:"🔄",t:"Rotate PDF pages",d:"উল্টো বা কাত হওয়া পাতা ঘুরিয়ে সোজা করুন।",f:[tbfF("files","PDF ফাইল",PDFA),tbfT("pages","কোন পাতা (ফাঁকা = সব পাতা)","যেমন 2,4-5"),tbfS("angle","কতটা ঘোরাবেন",[["90","ডানে ৯০°"],["180","উল্টো ১৮০°"],["270","বামে ৯০°"]],"90")],run:(a,o)=>tbPages(a,{...o,mode:"rotate"})},
+{g:0,id:"sort",i:"🔢",t:"Sort PDF pages",d:"পাতার ক্রম নিজের মতো সাজান।",f:[tbfF("files","PDF ফাইল",PDFA),tbfT("pages","নতুন ক্রম","যেমন 3,1,2,4-6 (বাদ পড়া পাতা শেষে যাবে)")],run:(a,o)=>tbPages(a,{...o,mode:"sort"})},
+{g:0,id:"psize",i:"📐",t:"Change PDF page size",d:"PDF-এর সব পাতা একই মাপে (A4, A5 ...) করুন।",f:[tbfF("files","PDF ফাইল",PDFA),tbfS("size","নতুন মাপ",SZ.slice(0,3),"A4")],run:(a,o)=>tbMerge(a,{...o,name:"resized.pdf"})},
+{g:0,id:"nup",i:"🗂️",t:"Pages per sheet",d:"এক পাতায় কয়েকটা পাতা বসান (প্রিন্ট খরচ কমাতে)।",u:P24+"pages-per-sheet"},
+{g:0,id:"bm",i:"🔖",t:"Edit PDF bookmarks",d:"PDF-এর বুকমার্ক যোগ বা বদলান।",u:P24+"bookmark-pdf"},
+{g:1,id:"img2pdf",i:"🖼️",t:"Images to PDF",d:"ছবি (JPG, PNG, ফোনের ছবি) থেকে PDF বানান। প্রতিটা ছবি একই মাপের পাতায় বসে।",f:[tbfF("files","ছবি (একসাথে অনেকগুলো, নামের ক্রমে বসবে)","image/*",1),tbfS("size","পাতার মাপ",[["A4","A4 পাতা"],["fit","ছবির নিজের মাপ"]],"A4"),tbfS("margin","চারপাশে ফাঁকা",[["0","ফাঁকা নয়"],["24","হালকা"],["48","বেশি"]],"24")],run:tbImg},
+{g:1,id:"pdf2img",i:"📷",t:"PDF to images",d:"PDF-এর প্রতিটা পাতা JPG ছবি হিসেবে নামান (ZIP)।",f:[tbfF("files","PDF ফাইল",PDFA),tbfS("dpi","মান",[["110","ছোট (দ্রুত)"],["150","মাঝারি"],["200","বড় (স্পষ্ট)"]],"150")],run:tbP2I},
+{g:1,id:"comp",i:"🗜️",t:"Compress PDF",d:"PDF-এর সাইজ ছোট করুন। লেখা ছবির মতো হয়ে যায়, সিলেক্ট বা কপি করা যায় না।",f:[tbfF("files","PDF ফাইল",PDFA),tbfS("dpi","স্পষ্টতা",[["72","সবচেয়ে ছোট"],["100","ছোট"],["130","ভালো"]],"100"),tbfS("q","JPG মান",[["0.5","কম"],["0.65","মাঝারি"],["0.8","বেশি"]],"0.65")],run:tbComp},
+{g:1,id:"w2p",i:"📝",t:"Word to PDF",d:"Word ফাইল PDF করুন। লেআউট ঠিক রাখতে বাইরের সাইট ব্যবহার করুন।",u:P24+"word-to-pdf"},
+{g:1,id:"p2w",i:"📄",t:"PDF to Word",d:"PDF থেকে Word ফাইল বানান।",u:P24+"pdf-to-word"},
+{g:1,id:"conv",i:"🔁",t:"Convert to PDF",d:"Excel, PowerPoint ও আরও ফাইল PDF করুন।",u:P24+"convert-to-pdf"},
+{g:1,id:"convf",i:"↩️",t:"Convert PDF to ...",d:"PDF থেকে Excel, PowerPoint, ছবি ইত্যাদি বানান।",u:P24+"convert-from-pdf"},
+{g:1,id:"w2j",i:"🏞️",t:"Word to JPG",d:"আগে Word-কে PDF করুন (Word to PDF), তারপর আমাদের PDF to images টুলে ছবি করুন।",u:P24+"word-to-pdf"},
+{g:1,id:"exi",i:"🧲",t:"Extract PDF images",d:"PDF-এর ভেতরের সব ছবি আলাদা করে নামান।",u:P24+"extract-images"},
+{g:2,id:"wm",i:"💧",t:"Add watermark",d:"সব পাতায় আড়াআড়ি হালকা লেখা বসান (বাংলাও চলে)।",f:[tbfF("files","PDF ফাইল",PDFA),tbfT("text","ওয়াটারমার্কের লেখা","যেমন Jahoss Enterprise","JAHOSS"),tbfS("op","স্বচ্ছতা",[["0.15","খুব হালকা"],["0.3","হালকা"],["0.5","গাঢ়"]],"0.3"),tbfS("color","রঙ",[["#888888","ধূসর"],["#cc0000","লাল"],["#0f2765","নীল"]],"#888888")],run:tbWm},
+{g:2,id:"num",i:"#️⃣",t:"Add page numbers",d:"প্রতিটা পাতার নিচে পাতার নম্বর বসান।",f:[tbfF("files","PDF ফাইল",PDFA),tbfS("pos","কোথায়",[["c","মাঝখানে"],["r","ডানে"],["l","বামে"]],"c"),tbfS("fmt","ধরন",[["n","1, 2, 3"],["of","1 / 10"]],"n")],run:tbNum},
+{g:2,id:"meta",i:"🏷️",t:"Edit / remove PDF metadata",d:"PDF-এর নাম, লেখক, বিষয় বদলান বা সব তথ্য মুছুন।",f:[tbfF("files","PDF ফাইল",PDFA),tbfT("title","শিরোনাম"),tbfT("author","লেখক"),tbfT("subject","বিষয়"),tbfT("kw","কীওয়ার্ড (কমা দিয়ে)"),tbfC("clear","সব তথ্য মুছে ফেলুন")],run:tbMeta},
+{g:2,id:"qr",i:"🔳",t:"Generate QR code",d:"লেখা বা লিংক থেকে QR কোড ছবি বানান।",f:[tbfT("text","লেখা বা লিংক","https://jahoss-tracker.web.app")],run:tbQr},
+{g:2,id:"edit",i:"✏️",t:"Edit PDF",d:"PDF-এর ভেতরের লেখা বদলান (যেমন নাম Shihab কে Shahriar করা)। আমাদের নিজের এডিটর আসছে, আপাতত বাইরের সাইট।",u:P24+"edit-pdf"},
+{g:2,id:"sign",i:"🖊️",t:"Sign PDF",d:"PDF-এ সই বসান।",u:P24+"sign-pdf"},
+{g:2,id:"ovl",i:"📑",t:"PDF Overlay",d:"এক PDF-এর ওপর আরেক PDF বসান (যেমন লেটারহেডের ওপর)।",u:P24+"overlay-pdf"},
+{g:2,id:"cmp",i:"🔍",t:"Compare PDFs",d:"দুটো PDF-এর পার্থক্য দেখুন।",u:P24+"compare-pdf"},
+{g:2,id:"flat",i:"🧱",t:"Flatten PDF",d:"ফর্মের লেখা পাকা করুন, যাতে আর বদলানো না যায়।",u:P24+"flatten-pdf"},
+{g:2,id:"ocr",i:"🔠",t:"PDF OCR",d:"ছবির মতো PDF থেকে লেখা চিনে সার্চযোগ্য PDF বানান।",u:P24+"ocr-pdf"},
+{g:2,id:"form",i:"📋",t:"Create fillable PDF form",d:"পূরণ করার মতো PDF ফর্ম বানান।",u:P24+"create-fillable-pdf-form"},
+{g:2,id:"vp",i:"👁️",t:"Edit viewer preferences",d:"PDF খুললে কেমন দেখাবে তা ঠিক করুন।",u:P24+"set-pdf-viewer-preferences"},
+{g:2,id:"inv",i:"🧾",t:"Create invoice",d:"ইনভয়েস বানান।",u:P24+"create-invoice"},
+{g:2,id:"job",i:"💼",t:"Create PDF job application",d:"চাকরির আবেদন PDF বানান।",u:P24+"create-job-application"},
+{g:3,id:"lock",i:"🔒",t:"Protect PDF",d:"PDF-এ পাসওয়ার্ড দিন।",u:P24+"lock-pdf"},
+{g:3,id:"unlock",i:"🔓",t:"Unlock PDF",d:"PDF-এর পাসওয়ার্ড তুলে ফেলুন।",u:P24+"unlock-pdf"},
+{g:3,id:"rep",i:"🛠️",t:"Repair PDF",d:"নষ্ট বা না-খোলা PDF মেরামত করুন।",u:P24+"repair-pdf"},
+{g:3,id:"web",i:"🌐",t:"Web optimize PDF",d:"ওয়েবে দ্রুত খোলার মতো করুন।",u:P24+"web-optimize-pdf"},
+{g:4,id:"gpt",i:"🤖",t:"ChatGPT",d:"ছবির বস্তু মোছা, ঝাপসা ছবি স্পষ্ট করা বা নতুন ছবি বানানো। ছবি দিয়ে লিখুন কী চান।",u:"https://chatgpt.com"},
+{g:4,id:"gem",i:"✨",t:"Gemini",d:"ছবি ঠিক করা, বস্তু সরানো, ছবি বানানো।",u:"https://gemini.google.com"},
+{g:4,id:"grok",i:"⚡",t:"Grok",d:"ছবি বানানো ও বদলানো।",u:"https://grok.com"},
+{g:4,id:"bg",i:"🪄",t:"Remove background",d:"ছবির ব্যাকগ্রাউন্ড সরান।",u:"https://www.remove.bg"}];
+const tbCard=t=>{const q=esc((t.t+" "+t.d).toLowerCase()),inn=`<span class="tbi">${t.i}</span><b>${esc(t.t)}</b><span class="tbd">${esc(t.d)}</span><span class="tbb${t.u?" x":""}">${t.u?"বাইরের সাইট ↗":"আমাদের সাইটে"}</span>`;
+  return t.u?`<a class="tbc" data-q="${q}" href="${t.u}" target="_blank" rel="noopener" onclick="logA('TOOL LINK',this.querySelector('b').textContent)">${inn}</a>`:`<button type="button" class="tbc" data-q="${q}" data-act="tbOpen" data-id="${t.id}">${inn}</button>`};
+function toolbox(){V.innerHTML=sheetTitle("টুলস বক্স")+`<div class="note">✅ <b>আমাদের সাইটে</b> চিহ্নিত টুলে ফাইল আপনার ফোন বা কম্পিউটারেই প্রসেস হয়, ইন্টারনেটে যায় না। <b>↗ বাইরের সাইট</b> চিহ্নিত টুলে ফাইল ওই সাইটের সার্ভারে যায়।</div><div class="bar" style="margin-top:12px"><input data-in="tbq" placeholder="টুল খুঁজুন (যেমন merge, ভাগ, কমপ্রেস)" style="flex:1;min-width:220px"></div>`+TBG.map((g,gi)=>`<div class="sh" style="margin-top:18px"><small>${g}</small></div><div class="tbg">${TOOLS.filter(t=>t.g===gi).map(tbCard).join("")}</div>`).join("")}
+const tbField=f=>f.ty==="file"?`<label>${f.l}<input type="file" name="${f.k}" accept="${f.acc||""}"${f.multi?" multiple":""}></label>`:f.ty==="sel"?`<label>${f.l}<select name="${f.k}">${f.o.map(([v,l])=>`<option value="${v}"${v===f.v?" selected":""}>${l}</option>`).join("")}</select></label>`:f.ty==="chk"?`<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" name="${f.k}">${f.l}</label>`:`<label>${f.l}<input name="${f.k}" placeholder="${esc(f.ph||"")}" value="${esc(f.v||"")}"></label>`;
+let TBX=null;
+function tbOpen(t){TBX=t;V.innerHTML=`<div class="bar"><button type="button" class="btn sm" data-act="tbBack">← সব টুল</button></div><div class="sh">${esc(t.t)}<small>${esc(t.d)}</small></div><form id="tbf" class="tbform">${t.f.map(tbField).join("")}<button>শুরু করুন</button></form><div id="tbs" class="note" style="margin-top:14px">ফাইল বেছে "শুরু করুন" চাপুন। ফলাফল নিজে থেকে নামবে।</div>`;logA("TOOL",t.t)}
+FORM.tbf=async(fd,f)=>{const t=TBX;if(!t)return;const o={};
+  for(const x of t.f){if(x.ty==="file")o[x.k]=fd.getAll(x.k).filter(v=>v&&v.size).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));else if(x.ty==="chk")o[x.k]=fd.get(x.k)==="on";else o[x.k]=String(fd.get(x.k)||"")}
+  const fk=t.f.find(x=>x.ty==="file");if(fk&&!o[fk.k].length){tbSet("আগে ফাইল বাছুন।");return}
+  const bt=f.querySelector("button");bt.disabled=true;tbSet("কাজ চলছে... একটু অপেক্ষা করুন");
+  try{const r=await t.run(fk?o[fk.k]:[],o);tbSave(r.bytes,r.name,r.mime);tbSet("✅ হয়ে গেছে: "+r.name+" ("+tbSize(r.bytes.length)+") নামানো হয়েছে। "+(r.note||""));logA("TOOL DONE",t.t)}
+  catch(e){tbSet("❌ হয়নি: "+(e&&e.message||e)+" (ফাইলে পাসওয়ার্ড থাকলে আগে Unlock, নষ্ট হলে Repair করে নিন)")}
+  bt.disabled=false};
+Object.assign(INP,{tbq(t){const q=t.value.trim().toLowerCase();document.querySelectorAll(".tbc").forEach(c=>{c.style.display=!q||c.dataset.q.includes(q)?"":"none"})}});
+Object.assign(ACT,{tbOpen(b){const t=TOOLS.find(x=>x.id===b.dataset.id);if(t)tbOpen(t)},tbBack(){V.dataset.t="";render()}});
 fbBoot(start);
 </script>
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script></body>
