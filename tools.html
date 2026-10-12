@@ -28,7 +28,7 @@
 .tl{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.tl .b{padding:8px 12px;font-size:13px}.gr2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .bx input[type=range]{padding:0}.bx input[type=checkbox]{display:inline-block;width:auto;margin:0 6px 0 0}
 footer{background:var(--d);color:#aeb6c9;text-align:center;padding:22px;font-size:14px}
-</style></head><body>
+.pzx{position:absolute;border:1px dashed rgba(218,15,50,.6);background:rgba(218,15,50,.07);cursor:pointer}.pzx.dn{border-color:#1a8a3a;background:rgba(26,138,58,.14)}.pzx:active{background:rgba(218,15,50,.25)}#pzbx.add{cursor:crosshair;outline:3px solid #1a8a3a}#pzs.er{color:#b00020}#pzs{margin:8px 0;font-size:14px}</style></head><body>
 <div class="tb"><div class="w"><img src="data:image/jpeg;base64,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" alt="Jahoss"><b>JAHOSS ENTERPRISE LIMITED</b></div></div>
 <div class="nv"><div class="w"><a class="on" href="tools.html">টুলস বক্স</a><a href="app.html">অ্যাপ (লগইন)</a><a href="index.html?site=1">ওয়েবসাইট</a></div></div>
 <div class="hero"><div class="w"><h1>টুলস বক্স</h1><p>PDF, ছবি আর অফিসের দৈনন্দিন কাজের টুল এক জায়গায়। যে টুলে "এখানেই কাজ হয়" লেখা, সেখানে আপনার ফাইল ফোন বা কম্পিউটার থেকে বের হয় না।</p></div></div>
@@ -36,9 +36,21 @@ footer{background:var(--d);color:#aeb6c9;text-align:center;padding:22px;font-siz
 <div class="sr"><input id="q" type="search" placeholder="টুল খুঁজুন (যেমন: মার্জ, compress, ছবি...)" autocomplete="off"></div>
 <div class="chips" id="ch"></div>
 <div class="note"><b>মনে রাখবেন:</b> "এখানেই কাজ হয়" লেখা টুলে ফাইল কোথাও যায় না। "বাইরের সাইট ↗" লেখা টুল চাপলে নতুন ট্যাবে অন্য সাইট খোলে, সেখানে ফাইল তাদের সার্ভারে যায়। পাসপোর্টের মতো গোপন ফাইল হলে সাবধান।</div>
-<div class="g" id="g"></div></div>
+<h2 id="gph" style="color:var(--n);margin:26px 0 4px;font-size:22px">Gemini-তে ছবি এডিট</h2><p style="margin:0 0 12px;color:var(--m);font-size:14px">বাটনে চাপলে সংরক্ষিত Gem খুলবে, শুধু ছবি দিন। Gem না খুললে "প্রম্পট কপি" চেপে Gemini-তে পেস্ট করুন। ছবি Google-এর Gemini-তে যায়।</p><div class="g" id="gp"></div><h2 style="color:var(--n);margin:30px 0 4px;font-size:22px">সব টুল</h2><div class="g" id="g"></div></div>
 <footer>© Jahoss Enterprise Limited</footer>
 <div class="md hide" id="md"><div class="bx"><button class="cl" id="mx" aria-label="বন্ধ">×</button><h2 id="mt"></h2><p id="mds"></p><div id="mf"></div><button class="b" id="mg">শুরু করুন</button><div id="ms"></div><div id="mr"></div></div></div>
+<div class="md hide" id="pz"><div class="bx wide"><button class="cl" id="pzx0" aria-label="বন্ধ">×</button><h2>Edit PDF: ট্যাপ করে লেখা বদলান</h2>
+<p>PDF বাছুন। পাতায় যে লেখা বদলাতে চান তার ওপর ট্যাপ করুন, নতুন লেখা বসিয়ে "বদলান" চাপুন। মুছতে চাইলে "মুছুন" চাপুন। লেখা ছোট লাগলে + দিয়ে পাতা বড় করুন। ফাইল আপনার ফোনেই থাকে।</p>
+<label>PDF বাছুন<input type="file" id="pzf0" accept=".pdf,application/pdf"></label>
+<div id="pzw" class="hide">
+<div class="tl"><button class="b o" data-z="prev">◀ আগের</button><span id="pzg" style="align-self:center;font-weight:600"></span><button class="b o" data-z="next">পরের ▶</button><button class="b o" data-z="zo">− ছোট</button><button class="b o" data-z="zi">+ বড়</button><button class="b o" id="pza" data-z="add">＋ নতুন লেখা বসান</button><button class="b o" id="pzi" data-z="img">🖼 ছবি বসান</button></div>
+<div id="pzh" style="font-size:13px;color:var(--m);margin:6px 0"></div>
+<div id="pzp" class="hide" style="background:#fff;border:2px solid var(--n);padding:10px;margin:8px 0"><div id="pzph" style="font-weight:600;margin-bottom:4px"></div><textarea id="pzt" rows="2" style="width:100%"></textarea><label id="pzszw" class="hide">লেখার মাপ<select id="pzsz"><option>9</option><option>10</option><option selected>11</option><option>12</option><option>14</option><option>18</option><option>24</option></select></label><div class="tl"><button class="b" data-z="ok">✔ বদলান</button><button class="b o" data-z="del" id="pzdl">🗑 মুছুন</button><button class="b o" data-z="cn">বাতিল</button></div></div>
+<div id="pzv" style="overflow:auto;max-height:62vh;border:1px solid #cfd7ea;background:#e9edf7"><div id="pzbx" style="position:relative;width:100%"><canvas id="pzc" style="display:block;width:100%"></canvas><div id="pzo"></div><div id="pzsel" class="hide" style="position:absolute;border:2px solid #1a8a3a;background:rgba(26,138,58,.18);pointer-events:none"></div></div></div><input type="file" id="pzimf" accept="image/*" class="hide">
+<div class="gr2" style="margin-top:10px"><label>নতুন লেখার ফন্ট<select id="pzf"><option value="carlito">Calibri-র মতো (Carlito)</option><option value="helv">Arial-র মতো</option><option value="times">Times New Roman-এর মতো</option></select></label><label>ছবি কীভাবে বসবে<select id="pzit"><option value="c">ঘর ভরে (দরকারে কিনারা কাটবে)</option><option value="f">পুরো ছবি (পাশে ফাঁক থাকতে পারে)</option></select></label><label>ফলাফল কেমন হবে<select id="pzm"><option value="n">সাধারণ: লেখা কপি করা যায় (পুরোনো লেখা শুধু ঢাকা পড়ে, ভেতরে থেকে যায়)</option><option value="s">নিরাপদ: পাতা ছবি হয়ে যায়, পুরোনো লেখা পুরোপুরি বাদ</option></select></label></div>
+<div class="tl"><button class="b" id="pzsv" data-z="save">⬇ সেভ করুন (PDF)</button><button class="b o" data-z="undo">⟲ শেষ বদলটা বাতিল</button></div>
+<div id="pzs"></div><div id="pzr"></div>
+</div></div></div>
 <div class="md hide" id="ie"><div class="bx wide"><button class="cl" id="iex" aria-label="বন্ধ">×</button><h2>ছবি ঠিক করা</h2>
 <p>ছবি বাছুন, তারপর নিচের বাটনগুলো দিয়ে ঠিক করুন। সব কাজ আপনার ফোন বা কম্পিউটারেই হয়। ভুল হলে "পূর্বাবস্থা" চাপুন।</p>
 <label>ছবি বাছুন (ক্যামেরা বা গ্যালারি থেকে)<input type="file" id="ief" accept="image/*"></label>
@@ -56,7 +68,7 @@ footer{background:var(--d);color:#aeb6c9;text-align:center;padding:22px;font-siz
 <script>
 const $=s=>document.querySelector(s);
 const PL="https://cdnjs.cloudflare.com/ajax/libs/";
-const LIBS={pdflib:PL+"pdf-lib/1.17.1/pdf-lib.min.js",pdfjs:PL+"pdf.js/3.11.174/pdf.min.js",jszip:PL+"jszip/3.10.1/jszip.min.js",qr:PL+"qrcode-generator/1.4.4/qrcode.min.js",fontkit:"https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js",tess:"https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"};
+const LIBS={pdflib:PL+"pdf-lib/1.17.1/pdf-lib.min.js",pdfjs:PL+"pdf.js/3.11.174/pdf.min.js",jszip:PL+"jszip/3.10.1/jszip.min.js",qr:PL+"qrcode-generator/1.4.4/qrcode.min.js",fontkit:"https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js",tess:"https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js",jspdf:PL+"jspdf/2.5.1/jspdf.umd.min.js"};
 const LD={};
 const lib=k=>LD[k]||(LD[k]=new Promise((ok,no)=>{const s=document.createElement("script");s.src=LIBS[k];s.onload=ok;s.onerror=()=>{delete LD[k];no(new Error("প্রয়োজনীয় অংশ লোড হয়নি। ইন্টারনেট চালু আছে কিনা দেখুন।"))};document.head.appendChild(s)}));
 const pjs=async()=>{await lib("pdfjs");pdfjsLib.GlobalWorkerOptions.workerSrc=PL+"pdf.js/3.11.174/pdf.worker.min.js";return pdfjsLib};
@@ -92,12 +104,12 @@ const SZO=[["a4","A4"],["a3","A3"],["a5","A5"],["letter","Letter"]];
 const meta=clr=>async v=>{const f=v.files[0],d=await ld(f);if(clr){d.setTitle("");d.setAuthor("");d.setSubject("");d.setKeywords([]);d.setProducer("");d.setCreator("")}else{if(v.t)d.setTitle(v.t);if(v.a)d.setAuthor(v.a);if(v.s)d.setSubject(v.s);if(v.k)d.setKeywords(v.k.split(",").map(x=>x.trim()).filter(Boolean))}return[{name:base(f)+(clr?"-clean":"-meta")+".pdf",blob:pb(await d.save())}]};
 // ---------- Edit PDF (লেখা বদলানো) ও PDF OCR
 const CRL=w=>"https://cdn.jsdelivr.net/fontsource/fonts/carlito@5.3.0/latin-"+w+"-normal.woff";
-function mkRuns(items){const out=[];let c=null;
+function mkRuns(items,mg=.45){const out=[];let c=null;
   for(const it of items){if(typeof it.str!=="string"||it.str==="")continue;
     const t=it.transform,fs=Math.abs(t[3])||it.height||10,x=t[4],y=t[5];
     if(Math.abs(t[1])>.01*fs||Math.abs(t[2])>.01*fs){c=null;continue}
     const gap=c?x-c.ex:0;
-    if(c&&Math.abs(y-c.y)<fs*.2&&Math.abs(fs-c.fs)<fs*.1&&gap>-fs*.4&&gap<fs*.45){
+    if(c&&Math.abs(y-c.y)<fs*.2&&Math.abs(fs-c.fs)<fs*.1&&gap>-fs*.4&&gap<fs*mg){
       if(gap>fs*.12&&!/\s$/.test(c.s)&&!/^\s/.test(it.str))c.s+=" ";
       c.s+=it.str;c.ex=x+it.width}
     else c=out[out.push({s:it.str,x,y,fs,ex:x+it.width,fn:it.fontName})-1]}
@@ -163,6 +175,163 @@ async function ocrGo(v){
   finally{await wk.terminate()}
   const nm=base(v.files[0])+(v.files.length>1?"-etc":"");
   return[{name:nm+"-ocr.pdf",blob:pb(await out.save())},{name:nm+"-text.txt",blob:new Blob([txt],{type:"text/plain;charset=utf-8"})}]}
+// ---------- আরও টুল: Flatten, Pages per sheet, Overlay, Viewer prefs, Extract images, Sign, Invoice, Job application, Compare, Unlock, Protect
+const ENMSG="এই টুলে শুধু ইংরেজি অক্ষর, সংখ্যা ও চিহ্ন চলবে (বাংলা লেখা এখানে বসানো যায় না)";
+const eng=t=>!/[^\x20-\x7E\n\r\t\xA0-\xFF]/.test(t||"");
+const safeT=t=>String(t).replace(/[^\x20-\x7E\xA0-\xFF]/g,"?");
+function wrapT(f,t,sz,mw){const out=[];String(t).split(/\r?\n/).forEach(p=>{if(!p.trim()){out.push("");return}let l="";p.split(/\s+/).forEach(w=>{const c=l?l+" "+w:w;if(!l||f.widthOfTextAtSize(c,sz)<=mw)l=c;else{out.push(l);l=w}});out.push(l)});return out}
+function PW(d,reg,bold){const W=595.28,H=841.89,M=50,o={M,W:W-2*M,reg,bold,p:d.addPage([W,H]),y:H-M,
+  np(){o.p=d.addPage([W,H]);o.y=H-M},nl(h){if(o.y-h<M)o.np()},
+  t(s,x={}){const f=x.b?bold:reg,sz=x.sz||11,mw=x.w||o.W,lh=sz*1.4,col=x.c||PDFLib.rgb(.1,.1,.1);
+    for(const l of wrapT(f,safeT(s),sz,mw)){o.nl(lh);o.y-=lh;if(l)o.p.drawText(l,{x:(x.x===undefined?M:x.x)+(x.r?mw-f.widthOfTextAtSize(l,sz):0),y:o.y+lh*.25,size:sz,font:f,color:col})}return o}};
+  return o}
+const NAVY=()=>PDFLib.rgb(.06,.15,.39);
+async function rasterDoc(doc,sc,fn){for(let i=1;i<=doc.numPages;i++){st("পাতা "+i+" / "+doc.numPages+"...");const pg=await doc.getPage(i),v1=pg.getViewport({scale:1}),vp=pg.getViewport({scale:sc}),[c,x]=cv(vp.width,vp.height);await pg.render({canvasContext:x,viewport:vp}).promise;await fn(c,i,v1)}}
+async function openPw(f,pw){const pj=await pjs();try{return await pj.getDocument({data:await f.arrayBuffer(),password:pw||""}).promise}catch(e){throw new Error(e&&e.name==="PasswordException"?(pw?"পাসওয়ার্ড ভুল হয়েছে":"এই PDF-এর পাসওয়ার্ড লাগবে, নিচের ঘরে দিন"):"PDF খোলা যায়নি")}}
+
+async function flattenGo(v){const f=v.files[0];
+  if(v.mode==="r"){const doc=await openPw(f,""),o=await PDFLib.PDFDocument.create();
+    await rasterDoc(doc,2.2,async(c,i,v1)=>{const im=await o.embedJpg(await u8(await cb(c,"image/jpeg",.88)));o.addPage([v1.width,v1.height]).drawImage(im,{x:0,y:0,width:v1.width,height:v1.height})});
+    return[{name:base(f)+"-flattened.pdf",blob:pb(await o.save())}]}
+  const d=await ld(f),fm=d.getForm(),n=fm.getFields().length;
+  if(!n)throw new Error("এই PDF-এ পূরণযোগ্য ফর্মের ঘর নেই। সব কিছু ছবি বানিয়ে স্থায়ী করতে চাইলে 'সবকিছু ছবি করে' বাছুন।");
+  fm.flatten();const res=[{name:base(f)+"-flattened.pdf",blob:pb(await d.save())}];res.note=n+"টা ফর্মের ঘর স্থায়ী করা হয়েছে।";return res}
+
+async function ppsGo(v){const f=v.files[0],src=await ld(f),o=await PDFLib.PDFDocument.create(),pages=await o.embedPdf(src),
+  L={2:[2,1,1],4:[2,2,0],6:[2,3,0]}[v.n],[cols,rows,land]=L,W=land?841.89:595.28,H=land?595.28:841.89,m=24,g=10,
+  cw=(W-2*m-(cols-1)*g)/cols,ch=(H-2*m-(rows-1)*g)/rows,per=cols*rows;let pg;
+  pages.forEach((p,i)=>{if(i%per===0)pg=o.addPage([W,H]);const j=i%per,c=j%cols,r=Math.floor(j/cols),k=Math.min(cw/p.width,ch/p.height),w=p.width*k,h=p.height*k,
+    x=m+c*(cw+g)+(cw-w)/2,y=H-m-(r+1)*ch-r*g+(ch-h)/2;pg.drawPage(p,{x,y,width:w,height:h});
+    if(v.ln==="1")pg.drawRectangle({x,y,width:w,height:h,borderColor:PDFLib.rgb(.7,.7,.7),borderWidth:.6})});
+  return[{name:base(f)+"-"+v.n+"up.pdf",blob:pb(await o.save())}]}
+
+async function overlayGo(v){const{PDFDocument}=PDFLib,b=await ld(v.files[0]),ov=await ld(v.ov[0]),o=await PDFDocument.create(),bp=await o.embedPdf(b),op=await o.embedPdf(ov);
+  bp.forEach((p,i)=>{const q=op[v.map==="n"?Math.min(i,op.length-1):0],pg=o.addPage([p.width,p.height]),k=Math.min(p.width/q.width,p.height/q.height),w=q.width*k,h=q.height*k,
+    dq=()=>pg.drawPage(q,{x:(p.width-w)/2,y:(p.height-h)/2,width:w,height:h}),db=()=>pg.drawPage(p,{x:0,y:0,width:p.width,height:p.height});
+    if(v.pos==="d"){dq();db()}else{db();dq()}});
+  return[{name:base(v.files[0])+"-overlay.pdf",blob:pb(await o.save())}]}
+
+async function viewGo(v){const{PDFName}=PDFLib,f=v.files[0],d=await ld(f);
+  d.catalog.set(PDFName.of("PageMode"),PDFName.of(v.mode));d.catalog.set(PDFName.of("PageLayout"),PDFName.of(v.lay));
+  const vp=d.catalog.getOrCreateViewerPreferences();vp.setFitWindow(v.fit==="1");vp.setCenterWindow(v.ctr==="1");vp.setHideToolbar(v.tb==="1");vp.setHideMenubar(v.mb==="1");
+  if(v.ttl.trim())d.setTitle(v.ttl.trim());vp.setDisplayDocTitle(v.dt==="1");
+  return[{name:base(f)+"-view.pdf",blob:pb(await d.save())}]}
+
+const getObj=(pg,id)=>new Promise(ok=>{const s=id.startsWith("g_")?pg.commonObjs:pg.objs;let done=0;const t=setTimeout(()=>{if(!done){done=1;ok(null)}},5000);
+  try{s.get(id,o=>{if(!done){done=1;clearTimeout(t);ok(o)}})}catch(e){clearTimeout(t);ok(null)}});
+function imgToCv(im){const w=im.width,h=im.height,[c,x]=cv(w,h);if(im.bitmap){x.drawImage(im.bitmap,0,0);return c}
+  const d=im.data;if(!d)return null;const t=document.createElement("canvas");t.width=w;t.height=h;const tx=t.getContext("2d"),id=tx.createImageData(w,h),o=id.data;
+  if(im.kind===3&&d.length>=w*h*4)o.set(d.subarray(0,w*h*4));
+  else if(im.kind===2){for(let i=0,j=0;i<w*h;i++,j+=3){o[i*4]=d[j];o[i*4+1]=d[j+1];o[i*4+2]=d[j+2];o[i*4+3]=255}}
+  else if(im.kind===1){const rb=(w+7)>>3;for(let y=0;y<h;y++)for(let xx=0;xx<w;xx++){const val=(d[y*rb+(xx>>3)]>>(7-(xx&7)))&1?255:0,k=(y*w+xx)*4;o[k]=o[k+1]=o[k+2]=val;o[k+3]=255}}
+  else return null;
+  tx.putImageData(id,0,0);x.drawImage(t,0,0);return c}
+async function exImgGo(v){const pj=await pjs(),OPS=pj.OPS,out=[],mn=+v.min,png=v.fmt==="png";
+  for(const f of v.files){const doc=await pj.getDocument({data:await f.arrayBuffer()}).promise,seen=new Set();let n=0;
+    for(let i=1;i<=doc.numPages;i++){st("পাতা "+i+" / "+doc.numPages+" থেকে ছবি খোঁজা হচ্ছে...");const pg=await doc.getPage(i),ops=await pg.getOperatorList();
+      for(let k=0;k<ops.fnArray.length;k++){const fn=ops.fnArray[k];if(fn!==OPS.paintImageXObject&&fn!==OPS.paintInlineImageXObject)continue;
+        const a=ops.argsArray[k][0];if(typeof a==="string"){if(seen.has(a))continue;seen.add(a)}
+        const im=typeof a==="string"?await getObj(pg,a):a;if(!im||im.width<mn||im.height<mn)continue;
+        const c=imgToCv(im);if(!c)continue;n++;out.push({name:base(f)+"-img"+n+(png?".png":".jpg"),blob:await cb(c,png?"image/png":"image/jpeg",.92)})}}}
+  if(!out.length)throw new Error("কোনো ছবি পাওয়া যায়নি। এই PDF-এ হয়তো শুধু লেখা আছে, অথবা ছবিগুলো খুব ছোট। 'ছোট ছবি বাদ' বদলে আবার দেখুন।");
+  return out}
+
+async function signGo(v){const f=v.files[0],d=await ld(f),n=d.getPageCount(),im=await d.embedPng(await(await fetch(v.sig)).arrayBuffer()),t=v.pg.trim().toLowerCase();
+  const idx=t===""?[n-1]:t==="all"?[...Array(n).keys()]:rng(t,n);if(!idx.length)throw new Error("পাতার নম্বর ঠিক নেই");
+  const wd={s:90,m:140,l:200}[v.sz]||140,h=wd*im.height/im.width,ft=await d.embedFont(PDFLib.StandardFonts.Helvetica),
+    ds=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+  idx.forEach(i=>{const p=d.getPage(i),{width:W,height:H}=p.getSize(),r=v.pos[0],c=v.pos[1],mg=36,
+    x=c==="l"?mg:c==="c"?(W-wd)/2:W-wd-mg,y=r==="b"?mg+(v.dt==="1"?12:0):r==="m"?(H-h)/2:H-h-mg;
+    p.drawImage(im,{x,y,width:wd,height:h});
+    if(v.dt==="1")p.drawText(ds,{x,y:y-11,size:8,font:ft,color:PDFLib.rgb(.25,.25,.25)})});
+  return[{name:base(f)+"-signed.pdf",blob:pb(await d.save())}]}
+function wireSig(){document.querySelectorAll("#mf canvas[data-k]").forEach(c=>{const x=c.getContext("2d");let dr=false,bb=null,px=0,py=0;c.value="";
+  x.lineWidth=4;x.lineCap="round";x.lineJoin="round";x.strokeStyle="#0a1f6b";
+  const P=e=>{const r=c.getBoundingClientRect();return[(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]},
+    gr=(a,b)=>{bb=bb?[Math.min(bb[0],a),Math.min(bb[1],b),Math.max(bb[2],a),Math.max(bb[3],b)]:[a,b,a,b]},
+    ex=()=>{if(!bb)return;const pd=8,X=Math.max(0,bb[0]-pd),Y=Math.max(0,bb[1]-pd),W=Math.max(2,Math.min(c.width,bb[2]+pd)-X),H=Math.max(2,Math.min(c.height,bb[3]+pd)-Y),o=document.createElement("canvas");o.width=W;o.height=H;o.getContext("2d").drawImage(c,X,Y,W,H,0,0,W,H);c.value=o.toDataURL("image/png")};
+  c.onpointerdown=e=>{c.setPointerCapture(e.pointerId);dr=true;[px,py]=P(e);x.beginPath();x.moveTo(px,py);x.lineTo(px+.1,py+.1);x.stroke();gr(px,py)};
+  c.onpointermove=e=>{if(!dr)return;const[a,b]=P(e);x.beginPath();x.moveTo(px,py);x.lineTo(a,b);x.stroke();px=a;py=b;gr(a,b)};
+  const up=()=>{if(dr){dr=false;ex()}};c.onpointerup=up;c.onpointercancel=up;
+  c.clr=()=>{x.clearRect(0,0,c.width,c.height);bb=null;c.value=""}});
+  document.querySelectorAll("#mf [data-sc]").forEach(b=>b.onclick=()=>{const c=document.querySelector("#mf canvas[data-k]");if(c&&c.clr)c.clr()})}
+
+async function invGo(v){const{StandardFonts,rgb}=PDFLib;
+  if(!eng([v.from,v.to,v.no,v.date,v.cur,v.items,v.tax,v.note].join("\n")))throw new Error(ENMSG);
+  const rows=v.items.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{const a=l.split("|").map(q=>q.trim());return{d:a[0]||"",q:parseFloat(a[1])||1,u:parseFloat((a[2]||"0").replace(/,/g,""))||0}});
+  if(!rows.length)throw new Error("অন্তত একটা আইটেম লিখুন, যেমন: Visa processing | 2 | 5000");
+  const d=await PDFLib.PDFDocument.create(),reg=await d.embedFont(StandardFonts.Helvetica),bold=await d.embedFont(StandardFonts.HelveticaBold),w=PW(d,reg,bold),navy=NAVY(),gray=rgb(.4,.4,.4),
+    cur=v.cur.trim(),fm=n=>(cur?cur+" ":"")+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}),
+    dt=v.date.trim()||new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+  w.p.drawText("INVOICE",{x:50,y:w.y-24,size:26,font:bold,color:navy});
+  const rt=(s,y)=>{s=safeT(s);w.p.drawText(s,{x:545-reg.widthOfTextAtSize(s,10),y,size:10,font:reg,color:gray})};
+  if(v.no.trim())rt("Invoice No: "+v.no.trim(),w.y-8);rt("Date: "+dt,w.y-22);w.y-=56;
+  const y0=w.y;w.t("FROM",{b:1,sz:9,c:navy,w:230});w.t(v.from||"",{w:230,sz:10});const y1=w.y;
+  w.y=y0;w.t("BILL TO",{b:1,sz:9,c:navy,x:320,w:225});w.t(v.to||"",{x:320,w:225,sz:10});w.y=Math.min(y1,w.y)-18;
+  w.nl(26);w.y-=22;w.p.drawRectangle({x:50,y:w.y-5,width:495,height:20,color:navy});const wt=rgb(1,1,1);
+  w.p.drawText("Description",{x:56,y:w.y,size:9.5,font:bold,color:wt});
+  [["Qty",352],["Unit price",430],["Amount",541]].forEach(([s,x])=>w.p.drawText(s,{x:x-bold.widthOfTextAtSize(s,9.5),y:w.y,size:9.5,font:bold,color:wt}));w.y-=10;
+  let sub=0;
+  rows.forEach(r=>{const am=r.q*r.u;sub+=am;const ls=wrapT(reg,safeT(r.d),10,250),h=ls.length*13+8;w.nl(h);
+    const top=w.y;ls.forEach((l,i)=>w.p.drawText(l,{x:56,y:top-13*(i+1)+3,size:10,font:reg,color:rgb(.1,.1,.1)}));
+    [[String(r.q),352],[fm(r.u),430],[fm(am),541]].forEach(([s,x])=>w.p.drawText(s,{x:x-reg.widthOfTextAtSize(s,10),y:top-13+3,size:10,font:reg,color:rgb(.1,.1,.1)}));
+    w.y-=h;w.p.drawLine({start:{x:50,y:w.y+2},end:{x:545,y:w.y+2},thickness:.5,color:rgb(.8,.8,.8)})});
+  const tx=parseFloat(v.tax)||0,tv=sub*tx/100,tot=sub+tv;w.nl(80);w.y-=8;
+  const tr=(a,b,bd)=>{w.y-=16;const f=bd?bold:reg,sz=bd?12:10,col=bd?navy:rgb(.1,.1,.1);w.p.drawText(a,{x:380,y:w.y,size:sz,font:f,color:col});w.p.drawText(b,{x:545-f.widthOfTextAtSize(b,sz),y:w.y,size:sz,font:f,color:col})};
+  tr("Subtotal",fm(sub));if(tx>0)tr("Tax ("+tx+"%)",fm(tv));tr("TOTAL",fm(tot),1);
+  if(v.note.trim()){w.y-=26;w.t("NOTES",{b:1,sz:9,c:navy});w.t(v.note,{sz:10})}
+  return[{name:"invoice"+(v.no.trim()?"-"+v.no.trim().replace(/[^\w-]+/g,"_"):"")+".pdf",blob:pb(await d.save())}]}
+
+async function jobGo(v){const{StandardFonts,rgb}=PDFLib;
+  if(!eng([v.name,v.contact,v.to,v.pos,v.body,v.edu,v.exp,v.skills].join("\n")))throw new Error(ENMSG);
+  if(!v.name.trim()||!v.pos.trim())throw new Error("আপনার নাম আর কোন পদের জন্য আবেদন সেটা লিখুন");
+  const d=await PDFLib.PDFDocument.create(),reg=await d.embedFont(StandardFonts.Helvetica),bold=await d.embedFont(StandardFonts.HelveticaBold),w=PW(d,reg,bold),navy=NAVY(),gray=rgb(.35,.35,.35),
+    dt=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"long",year:"numeric"}),
+    head=()=>{w.t(v.name.trim(),{b:1,sz:20,c:navy});if(v.contact.trim())w.t(v.contact,{sz:10,c:gray});w.y-=4;w.p.drawLine({start:{x:50,y:w.y},end:{x:545,y:w.y},thickness:1.2,color:navy});w.y-=10};
+  head();w.y-=8;w.t(dt);w.y-=8;if(v.to.trim()){w.t(v.to);w.y-=6}
+  w.t("Subject: Application for the post of "+v.pos.trim(),{b:1});w.y-=6;w.t("Dear Sir/Madam,");w.y-=4;
+  w.t(v.body.trim()||"I am writing to apply for the post of "+v.pos.trim()+". I believe my skills and experience make me a good fit for this position, and I would be grateful for the opportunity to discuss my application further.");
+  w.y-=8;w.t("Yours sincerely,");w.y-=28;w.t(v.name.trim(),{b:1});
+  if(v.edu.trim()||v.exp.trim()||v.skills.trim()){w.np();w.t("CURRICULUM VITAE",{b:1,sz:9,c:gray});head();
+    [["EDUCATION",v.edu],["EXPERIENCE",v.exp],["SKILLS",v.skills]].forEach(([h,t])=>{if(!t.trim())return;w.y-=8;w.nl(40);w.t(h,{b:1,sz:11,c:navy});w.y-=2;t.split(/\r?\n/).map(q=>q.trim()).filter(Boolean).forEach(l=>w.t("- "+l,{sz:10.5,x:56,w:489}))})}
+  return[{name:base({name:v.name})+"-application.pdf",blob:pb(await d.save())}]}
+
+async function pdfLines(f){const pj=await pjs(),doc=await pj.getDocument({data:await f.arrayBuffer()}).promise,L=[];
+  for(let i=1;i<=doc.numPages;i++){const tc=await(await doc.getPage(i)).getTextContent(),rows=[];
+    tc.items.forEach(it=>{if(!it.str||!it.str.trim())return;const y=it.transform[5];let r=rows.find(q=>Math.abs(q.y-y)<3);if(!r){r={y,a:[]};rows.push(r)}r.a.push([it.transform[4],it.str])});
+    rows.sort((a,b)=>b.y-a.y).forEach(r=>{const s=r.a.sort((a,b)=>a[0]-b[0]).map(q=>q[1]).join(" ").replace(/\s+/g," ").trim();if(s)L.push({s,p:i})})}
+  return L}
+function lcsDiff(a,b){const n=a.length,m=b.length,w=m+1,t=new Uint16Array((n+1)*w);
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)t[i*w+j]=a[i]===b[j]?t[(i+1)*w+j+1]+1:Math.max(t[(i+1)*w+j],t[i*w+j+1]);
+  const out=[];let i=0,j=0;
+  while(i<n&&j<m){if(a[i]===b[j]){out.push([0,i,j]);i++;j++}else if(t[(i+1)*w+j]>=t[i*w+j+1]){out.push([-1,i,-1]);i++}else{out.push([1,-1,j]);j++}}
+  while(i<n){out.push([-1,i,-1]);i++}while(j<m){out.push([1,-1,j]);j++}return out}
+async function compareGo(v){const A=await pdfLines(v.files[0]),B=await pdfLines(v.ov[0]);
+  if(!A.length&&!B.length)throw new Error("দুটো PDF-এ কোনো লেখা পাওয়া গেল না (স্ক্যান করা হলে আগে PDF OCR করুন)");
+  if((A.length+1)*(B.length+1)>16e6)throw new Error("PDF দুটো এত বড় যে মেলানো যাচ্ছে না। পাতা কমিয়ে (Extract PDF pages দিয়ে) আবার চেষ্টা করুন");
+  st("মেলানো হচ্ছে...");const df=lcsDiff(A.map(q=>q.s),B.map(q=>q.s)),rem=df.filter(q=>q[0]<0).length,add=df.filter(q=>q[0]>0).length,same=df.length-rem-add,
+    n1=v.files[0].name,n2=v.ov[0].name,tx=[];
+  tx.push("PDF COMPARE REPORT","A (old): "+n1,"B (new): "+n2,"","Only in A (removed): "+rem+" lines","Only in B (added): "+add+" lines","Same: "+same+" lines","");
+  df.forEach(q=>{if(q[0]<0)tx.push("- [A p."+A[q[1]].p+"] "+A[q[1]].s);else if(q[0]>0)tx.push("+ [B p."+B[q[2]].p+"] "+B[q[2]].s)});
+  if(!rem&&!add)tx.push("No text differences found.");
+  const{StandardFonts,rgb}=PDFLib,d=await PDFLib.PDFDocument.create(),reg=await d.embedFont(StandardFonts.Helvetica),bold=await d.embedFont(StandardFonts.HelveticaBold),w=PW(d,reg,bold);
+  w.t("PDF Compare Report",{b:1,sz:18,c:NAVY()});w.y-=4;w.t("A (old): "+n1,{sz:10});w.t("B (new): "+n2,{sz:10});w.y-=6;
+  w.t("Removed lines (only in A): "+rem,{b:1,sz:11,c:rgb(.75,.1,.1)});w.t("Added lines (only in B): "+add,{b:1,sz:11,c:rgb(.05,.5,.2)});w.t("Unchanged lines: "+same,{sz:11});w.y-=8;
+  w.t("Note: only the text is compared, not pictures or layout.",{sz:9,c:rgb(.4,.4,.4)});w.y-=8;
+  df.forEach(q=>{if(q[0]<0)w.t("- [A p."+A[q[1]].p+"] "+A[q[1]].s,{sz:9.5,c:rgb(.75,.1,.1)});else if(q[0]>0)w.t("+ [B p."+B[q[2]].p+"] "+B[q[2]].s,{sz:9.5,c:rgb(.05,.5,.2)})});
+  if(!rem&&!add)w.t("No text differences found.",{b:1,sz:12,c:rgb(.05,.5,.2)});
+  const res=[{name:"compare-report.pdf",blob:pb(await d.save())},{name:"compare-report.txt",blob:new Blob([tx.join("\n")],{type:"text/plain;charset=utf-8"})}];
+  res.note="বাদ পড়েছে "+rem+"টা লাইন, যোগ হয়েছে "+add+"টা লাইন।";return res}
+
+async function unlockGo(v){const f=v.files[0],doc=await openPw(f,v.pw),o=await PDFLib.PDFDocument.create();
+  await rasterDoc(doc,+v.q,async(c,i,v1)=>{const im=await o.embedJpg(await u8(await cb(c,"image/jpeg",.88)));o.addPage([v1.width,v1.height]).drawImage(im,{x:0,y:0,width:v1.width,height:v1.height})});
+  const res=[{name:base(f)+"-unlocked.pdf",blob:pb(await o.save())}];res.note="পাতাগুলো ছবি হয়ে গেছে, তাই লেখা আর বাছাই করা যাবে না। লেখা লাগলে PDF OCR চালান।";return res}
+async function protectGo(v){if(!v.pw.trim())throw new Error("একটা পাসওয়ার্ড লিখুন");await lib("jspdf");
+  const{jsPDF}=window.jspdf,f=v.files[0],doc=await openPw(f,v.old);let pdf=null;
+  await rasterDoc(doc,+v.q,async(c,i,v1)=>{const w=v1.width,h=v1.height,url=c.toDataURL("image/jpeg",.85);
+    if(!pdf)pdf=new jsPDF({unit:"pt",format:[w,h],orientation:w>h?"l":"p",compress:true,encryption:{userPassword:v.pw,ownerPassword:v.pw+"#"+Math.random().toString(36).slice(2),userPermissions:v.perm==="p"?["print"]:[]}});
+    else pdf.addPage([w,h],w>h?"l":"p");pdf.addImage(url,"JPEG",0,0,w,h)});
+  const res=[{name:base(f)+"-protected.pdf",blob:pdf.output("blob")}];res.note="পাতাগুলো ছবি হয়ে গেছে, তাই লেখা বাছাই করা যাবে না। পাসওয়ার্ডটা লিখে রাখুন, হারালে ফেরত পাওয়া যাবে না।";return res}
 // ---------- এখানেই চলা টুল
 const TOOLS={
  merge:{in:[{k:"files",t:"file",l:"PDF বা ছবি বাছুন (ফাইলের নামের ক্রমে জোড়া লাগবে; ক্রম ঠিক করতে নামের আগে 1, 2, 3 দিন)",acc:".pdf,application/pdf,image/*",multi:1},{k:"size",t:"sel",l:"পাতার মাপ",o:[["a4","সব পাতা একই মাপে (A4), ছোট-বড় সমান হবে"],["orig","আসল মাপে"]]}],go:v=>build(v.files,v.size==="orig"?null:"a4","merged.pdf")},
@@ -184,6 +353,17 @@ const TOOLS={
  meta:{in:[FP,{k:"t",t:"txt",l:"শিরোনাম (Title)"},{k:"a",t:"txt",l:"লেখক (Author)"},{k:"s",t:"txt",l:"বিষয় (Subject)"},{k:"k",t:"txt",l:"কীওয়ার্ড (কমা দিয়ে)"}],go:meta(0)},
  rmmeta:{in:[FP],go:meta(1)},
  editpdf:{lib:["pdflib","pdfjs"],in:[FP,{k:"find",t:"txt",l:"যে লেখা খুঁজবেন (যেমন Shihab)",ph:"Shihab"},{k:"rep",t:"txt",l:"তার বদলে যা বসবে (যেমন Shahriar)",ph:"Shahriar"},{k:"ci",t:"sel",l:"বড়-ছোট হাতের অক্ষর",o:[["1","গুরুত্ব দেবে না (SHIHAB, Shihab, shihab সব ধরবে; মূল লেখা বড় হাতের হলে নতুনটাও বড় হাতের হবে)"],["0","হুবহু যেভাবে লিখেছেন সেভাবে খুঁজবে"]]},{k:"font",t:"sel",l:"নতুন লেখার ফন্ট",o:[["carlito","Calibri-র মতো (Carlito), Excel থেকে বানানো PDF-এর জন্য"],["helv","Arial-র মতো (Helvetica)"]]},{k:"al",t:"sel",l:"নতুন লেখা কোথা থেকে বসবে",o:[["l","আগের লেখার বাম প্রান্ত থেকে"],["r","আগের লেখার ডান প্রান্ত ধরে (সংখ্যার কলামে)"]]},{k:"pg",t:"txt",l:"কোন পাতায় (ফাঁকা = সব পাতায়)",ph:"1-2"},{k:"mode",t:"sel",l:"ফলাফল কেমন হবে",o:[["n","সাধারণ: লেখা কপি বা খোঁজা যায়। (পুরোনো লেখা শুধু ঢাকা পড়ে, ভেতরে থেকে যায়)"],["s","নিরাপদ: পাতাগুলো ছবি হয়ে যায়, পুরোনো লেখা পুরোপুরি বাদ"]]}],go:editPdf},
+ flatten:{lib:["pdflib","pdfjs"],in:[FP,{k:"mode",t:"sel",l:"কীভাবে স্থায়ী করবেন",o:[["f","শুধু ফর্মের ঘরগুলো (লেখা বাছাই করা যাবে)"],["r","সবকিছু ছবি করে (সই, মন্তব্য সহ। লেখা আর বাছাই করা যাবে না)"]]}],go:flattenGo},
+ pps:{in:[FP,{k:"n",t:"sel",l:"এক পাতায় কয়টা পাতা",o:[["2","২টা (আড়াআড়ি A4, পাশাপাশি)"],["4","৪টা (২×২)"],["6","৬টা (২×৩)"]]},{k:"ln",t:"sel",l:"প্রতিটা পাতার চারপাশে হালকা রেখা",o:[["1","দেবে"],["0","দেবে না"]]}],go:ppsGo},
+ overlay:{in:[{...FP,l:"মূল PDF (যার ওপরে বা নিচে বসবে)"},{k:"ov",t:"file",l:"যে PDF বসাবেন (যেমন লেটারহেড)",acc:".pdf,application/pdf"},{k:"pos",t:"sel",l:"কোথায় বসবে",o:[["d","মূল লেখার নিচে বা পেছনে (লেটারহেডের জন্য)"],["u","মূল লেখার ওপরে"]]},{k:"map",t:"sel",l:"কোন পাতা বসবে",o:[["1","বসানো PDF-এর ১ম পাতা সব পাতায়"],["n","পাতায় পাতায় মিলিয়ে (১ম-১ম, ২য়-২য়)"]]}],go:overlayGo},
+ viewpref:{in:[FP,{k:"mode",t:"sel",l:"খুললে কেমন দেখাবে",o:[["UseNone","সাধারণ"],["FullScreen","পূর্ণ পর্দায়"],["UseOutlines","বুকমার্কের প্যানেলসহ"],["UseThumbs","ছোট ছবির প্যানেলসহ"]]},{k:"lay",t:"sel",l:"পাতা সাজানো",o:[["SinglePage","এক পাতা করে"],["OneColumn","একটানা (নিচে নামবে)"],["TwoColumnLeft","দুই কলাম"],["TwoPageLeft","দুই পাতা পাশাপাশি"]]},{k:"fit",t:"sel",l:"উইন্ডোর মাপে পাতা ফিট",o:[["0","না"],["1","হ্যাঁ"]]},{k:"ctr",t:"sel",l:"উইন্ডো মাঝখানে",o:[["0","না"],["1","হ্যাঁ"]]},{k:"tb",t:"sel",l:"টুলবার লুকাবে",o:[["0","না"],["1","হ্যাঁ"]]},{k:"mb",t:"sel",l:"মেনু লুকাবে",o:[["0","না"],["1","হ্যাঁ"]]},{k:"ttl",t:"txt",l:"শিরোনাম (ফাঁকা রাখলে আগেরটাই থাকবে)",ph:"Jahoss Enterprise Limited"},{k:"dt",t:"sel",l:"ফাইলের নামের বদলে শিরোনাম দেখাবে",o:[["0","না"],["1","হ্যাঁ"]]}],go:viewGo},
+ extractimg:{lib:["pdfjs"],in:[FPm,{k:"fmt",t:"sel",l:"ছবির ধরন",o:[["jpg","JPG (ছোট সাইজ)"],["png","PNG (বেশি স্পষ্ট)"]]},{k:"min",t:"sel",l:"ছোট ছবি (আইকন, দাগ) বাদ দেবেন?",o:[["50","হ্যাঁ, ৫০ পিক্সেলের ছোট ছবি বাদ"],["0","না, সব নেবে"]]}],go:exImgGo},
+ sign:{lib:["pdflib"],in:[FP,{k:"sig",t:"sig",l:"নিচের সাদা ঘরে আঙুল দিয়ে সই আঁকুন"},{k:"pg",t:"txt",l:"কোন পাতায় (ফাঁকা = শেষ পাতা, all = সব পাতা, বা 1,3)",ph:"শেষ পাতায় বসাতে ফাঁকা রাখুন"},{k:"pos",t:"sel",l:"পাতার কোথায় বসবে",o:[["br","নিচে ডানে"],["bc","নিচে মাঝখানে"],["bl","নিচে বামে"],["mr","মাঝখানে ডানে"],["mc","পুরো মাঝখানে"],["ml","মাঝখানে বামে"]]},{k:"sz",t:"sel",l:"সইয়ের মাপ",o:[["m","মাঝারি"],["s","ছোট"],["l","বড়"]]},{k:"dt",t:"sel",l:"সইয়ের নিচে আজকের তারিখ",o:[["0","দেবে না"],["1","দেবে"]]}],go:signGo},
+ invoice:{in:[{k:"from",t:"area",l:"আপনার তথ্য (নাম, ঠিকানা, ফোন) ইংরেজিতে",ph:"Jahoss Enterprise Limited\nNaya Paltan, Dhaka"},{k:"to",t:"area",l:"কাকে দিচ্ছেন (নাম, ঠিকানা)",ph:"Client name\nAddress"},{k:"no",t:"txt",l:"ইনভয়েস নম্বর",ph:"INV-001"},{k:"date",t:"txt",l:"তারিখ (ফাঁকা = আজকের তারিখ)",ph:"11 Oct 2026"},{k:"cur",t:"txt",l:"টাকার চিহ্ন",ph:"BDT"},{k:"items",t:"area",l:"আইটেম, প্রতি লাইনে একটা: বিবরণ | সংখ্যা | একটার দাম",ph:"Visa processing | 2 | 5000\nService charge | 1 | 3000"},{k:"tax",t:"txt",l:"ট্যাক্স % (না থাকলে ফাঁকা)",ph:"0"},{k:"note",t:"area",l:"নোট (ব্যাংক হিসাব, শর্ত ইত্যাদি)",ph:"Payment due within 7 days."}],go:invGo},
+ jobapp:{in:[{k:"name",t:"txt",l:"আপনার পুরো নাম (ইংরেজিতে)",ph:"Md. Example Name"},{k:"contact",t:"txt",l:"ফোন, ইমেইল, ঠিকানা (এক লাইনে)",ph:"+8801XXXXXXXXX | name@email.com | Dhaka"},{k:"to",t:"area",l:"কোম্পানির নাম ও ঠিকানা",ph:"The Hiring Manager\nCompany Name\nAddress"},{k:"pos",t:"txt",l:"কোন পদের জন্য আবেদন",ph:"Accounts Officer"},{k:"body",t:"area",l:"আবেদনের মূল লেখা (ফাঁকা রাখলে সাধারণ একটা লেখা বসবে)",ph:"I am writing to apply for ..."},{k:"edu",t:"area",l:"শিক্ষা (প্রতি লাইনে একটা)। CV পাতা লাগলে দিন",ph:"BBA, XYZ University, 2020"},{k:"exp",t:"area",l:"অভিজ্ঞতা (প্রতি লাইনে একটা)",ph:"Accounts Assistant, ABC Ltd, 2021-2024"},{k:"skills",t:"area",l:"দক্ষতা (প্রতি লাইনে একটা)",ph:"MS Excel\nEnglish communication"}],go:jobGo},
+ compare:{lib:["pdflib","pdfjs"],in:[{...FP,l:"পুরোনো PDF (A)"},{k:"ov",t:"file",l:"নতুন PDF (B)",acc:".pdf,application/pdf"}],go:compareGo},
+ unlock:{lib:["pdflib","pdfjs"],in:[FP,{k:"pw",t:"txt",l:"PDF-এর পাসওয়ার্ড (না থাকলে ফাঁকা)"},{k:"q",t:"sel",l:"স্পষ্টতা",o:[["1.8","সাধারণ"],["2.4","ভালো (ফাইল বড় হবে)"]]}],go:unlockGo},
+ protect:{lib:["pdflib","pdfjs"],in:[FP,{k:"pw",t:"txt",l:"নতুন পাসওয়ার্ড (খুলতে এটা লাগবে)"},{k:"old",t:"txt",l:"PDF-এ আগে থেকে পাসওয়ার্ড থাকলে সেটা (না থাকলে ফাঁকা)"},{k:"perm",t:"sel",l:"পাসওয়ার্ড দিয়ে খোলার পর",o:[["p","ছাপা যাবে"],["n","ছাপাও যাবে না"]]},{k:"q",t:"sel",l:"স্পষ্টতা",o:[["1.8","সাধারণ"],["2.4","ভালো (ফাইল বড় হবে)"]]}],go:protectGo},
  ocr:{lib:["pdflib","pdfjs"],in:[{k:"files",t:"file",l:"স্ক্যান করা PDF বা ছবি বাছুন (একাধিক হলে একসাথে)",acc:".pdf,application/pdf,image/*",multi:1},{k:"lang",t:"sel",l:"লেখার ভাষা",o:[["eng","English"],["ben","বাংলা"],["eng+ben","English + বাংলা (ধীর)"]]},{k:"q",t:"sel",l:"পড়ার মান",o:[["2","সাধারণ (দ্রুত)"],["3","ভালো (ধীর, ফোনে বেশি মেমরি লাগে)"]]}],go:ocrGo},
  qr:{lib:["qr"],in:[{k:"txt",t:"area",l:"লেখা বা লিংক",ph:"https://jahoss-tracker.web.app"},{k:"px",t:"sel",l:"ছবির সাইজ",o:[["512","মাঝারি"],["1024","বড়"]]}],go:async v=>{if(!v.txt.trim())throw new Error("লেখা বা লিংক দিন");qrcode.stringToBytes=s=>Array.from(new TextEncoder().encode(s));const q=qrcode(0,"M");q.addData(v.txt,"Byte");q.make();const n=q.getModuleCount(),m=4,cs=Math.max(2,Math.floor(+v.px/(n+2*m))),[c,x]=cv(cs*(n+2*m),cs*(n+2*m));x.fillStyle="#000";for(let r=0;r<n;r++)for(let k=0;k<n;k++)if(q.isDark(r,k))x.fillRect((k+m)*cs,(r+m)*cs,cs,cs);return[{name:"qr-code.png",blob:await cb(c,"image/png")}]}}
 };
@@ -196,37 +376,38 @@ const T=[
 ["compress","Compress PDF","PDF-এর সাইজ ছোট করে, ইমেইল বা আপলোডের জন্য। (লেখা তখন ছবির মতো হয়ে যায়, বাছাই করা যায় না।)","pdf","🗜️","L"],
 ["imgpdf","Images to PDF","ছবি (JPG, PNG) থেকে PDF বানায়, সব ছবি একই মাপে।","pdf","🖼️","L"],
 ["pdfimg","PDF to images","PDF-এর প্রতিটা পাতাকে ছবি (JPG বা PNG) বানায়।","pdf","📷","L"],
-["extractimg","Extract PDF images","PDF-এর ভেতরের সব ছবি আলাদা করে নামায়।","pdf","🏞️","X","extract-images"],
+["extractimg","Extract PDF images","PDF-এর ভেতরের সব ছবি আলাদা করে নামায়। ফাইল আপনার ফোনেই থাকে।","pdf","🏞️","L"],
 ["extract","Extract PDF pages","পছন্দের পাতাগুলো আলাদা করে নতুন PDF বানায়।","pages","📄","L"],
 ["remove","Remove PDF pages","অপ্রয়োজনীয় পাতা মুছে ফেলে।","pages","🗑️","L"],
 ["rotate","Rotate PDF pages","বাঁকা বা উল্টো পাতা ঘুরিয়ে সোজা করে।","pages","🔄","L"],
 ["sort","Sort PDF pages","পাতার ক্রম বদলায়।","pages","🔢","L"],
 ["pagesize","Change PDF page size","সব পাতাকে A4, A3, A5 বা Letter মাপে আনে। ছোট-বড় পাতা সমান হয়।","pages","📐","L"],
-["pps","Pages per sheet","এক পাতায় ২ বা ৪টা পাতা একসাথে ছাপার জন্য বসায়।","pages","🗂️","X","pages-per-sheet"],
+["pps","Pages per sheet","এক পাতায় ২, ৪ বা ৬টা পাতা একসাথে ছাপার জন্য বসায়।","pages","🗂️","L"],
 ["pnum","Add page numbers","প্রতিটা পাতায় পাতার নম্বর বসায়।","pages","#️⃣","L"],
 ["wm","Add watermark","সব পাতায় ঝাপসা লেখা (যেমন COPY) বসায়।","pages","💧","L"],
-["overlay","PDF Overlay","এক PDF-এর ওপর আরেকটা বসায়, যেমন লেটারহেডের ওপর লেখা।","pages","📑","X","overlay-pdf"],
+["overlay","PDF Overlay","এক PDF-এর ওপরে বা নিচে আরেকটা বসায়, যেমন লেটারহেডের ওপর লেখা।","pages","📑","L"],
 ["topdf","Convert to PDF","Word, Excel, PowerPoint ইত্যাদি ফাইল থেকে PDF বানায়।","conv","📥","X","convert-to-pdf"],
 ["frompdf","Convert PDF to ...","PDF থেকে Word, Excel, ছবি ইত্যাদিতে রূপান্তর করে।","conv","📤","X","convert-from-pdf"],
 ["w2p","Word to PDF","Word ফাইলকে PDF বানায়।","conv","📘","X","word-to-pdf"],
 ["p2w","PDF to Word","PDF-কে বদলানোর মতো Word ফাইলে রূপান্তর করে।","conv","📝","X","pdf-to-word"],
 ["w2j","Word to JPG","Word ফাইল সরাসরি JPG ছবিতে বদলায়। বাইরের সাইট (Online2PDF) খুলবে।","conv","🌄","X","https://online2pdf.com/convert-word-to-jpg"],
 ["ocr","PDF OCR","স্ক্যান করা PDF বা ছবির লেখা চিনে খোঁজা যায় এমন PDF আর লেখার ফাইল (TXT) বানায়। ইংরেজি ও বাংলা। ফাইল আপনার ফোনেই থাকে।","conv","🔍","L"],
-["editpdf","Edit PDF","PDF-এর ভেতরের লেখা খুঁজে বদলায় (যেমন Shihab মুছে Shahriar), Calibri-র মতো ফন্টে। ফাইল আপনার ফোনেই থাকে।","edit","✏️","L"],
-["sign","Sign PDF","PDF-এ সই বসায়।","edit","🖋️","X","sign-pdf",1],
-["compare","Compare PDFs","দুটো PDF মিলিয়ে কোথায় কী বদলেছে দেখায়।","edit","⚖️","X","compare-pdf"],
-["flatten","Flatten PDF","ফর্ম আর লেখা স্থায়ী করে, যাতে আর বদলানো না যায়।","edit","📌","X","flatten-pdf"],
+["pzedit","Edit PDF (ট্যাপ করে লেখা বদলান)","PDF-এর পাতায় লেখার ওপর ট্যাপ করে মুছুন, বদলান বা নতুন লেখা বসান, Word-এর মতো। লেখার জায়গা বদলালে বাকি লেখা নিজে সরে আসে না। ফাইল আপনার ফোনেই থাকে।","edit","✍️","P"],
+["editpdf","Edit PDF (খুঁজে সব জায়গায় বদলান)","একটা লেখা (যেমন Shihab) পুরো PDF-এ খুঁজে বদলে Shahriar করে, Calibri-র মতো ফন্টে। ফাইল আপনার ফোনেই থাকে।","edit","✏️","L"],
+["sign","Sign PDF","আঙুল দিয়ে সই এঁকে PDF-এর পাতায় বসায়।","edit","🖋️","L"],
+["compare","Compare PDFs","দুটো PDF-এর লেখা মিলিয়ে কোন লাইন বাদ পড়ল বা যোগ হলো তার রিপোর্ট বানায়। (শুধু লেখা মেলে, ছবি নয়।)","edit","⚖️","L"],
+["flatten","Flatten PDF","ফর্মের ঘর বা সবকিছু স্থায়ী করে, যাতে আর বদলানো না যায়।","edit","📌","L"],
 ["bookmark","Edit PDF bookmarks","PDF-এর সূচিপত্র বা বুকমার্ক যোগ ও বদল করে।","edit","🔖","X","bookmark-pdf"],
 ["fillable","Create fillable PDF form","ফাঁকা ঘরসহ পূরণযোগ্য PDF ফর্ম বানায়।","edit","📋","X","create-fillable-pdf-form"],
-["invoice","Create invoice","ইনভয়েস বানিয়ে PDF করে।","edit","🧾","X","create-invoice"],
-["jobapp","Create PDF job application","চাকরির আবেদনপত্র (CV সহ) PDF বানায়।","edit","💼","X","create-job-application"],
+["invoice","Create invoice","ইনভয়েস বানিয়ে PDF করে (ইংরেজি লেখা)।","edit","🧾","L"],
+["jobapp","Create PDF job application","চাকরির আবেদনপত্র আর চাইলে CV পাতা PDF বানায় (ইংরেজি লেখা)।","edit","💼","L"],
 ["meta","Edit PDF metadata","PDF-এর শিরোনাম, লেখক, বিষয় বদলায়।","edit","🏷️","L"],
-["protect","Protect PDF","PDF-এ পাসওয়ার্ড দিয়ে তালা লাগায়।","sec","🔒","X","lock-pdf"],
-["unlock","Unlock PDF","পাসওয়ার্ড জানা PDF থেকে তালা খুলে দেয়।","sec","🔓","X","unlock-pdf"],
+["protect","Protect PDF","পাসওয়ার্ড দিয়ে PDF-এ তালা লাগায়। (পাতা ছবি হয়ে যায়।)","sec","🔒","L"],
+["unlock","Unlock PDF","পাসওয়ার্ড জানা PDF থেকে তালা খুলে দেয়। (পাতা ছবি হয়ে যায়।)","sec","🔓","L"],
 ["rmmeta","Remove PDF metadata","PDF-এর লুকানো তথ্য (লেখক, শিরোনাম) মুছে দেয়।","sec","🧼","L"],
 ["repair","Repair PDF","নষ্ট বা না-খোলা PDF মেরামতের চেষ্টা করে।","sec","🛠️","X","repair-pdf"],
 ["webopt","Web optimize PDF","ওয়েবে দ্রুত খোলার মতো করে PDF সাজায়।","sec","⚡","X","web-optimize-pdf"],
-["viewpref","Edit viewer preferences","PDF খুললে কীভাবে দেখাবে (পূর্ণ পর্দা, লেআউট) ঠিক করে।","sec","🖥️","X","set-pdf-viewer-preferences"],
+["viewpref","Edit viewer preferences","PDF খুললে কীভাবে দেখাবে (পূর্ণ পর্দা, পাতা সাজানো, শিরোনাম) ঠিক করে।","sec","🖥️","L"],
 ["imgfix","ছবি ঠিক করা","বাঁকা ছবি সোজা করা (৪ কোণা টেনে), কাটা, ঘোরানো, ঝাপসা ছবি স্পষ্ট করা, আলো ঠিক করা, ফাইল সাইজ (KB) কমানো।","img","🎨","I"],
 ["photopea","Photopea (ফ্রি ছবি এডিটর)","ব্যাকগ্রাউন্ড মোছা সহ ফটোশপের মতো ফ্রি অনলাইন এডিটর। আমাদের টুলে যা নেই সেটার জন্য।","img","🖌️","X","https://www.photopea.com"],
 ["ai","বস্তু মোছা, ব্যাকগ্রাউন্ড সরানো (AI)","ছবি থেকে বস্তু মুছতে, ব্যাকগ্রাউন্ড সরাতে বা খুব ঝাপসা ছবি পরিষ্কার করতে AI সাইটে ছবি দিয়ে বলুন। ফাইল তাদের সার্ভারে যায়।","img","🤖","A",AI],
@@ -240,10 +421,10 @@ const isX=t=>t[5]==="X"||t[5]==="A";
 function draw(){const q=$("#q").value.trim().toLowerCase();
   const L=T.filter(t=>(cat==="all"||t[3]===cat)&&(!q||(t[1]+" "+t[2]).toLowerCase().includes(q))).sort((a,b)=>isX(a)-isX(b)),fx=L.findIndex(isX);
   $("#g").innerHTML=L.map(t=>{const[id,en,bn,c,ic,k,a,soon]=t;return(fx>0&&t===L[fx]?'<h3 style="grid-column:1/-1;margin:14px 0 0;color:var(--n);border-bottom:2px solid var(--r);padding-bottom:6px">বাইরের সাইটে হয় এমন টুল</h3>':"")+
-  `<div class="c"><div class="ic">${ic}</div><h3>${en}</h3><p>${bn}</p><span class="bd${k==="L"||k==="I"?"":" x"}">${k==="L"||k==="I"?"এখানেই কাজ হয়":"বাইরের সাইট ↗"}</span>${soon?'<span class="bd s">পরে এখানেই আসবে</span>':""}<div class="bs">${k==="L"?`<button class="b" data-o="${id}">খুলুন</button>`:k==="I"?`<button class="b" data-e="1">খুলুন</button>`:k==="X"?`<a class="b o" target="_blank" rel="noopener noreferrer" href="${url(a)}">সাইটে খুলুন ↗</a>`:a.map(([n,u])=>`<a class="b o" target="_blank" rel="noopener noreferrer" href="${u}">${n} ↗</a>`).join("")}</div></div>`}).join("")||"<p>কিছু পাওয়া যায়নি।</p>"}
+  `<div class="c"><div class="ic">${ic}</div><h3>${en}</h3><p>${bn}</p><span class="bd${k==="L"||k==="I"||k==="P"?"":" x"}">${k==="L"||k==="I"||k==="P"?"এখানেই কাজ হয়":"বাইরের সাইট ↗"}</span>${soon?'<span class="bd s">পরে এখানেই আসবে</span>':""}<div class="bs">${k==="L"?`<button class="b" data-o="${id}">খুলুন</button>`:k==="I"?`<button class="b" data-e="1">খুলুন</button>`:k==="P"?`<button class="b" data-p0="1">খুলুন</button>`:k==="X"?`<a class="b o" target="_blank" rel="noopener noreferrer" href="${url(a)}">সাইটে খুলুন ↗</a>`:a.map(([n,u])=>`<a class="b o" target="_blank" rel="noopener noreferrer" href="${u}">${n} ↗</a>`).join("")}</div></div>`}).join("")||"<p>কিছু পাওয়া যায়নি।</p>"}
 $("#q").oninput=draw;
 $("#ch").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;cat=b.dataset.c;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));draw()};
-$("#g").onclick=e=>{const b=e.target.closest("[data-o]");if(b)openTool(b.dataset.o);if(e.target.closest("[data-e]"))$("#ie").classList.remove("hide")};
+$("#g").onclick=e=>{const b=e.target.closest("[data-o]");if(b)openTool(b.dataset.o);if(e.target.closest("[data-e]"))$("#ie").classList.remove("hide");if(e.target.closest("[data-p0]"))$("#pz").classList.remove("hide")};
 draw();
 // ---------- টুল খোলা ও চালানো
 let cur=null;
@@ -253,9 +434,10 @@ function openTool(id){const t=T.find(x=>x[0]===id),S=TOOLS[id];cur=id;$("#mt").t
   $("#mf").innerHTML=S.in.map(f=>{const l=`<label>${f.l}`;
     if(f.t==="file")return l+`<input type="file" data-k="${f.k}" accept="${f.acc}" ${f.multi?"multiple":""}></label>`;
     if(f.t==="sel")return l+`<select data-k="${f.k}">${f.o.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join("")}</select></label>`;
+    if(f.t==="sig")return l+`<canvas data-k="${f.k}" width="640" height="240" style="display:block;width:100%;height:150px;margin-top:6px;background:#fff;border:1px solid #c9d3ea;border-radius:8px;touch-action:none"></canvas></label><button type="button" class="b o" data-sc="1" style="margin:6px 0 10px">মুছে আবার আঁকুন</button>`;
     if(f.t==="area")return l+`<textarea data-k="${f.k}" rows="3" placeholder="${esc(f.ph||"")}"></textarea></label>`;
     return l+`<input type="text" data-k="${f.k}" placeholder="${esc(f.ph||"")}"></label>`}).join("");
-  st("");$("#mr").innerHTML="";$("#mg").disabled=false;$("#md").classList.remove("hide")}
+  st("");$("#mr").innerHTML="";$("#mg").disabled=false;wireSig();$("#md").classList.remove("hide")}
 // ---------- ছবি ঠিক করার এডিটর
 const IE={base:null,k:1,mode:"",pts:[],crop:null,hist:[],drag:null};
 const cl2=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -316,8 +498,131 @@ function show(res){const r=$("#mr");
 $("#mg").onclick=async()=>{const S=TOOLS[cur],v={};
   document.querySelectorAll("#mf [data-k]").forEach(e=>v[e.dataset.k]=e.type==="file"?[...e.files]:e.value);
   if(S.in.some(f=>f.t==="file"&&!v[f.k].length)){st("আগে ফাইল বাছুন।",1);return}
+  if(S.in.some(f=>f.t==="sig"&&!v[f.k])){st("আগে সই আঁকুন।",1);return}
   st("কাজ চলছে, একটু অপেক্ষা করুন...");$("#mr").innerHTML="";$("#mg").disabled=true;
   try{await Promise.all((S.lib||["pdflib"]).map(lib));const res=await S.go(v);show(res);st("হয়ে গেছে। নিচের বাটনে চেপে ফাইল নামান।"+(res.note?" "+res.note:""))}
   catch(e){st("ত্রুটি: "+(e&&e.message||e),1)}
   $("#mg").disabled=false};
+
+// ---------- Gemini প্রম্পট বাটন (নতুন প্রম্পট যোগ করতে GP-তে একটা {…} বসান)
+const GP=[
+ {n:"ছবি সুন্দর করা (পোর্ট্রেট এনহান্স)",d:"চেহারা আর ব্যাকগ্রাউন্ড একই রেখে ছবির আলো, রং আর স্পষ্টতা উন্নত করে। পাসপোর্ট বা ভিসার ছবির জন্য নয়।",gem:"https://gemini.google.com/u/7/gem/bdea9286c5ac",p:`When I upload a photo, edit it using the instructions below and return the edited image as the result. Do not just describe it.
+Enhance the portrait while strictly preserving the subject’s identity, with precise facial geometry. Do not alter the expression or face shape. Only subtle refinements are allowed to clean up details, without changing who the person is. Keep exactly the same background as the reference image.
+No replacements, no alterations, no new objects, no composition changes, and no element shifts. The environment must appear identical. The image should be recreated as if it were captured with a Sony A1, using an 85mm f/1.4 lens at f/1.6, ISO 100, shutter speed 1/200, with a shallow cinematic depth of field, perfect focus on the face, and a neutral editorial color profile. This Sony A1 + 85mm f/1.4 setup is mandatory. The final result must clearly convey the premium quality of a Sony A1 full-frame.
+The lighting must exactly match the direction, angle, and emotional mood of the reference photo.
+Elevate the lighting to a cinematic subject-focused style: soft directional light, warm highlights, cool shadows, deeper contrast, increased dynamic range, enhanced micro-contrast, smooth gradation, and zero harsh shadows.
+Maintain a neutral and premium color tone, cinematic contrast curve, natural saturation, real skin texture with no plastic effect, and subtle film grain. No artificial glow, no runway lighting, no excessive smoothing. Render in 4K resolution, 10-bit color, cinematic editorial style, premium sharpness, portrait framing, and fully preserve the original atmosphere of the environment.
+Re-render the subject with greater realism, depth, texture, and lighting, while fully preserving identity and background.
+NEGATIVE INSTRUCTIONS:
+No new background.
+No background alteration.
+No overly dramatic lighting.
+No facial deformation.
+No artificial glow.
+No flat lighting.
+No overly smoothed skin.`}
+];
+$("#gp").innerHTML=GP.map((x,i)=>`<div class="c"><div class="ic">✨</div><h3>${x.n}</h3><p>${x.d}</p><div class="bs"><a class="b" href="${x.gem}" target="_blank" rel="noopener">Gemini-তে খুলুন ↗</a><button class="b o" data-gp="${i}">প্রম্পট কপি</button></div></div>`).join("");
+document.addEventListener("click",async e=>{const b=e.target.closest("[data-gp]");if(!b)return;const t=GP[+b.dataset.gp].p;
+  try{await navigator.clipboard.writeText(t)}catch(_){const a=document.createElement("textarea");a.value=t;a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(__){}a.remove()}
+  const o=b.textContent;b.textContent="কপি হয়েছে ✔";setTimeout(()=>b.textContent=o,2000)});
+
+// ---------- Edit PDF: ট্যাপ করে লেখা বদলান
+const PZ={doc:null,buf:null,name:"",n:0,i:0,zoom:1,cache:{},edits:[],sel:null,add:false};
+const pzS=(m,er)=>{const e=$("#pzs");e.textContent=m;e.className=er?"er":""};
+const PZOK=/[^\x20-\x7E\xA0-\xFF\u2013\u2014\u2018\u2019\u201C\u201D\u2022\u2026\u20AC\n]/;
+const pzFam=()=>{const f=$("#pzf").value;return f==="times"?'"Times New Roman",Times,serif':f==="helv"?"Arial,Helvetica,sans-serif":"Calibri,Carlito,Arial,sans-serif"};
+async function pzFont(d,FC,fam,bold){const k=fam+(bold?"b":"r");if(FC[k])return FC[k];const SF=PDFLib.StandardFonts;
+  if(fam==="carlito"){try{if(!FC.fk){await lib("fontkit");d.registerFontkit(fontkit);FC.fk=1}const r=await fetch(CRL(bold?700:400));if(!r.ok)throw new Error("font");return FC[k]=await d.embedFont(await r.arrayBuffer(),{subset:false})}catch(e){FC.fb=1}}
+  return FC[k]=await d.embedFont(fam==="times"?(bold?SF.TimesRomanBold:SF.TimesRoman):(bold?SF.HelveticaBold:SF.Helvetica))}
+async function pzLoad(i){pzS("পাতা তৈরি হচ্ছে...");const pg=await PZ.doc.getPage(i+1);let C=PZ.cache[i];
+  if(!C){const v1=pg.getViewport({scale:1}),sc=Math.min(3,2400/v1.width),vp=pg.getViewport({scale:sc}),[c,x]=cv(vp.width,vp.height);
+    await pg.render({canvasContext:x,viewport:vp}).promise;
+    const tc=await pg.getTextContent(),runs=mkRuns(tc.items,.9);
+    runs.forEach(r=>{r.bold=false;try{const fo=pg.commonObjs.get(r.fn);r.bold=/bold|black|heavy|demi/i.test(fo&&fo.name||"")||!!(fo&&fo.bold)}catch(e){}});
+    C=PZ.cache[i]={c,x,vp,runs,rot:(pg.rotate||0)%360!==0}}
+  Object.keys(PZ.cache).forEach(k=>{if(+k!==i&&!PZ.edits.some(e=>e.p===+k))delete PZ.cache[k]});
+  PZ.i=i;pzClose();pzDraw();pzS("")}
+function pzDraw(){const C=PZ.cache[PZ.i],cn=$("#pzc"),U=pdfjsLib.Util,fam=pzFam();cn.width=C.c.width;cn.height=C.c.height;const x=cn.getContext("2d");x.drawImage(C.c,0,0);
+  PZ.edits.filter(e=>e.p===PZ.i).forEach(e=>{
+    if(e.img){const[a,b]=U.applyTransform([e.x,e.y],C.vp.transform),[c2,d2]=U.applyTransform([e.x+e.w,e.y+e.h],C.vp.transform);x.drawImage(e.fit,Math.min(a,c2),Math.min(b,d2),Math.abs(c2-a),Math.abs(d2-b));return}
+    if(!e.add){const[a,b]=U.applyTransform([e.x-.6,e.y-.2*e.fs],C.vp.transform),[c2,d2]=U.applyTransform([e.ex+.6,e.y+.78*e.fs],C.vp.transform);
+      x.fillStyle="rgb("+e.bg.map(v=>Math.round(v*255))+")";x.fillRect(Math.min(a,c2),Math.min(b,d2),Math.abs(c2-a),Math.abs(d2-b))}
+    if(e.t){const[px,py]=U.applyTransform([e.x,e.y],C.vp.transform),sc=C.vp.scale;x.fillStyle="rgb("+e.fg.map(v=>Math.round(v*255))+")";x.font=(e.bold?"bold ":"")+e.fs*sc+"px "+fam;x.textBaseline="alphabetic";
+      e.t.split("\n").forEach((l,j)=>x.fillText(l,px,py+j*e.fs*1.25*sc))}});
+  const W=C.c.width,H=C.c.height,pad=1.5;
+  $("#pzo").innerHTML=C.rot?"":C.runs.map((r,k)=>{const[a,b]=U.applyTransform([r.x-pad,r.y-.25*r.fs],C.vp.transform),[c2,d2]=U.applyTransform([r.ex+pad,r.y+.9*r.fs],C.vp.transform),dn=PZ.edits.some(e=>e.p===PZ.i&&e.k===k);
+    return '<div class="pzx'+(dn?" dn":"")+'" data-k="'+k+'" style="left:'+Math.min(a,c2)/W*100+'%;top:'+Math.min(b,d2)/H*100+'%;width:'+Math.abs(c2-a)/W*100+'%;height:'+Math.abs(d2-b)/H*100+'%"></div>'}).join("");
+  $("#pzg").textContent="পাতা "+(PZ.i+1)+" / "+PZ.n;
+  $("#pzh").textContent=C.rot?"এই পাতাটা ঘোরানো, এখানে এডিট করা যাবে না।":!C.runs.length?"এই পাতায় সিলেক্ট করার মতো লেখা নেই (ছবি বা স্ক্যান হতে পারে)। স্ক্যান হলে আগে PDF OCR চালান। চাইলে '＋ নতুন লেখা বসান' দিয়ে লিখতে পারেন।":PZ.img?"পুরোনো ছবির ওপর আঙুল টেনে একটা চৌকো আঁকুন, নতুন ছবি ওই জায়গায় বসবে।":PZ.add?"যেখানে লিখতে চান পাতার সেখানে ট্যাপ করুন।":"লাল ঘরের ওপর ট্যাপ করলে ওই লাইন বদলানো যাবে। সবুজ ঘর মানে বদলানো হয়েছে।"}
+function pzClose(){PZ.sel=null;$("#pzp").classList.add("hide")}
+function pzOpen(txt,ph,add,del){$("#pzt").value=txt;$("#pzph").textContent=ph;$("#pzszw").classList.toggle("hide",!add);$("#pzdl").classList.toggle("hide",add);$("#pzp").classList.remove("hide");$("#pzp").scrollIntoView({block:"nearest"});$("#pzt").focus()}
+function pzApply(del){const s=PZ.sel;if(!s)return;const C=PZ.cache[PZ.i],U=pdfjsLib.Util;let t=del?"":$("#pzt").value;
+  if(PZOK.test(t)){pzS("শুধু ইংরেজি অক্ষর, সংখ্যা ও চিহ্ন চলবে। বাংলা লেখা এখানে বসানো যায় না।",1);return}
+  if(s.add){if(!t.trim()){pzClose();return}PZ.edits.push({p:PZ.i,add:1,x:s.x,y:s.y,fs:+$("#pzsz").value||11,t,bg:[1,1,1],fg:[0,0,0],bold:false})}
+  else{const r=C.runs[s.k];t=t.replace(/\s*\n\s*/g," ");PZ.edits=PZ.edits.filter(q=>!(q.p===PZ.i&&q.k===s.k));
+    if(!del&&t===r.s){pzClose();pzDraw();return}
+    const[a,b]=U.applyTransform([r.x,r.y-.2*r.fs],C.vp.transform),[c2,d2]=U.applyTransform([r.ex,r.y+.8*r.fs],C.vp.transform),cl=pxSample(C.x,[Math.min(a,c2),Math.min(b,d2),Math.abs(c2-a),Math.abs(d2-b)]);
+    PZ.edits.push({p:PZ.i,k:s.k,x:r.x,y:r.y,ex:r.ex,fs:r.fs,t,bg:cl.bg,fg:cl.fg,bold:r.bold})}
+  pzClose();pzDraw();pzS("")}
+async function pzSave(){if(!PZ.edits.length){pzS("আগে কোনো লেখা বদলান বা নতুন লেখা বসান।",1);return}
+  const btn=$("#pzsv");btn.disabled=true;$("#pzr").innerHTML="";
+  try{pzS("PDF তৈরি হচ্ছে...");const{rgb}=PDFLib,d=await PDFLib.PDFDocument.load(PZ.buf.slice(0),{ignoreEncryption:true,updateMetadata:false}),FC={},fam=$("#pzf").value;
+    for(const e of PZ.edits){const page=d.getPage(e.p),W=page.getSize().width;
+      if(e.img){const im=await d.embedJpg(await u8(await cb(e.fit,"image/jpeg",.92)));page.drawImage(im,{x:e.x,y:e.y,width:e.w,height:e.h});continue}
+      const f=await pzFont(d,FC,fam,e.bold);
+      if(!e.add)page.drawRectangle({x:e.x-.6,y:e.y-.2*e.fs,width:e.ex-e.x+1.2,height:e.fs*.98,color:rgb(...e.bg),borderWidth:0});
+      if(e.t){const ls=e.t.split("\n");let sz=e.fs;const mw=Math.max(...ls.map(l=>f.widthOfTextAtSize(l,sz)));
+        if(mw>0&&e.x+mw>W-10)sz=Math.max(4,sz*(W-10-e.x)/mw);
+        ls.forEach((l,j)=>{if(l)page.drawText(l,{x:e.x,y:e.y-j*sz*1.25,size:sz,font:f,color:rgb(...e.fg)})})}}
+    let bytes=await d.save();
+    if($("#pzm").value==="s"){pzS("পাতাগুলো ছবি বানানো হচ্ছে...");const o=await PDFLib.PDFDocument.create();
+      await eachPage(pb(bytes),2.4,async(c,i,v1)=>{const im=await o.embedJpg(await u8(await cb(c,"image/jpeg",.85)));o.addPage([v1.width,v1.height]).drawImage(im,{x:0,y:0,width:v1.width,height:v1.height})});
+      bytes=await o.save()}
+    const blob=pb(bytes),url=URL.createObjectURL(blob),nm=PZ.name+"-edited.pdf";
+    $("#pzr").innerHTML='<a class="b" href="'+url+'" download="'+esc(nm)+'">⬇ নামান: '+esc(nm)+" ("+Math.max(1,Math.round(blob.size/1024))+" KB)</a>";
+    pzS("হয়ে গেছে। "+PZ.edits.length+"টা বদল করা হয়েছে।"+(FC.fb?" (Calibri-র মতো ফন্ট নামানো যায়নি, তাই Arial-র মতো ফন্ট বসেছে।)":"")+" ফাইল খুলে একবার মিলিয়ে নিন।")}
+  catch(e){pzS("সমস্যা হয়েছে: "+(e&&e.message||e),1)}finally{btn.disabled=false}}
+$("#pzf0").onchange=async e=>{const f=e.target.files[0];if(!f)return;
+  try{pzS("PDF খোলা হচ্ছে...");$("#pzw").classList.add("hide");await pjs();PZ.doc=await openPw(f,"");PZ.buf=await f.arrayBuffer();PZ.name=base(f);PZ.n=PZ.doc.numPages;PZ.edits=[];PZ.cache={};PZ.add=false;PZ.img=false;PZ.zoom=innerWidth<700?2:1;
+    $("#pzbx").style.width=PZ.zoom*100+"%";$("#pzw").classList.remove("hide");$("#pzr").innerHTML="";await pzLoad(0);pzMode("")}
+  catch(er){pzS(er&&er.message||"PDF খোলা যায়নি",1)}};
+$("#pzo").onclick=e=>{if(PZ.add||PZ.img)return;const b=e.target.closest(".pzx");if(!b)return;const k=+b.dataset.k,r=PZ.cache[PZ.i].runs[k],ex=PZ.edits.find(q=>q.p===PZ.i&&q.k===k);
+  PZ.sel={k};pzOpen(ex&&ex.t!==undefined?ex.t:r.s,"এই লাইনের লেখা বদলান:",false)};
+$("#pzbx").onclick=e=>{if(!PZ.add)return;const C=PZ.cache[PZ.i],cn=$("#pzc"),r=cn.getBoundingClientRect(),cx=(e.clientX-r.left)/r.width*cn.width,cy=(e.clientY-r.top)/r.height*cn.height,[ux,uy]=pdfjsLib.Util.applyInverseTransform([cx,cy],C.vp.transform);
+  PZ.sel={add:1,x:ux,y:uy};pzOpen("","এখানে যে লেখা বসাতে চান সেটা লিখুন:",true)};
+$("#pz").onclick=async e=>{if(e.target.id==="pz"){$("#pz").classList.add("hide");return}
+  const b=e.target.closest("[data-z]");if(!b)return;const a=b.dataset.z,zs=[1,1.5,2,3,4];
+  if(a==="prev"&&PZ.i>0)await pzLoad(PZ.i-1);
+  else if(a==="next"&&PZ.i<PZ.n-1)await pzLoad(PZ.i+1);
+  else if(a==="zi"||a==="zo"){let j=zs.indexOf(PZ.zoom);if(j<0)j=0;j=cl2(j+(a==="zi"?1:-1),0,zs.length-1);PZ.zoom=zs[j];$("#pzbx").style.width=PZ.zoom*100+"%"}
+  else if(a==="add"){pzMode(PZ.add?"":"add")}
+  else if(a==="img"){if(PZ.img)pzMode("");else $("#pzimf").click()}
+  else if(a==="ok")pzApply(false);
+  else if(a==="del")pzApply(true);
+  else if(a==="cn")pzClose();
+  else if(a==="undo"){const x=PZ.edits.pop();if(x){if(x.p!==PZ.i)await pzLoad(x.p);else pzDraw()}}
+  else if(a==="save")await pzSave()};
+$("#pzx0").onclick=()=>$("#pz").classList.add("hide");
+
+// ---------- Edit PDF: ছবি বসানো
+function pzMode(m){PZ.add=m==="add";PZ.img=m==="img";const bx=$("#pzbx");bx.classList.toggle("add",PZ.add||PZ.img);bx.style.touchAction=PZ.img?"none":"";
+  $("#pza").textContent=PZ.add?"✕ নতুন লেখা বন্ধ":"＋ নতুন লেখা বসান";$("#pzi").textContent=PZ.img?"✕ ছবি বসানো বন্ধ":"🖼 ছবি বসান";$("#pzsel").classList.add("hide");pzClose();pzDraw()}
+function pzFit(src,wp,hp,mode){const k=1000/Math.max(wp,hp),tw=Math.max(2,Math.round(wp*k)),th=Math.max(2,Math.round(hp*k)),[c,x]=cv(tw,th),
+  sc=mode==="c"?Math.max(tw/src.width,th/src.height):Math.min(tw/src.width,th/src.height),dw=src.width*sc,dh=src.height*sc;x.drawImage(src,(tw-dw)/2,(th-dh)/2,dw,dh);return c}
+$("#pzimf").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;
+  try{const bm=await createImageBitmap(f),k=Math.min(1,2000/Math.max(bm.width,bm.height)),[c,x]=cv(Math.round(bm.width*k),Math.round(bm.height*k));x.drawImage(bm,0,0,c.width,c.height);PZ.pimg=c;pzMode("img")}
+  catch(er){pzS("ছবিটা খোলা যায়নি",1)}};
+(()=>{const bx=$("#pzbx"),sel=$("#pzsel");let st=null;
+  const pt=e=>{const r=bx.getBoundingClientRect();return[Math.max(0,Math.min(r.width,e.clientX-r.left)),Math.max(0,Math.min(r.height,e.clientY-r.top))]};
+  bx.addEventListener("pointerdown",e=>{if(!PZ.img)return;e.preventDefault();bx.setPointerCapture(e.pointerId);st=pt(e);sel.classList.remove("hide");sel.style.left=st[0]+"px";sel.style.top=st[1]+"px";sel.style.width="0px";sel.style.height="0px"});
+  bx.addEventListener("pointermove",e=>{if(!st)return;const p=pt(e);sel.style.left=Math.min(st[0],p[0])+"px";sel.style.top=Math.min(st[1],p[1])+"px";sel.style.width=Math.abs(p[0]-st[0])+"px";sel.style.height=Math.abs(p[1]-st[1])+"px"});
+  bx.addEventListener("pointerup",e=>{if(!st)return;const p=pt(e),a=st;st=null;sel.classList.add("hide");const r=bx.getBoundingClientRect(),w=Math.abs(p[0]-a[0]),h=Math.abs(p[1]-a[1]);
+    if(w<10||h<10){pzS("চৌকোটা খুব ছোট হয়েছে, আবার আঙুল টেনে আঁকুন।",1);return}
+    const C=PZ.cache[PZ.i],k=$("#pzc").width/r.width,U=pdfjsLib.Util,
+      q1=U.applyInverseTransform([Math.min(a[0],p[0])*k,Math.min(a[1],p[1])*k],C.vp.transform),q2=U.applyInverseTransform([Math.max(a[0],p[0])*k,Math.max(a[1],p[1])*k],C.vp.transform),
+      W=Math.abs(q2[0]-q1[0]),H=Math.abs(q2[1]-q1[1]);
+    PZ.edits.push({p:PZ.i,img:1,x:Math.min(q1[0],q2[0]),y:Math.min(q1[1],q2[1]),w:W,h:H,fit:pzFit(PZ.pimg,W,H,$("#pzit").value)});
+    pzMode("");pzS("ছবি বসেছে। ঠিক না হলে 'শেষ বদলটা বাতিল' চাপুন। পুরোনো ছবি পুরোপুরি মুছতে নিচে 'নিরাপদ' বাছুন।")});
+  bx.addEventListener("pointercancel",()=>{st=null;sel.classList.add("hide")})})();
 </script></body></html>
