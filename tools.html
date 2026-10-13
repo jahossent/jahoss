@@ -56,7 +56,7 @@ footer{background:var(--d);color:#aeb6c9;text-align:center;padding:22px;font-siz
 <script>
 const $=s=>document.querySelector(s);
 const PL="https://cdnjs.cloudflare.com/ajax/libs/";
-const LIBS={pdflib:PL+"pdf-lib/1.17.1/pdf-lib.min.js",pdfjs:PL+"pdf.js/3.11.174/pdf.min.js",jszip:PL+"jszip/3.10.1/jszip.min.js",qr:PL+"qrcode-generator/1.4.4/qrcode.min.js"};
+const LIBS={pdflib:PL+"pdf-lib/1.17.1/pdf-lib.min.js",pdfjs:PL+"pdf.js/3.11.174/pdf.min.js",jszip:PL+"jszip/3.10.1/jszip.min.js",qr:PL+"qrcode-generator/1.4.4/qrcode.min.js",fontkit:"https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js",tess:"https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"};
 const LD={};
 const lib=k=>LD[k]||(LD[k]=new Promise((ok,no)=>{const s=document.createElement("script");s.src=LIBS[k];s.onload=ok;s.onerror=()=>{delete LD[k];no(new Error("প্রয়োজনীয় অংশ লোড হয়নি। ইন্টারনেট চালু আছে কিনা দেখুন।"))};document.head.appendChild(s)}));
 const pjs=async()=>{await lib("pdfjs");pdfjsLib.GlobalWorkerOptions.workerSrc=PL+"pdf.js/3.11.174/pdf.worker.min.js";return pdfjsLib};
@@ -90,6 +90,79 @@ const PG=m=>async v=>{const{PDFDocument,degrees}=PDFLib,f=v.files[0],d=await ld(
 const FP={k:"files",t:"file",l:"PDF ফাইল বাছুন",acc:".pdf,application/pdf"},FPm={...FP,multi:1,l:"PDF ফাইল বাছুন (একাধিক হলে একসাথে)"};
 const SZO=[["a4","A4"],["a3","A3"],["a5","A5"],["letter","Letter"]];
 const meta=clr=>async v=>{const f=v.files[0],d=await ld(f);if(clr){d.setTitle("");d.setAuthor("");d.setSubject("");d.setKeywords([]);d.setProducer("");d.setCreator("")}else{if(v.t)d.setTitle(v.t);if(v.a)d.setAuthor(v.a);if(v.s)d.setSubject(v.s);if(v.k)d.setKeywords(v.k.split(",").map(x=>x.trim()).filter(Boolean))}return[{name:base(f)+(clr?"-clean":"-meta")+".pdf",blob:pb(await d.save())}]};
+// ---------- Edit PDF (লেখা বদলানো) ও PDF OCR
+const CRL=w=>"https://cdn.jsdelivr.net/fontsource/fonts/carlito@5.3.0/latin-"+w+"-normal.woff";
+function mkRuns(items){const out=[];let c=null;
+  for(const it of items){if(typeof it.str!=="string"||it.str==="")continue;
+    const t=it.transform,fs=Math.abs(t[3])||it.height||10,x=t[4],y=t[5];
+    if(Math.abs(t[1])>.01*fs||Math.abs(t[2])>.01*fs){c=null;continue}
+    const gap=c?x-c.ex:0;
+    if(c&&Math.abs(y-c.y)<fs*.2&&Math.abs(fs-c.fs)<fs*.1&&gap>-fs*.4&&gap<fs*.45){
+      if(gap>fs*.12&&!/\s$/.test(c.s)&&!/^\s/.test(it.str))c.s+=" ";
+      c.s+=it.str;c.ex=x+it.width}
+    else c=out[out.push({s:it.str,x,y,fs,ex:x+it.width,fn:it.fontName})-1]}
+  return out}
+function pxSample(x,r){const X=Math.max(0,Math.floor(r[0])),Y=Math.max(0,Math.floor(r[1])),W=Math.min(x.canvas.width-X,Math.ceil(r[2])),H=Math.min(x.canvas.height-Y,Math.ceil(r[3]));
+  if(W<2||H<2)return{bg:[1,1,1],fg:[0,0,0]};
+  const d=x.getImageData(X,Y,W,H).data,m=new Map(),key=i=>(d[i]>>4)<<8|(d[i+1]>>4)<<4|(d[i+2]>>4);
+  for(let i=0;i<d.length;i+=4){const k=key(i);m.set(k,(m.get(k)||0)+1)}
+  let bk=0,bc=0;m.forEach((c,k)=>{if(c>bc){bc=c;bk=k}});
+  let sr=0,sg=0,sb=0,n=0;for(let i=0;i<d.length;i+=4)if(key(i)===bk){sr+=d[i];sg+=d[i+1];sb+=d[i+2];n++}
+  const bg=[sr/n,sg/n,sb/n];let best=-1,fg=[0,0,0];
+  for(let i=0;i<d.length;i+=4){const dd=(d[i]-bg[0])**2+(d[i+1]-bg[1])**2+(d[i+2]-bg[2])**2;if(dd>best){best=dd;fg=[d[i],d[i+1],d[i+2]]}}
+  if(best<3600)fg=[0,0,0];
+  return{bg:bg.map(v=>v/255),fg:fg.map(v=>v/255)}}
+async function editPdf(v){
+  if(!v.find.trim())throw new Error("কোন লেখা খুঁজবেন সেটা লিখুন, যেমন Shihab");
+  if(/[^\x00-\u024F\u2010-\u2022\u20AC]/.test(v.rep))throw new Error("নতুন লেখায় শুধু ইংরেজি অক্ষর, সংখ্যা ও চিহ্ন চলবে");
+  const f=v.files[0],buf=await f.arrayBuffer(),pj=await pjs(),pdoc=await pj.getDocument({data:new Uint8Array(buf.slice(0))}).promise,
+    d=await PDFLib.PDFDocument.load(buf.slice(0),{ignoreEncryption:true,updateMetadata:false}),n=d.getPageCount(),
+    sel=v.pg.trim()?new Set(rng(v.pg,n)):null,
+    re=new RegExp(v.find.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),v.ci==="1"?"gi":"g"),FC={};
+  let total=0,rotSkip=0,fallback=false,fkit=false;
+  const fontFor=async b=>{const k=b?"b":"r";if(FC[k])return FC[k];
+    if(v.font==="carlito"){try{if(!fkit){await lib("fontkit");d.registerFontkit(fontkit);fkit=true}
+      const r=await fetch(CRL(b?700:400));if(!r.ok)throw new Error("font");return FC[k]=await d.embedFont(await r.arrayBuffer(),{subset:false})}catch(e){fallback=true}}
+    return FC[k]=await d.embedFont(b?PDFLib.StandardFonts.HelveticaBold:PDFLib.StandardFonts.Helvetica)};
+  for(let i=0;i<n;i++){if(sel&&!sel.has(i))continue;
+    st("পাতা "+(i+1)+" / "+n+" দেখা হচ্ছে...");
+    const pg=await pdoc.getPage(i+1),tc=await pg.getTextContent(),runs=mkRuns(tc.items),
+      hit=runs.filter(r=>{re.lastIndex=0;return re.test(r.s)});
+    if(!hit.length)continue;
+    if((pg.rotate||0)%360){rotSkip++;continue}
+    const vp=pg.getViewport({scale:2}),[c,x]=cv(vp.width,vp.height);
+    await pg.render({canvasContext:x,viewport:vp}).promise;
+    const page=d.getPage(i),U=pdfjsLib.Util;
+    for(const r of hit){
+      let bold=false;try{const fo=pg.commonObjs.get(r.fn);bold=/bold|black|heavy|demi/i.test(fo&&fo.name||"")||!!(fo&&fo.bold)}catch(e){}
+      const fnt=await fontFor(bold);re.lastIndex=0;
+      const ns=r.s.replace(re,m=>v.ci==="1"&&/[A-Z]/.test(m)&&m===m.toUpperCase()&&m.replace(/[^A-Za-z]/g,"").length>1?v.rep.toUpperCase():v.rep),w=fnt.widthOfTextAtSize(ns,r.fs),X=v.al==="r"?r.ex-w:r.x,
+        p0=U.applyTransform([r.x,r.y-.2*r.fs],vp.transform),p1=U.applyTransform([r.ex,r.y+.8*r.fs],vp.transform),
+        cl=pxSample(x,[Math.min(p0[0],p1[0]),Math.min(p0[1],p1[1]),Math.abs(p0[0]-p1[0]),Math.abs(p0[1]-p1[1])]);
+      page.drawRectangle({x:r.x-.6,y:r.y-.2*r.fs,width:r.ex-r.x+1.2,height:r.fs*.98,color:PDFLib.rgb(...cl.bg),borderWidth:0});
+      page.drawText(ns,{x:X,y:r.y,size:r.fs,font:fnt,color:PDFLib.rgb(...cl.fg)});total++}}
+  if(!total)throw new Error("'"+v.find+"' লেখাটা পাওয়া যায়নি"+(rotSkip?" (ঘোরানো পাতা বাদ গেছে)":"")+"। স্ক্যান করা PDF হলে আগে নিচের 'PDF OCR' টুল চালান, তারপর এখানে আনুন।");
+  let bytes=await d.save();
+  if(v.mode==="s"){st("পাতাগুলো ছবি বানানো হচ্ছে...");const o=await PDFLib.PDFDocument.create();
+    await eachPage(pb(bytes),2.4,async(c,i,v1)=>{const im=await o.embedJpg(await u8(await cb(c,"image/jpeg",.85)));o.addPage([v1.width,v1.height]).drawImage(im,{x:0,y:0,width:v1.width,height:v1.height})});
+    bytes=await o.save()}
+  const res=[{name:base(f)+"-edited.pdf",blob:pb(bytes)}];
+  res.note=total+"টা জায়গায় বদলানো হয়েছে।"+(fallback?" (Calibri-র মতো ফন্ট নামানো যায়নি, তাই Arial-র মতো ফন্ট বসেছে।)":"")+(rotSkip?" "+rotSkip+"টা ঘোরানো পাতা বাদ গেছে।":"")+" ফাইল খুলে নিজে একবার মিলিয়ে নিন।";
+  return res}
+async function ocrGo(v){
+  await lib("tess");
+  const sc=+v.q,out=await PDFLib.PDFDocument.create();let txt="",np=0;
+  st("ভাষার ফাইল নামছে (প্রথমবার একটু সময় লাগে)...");
+  const wk=await Tesseract.createWorker(v.lang);
+  const one=async(c,tw,th)=>{np++;st("পাতা "+np+" পড়া হচ্ছে...");
+    const{data}=await wk.recognize(c,{},{pdf:true}),d=await PDFLib.PDFDocument.load(new Uint8Array(data.pdf)),[p]=await out.copyPages(d,[0]);
+    out.addPage(p);p.scale(tw/p.getWidth(),th/p.getHeight());txt+=(data.text||"")+"\n\n"};
+  try{for(const f of v.files){
+      if(isPdf(f))await eachPage(f,sc,async(c,i,v1)=>{await one(c,v1.width,v1.height)});
+      else{const bm=await createImageBitmap(f),k=Math.min(1,3200/Math.max(bm.width,bm.height)),[c,x]=cv(bm.width*k,bm.height*k);x.drawImage(bm,0,0,c.width,c.height);await one(c,595.28,595.28*c.height/c.width)}}}
+  finally{await wk.terminate()}
+  const nm=base(v.files[0])+(v.files.length>1?"-etc":"");
+  return[{name:nm+"-ocr.pdf",blob:pb(await out.save())},{name:nm+"-text.txt",blob:new Blob([txt],{type:"text/plain;charset=utf-8"})}]}
 // ---------- এখানেই চলা টুল
 const TOOLS={
  merge:{in:[{k:"files",t:"file",l:"PDF বা ছবি বাছুন (ফাইলের নামের ক্রমে জোড়া লাগবে; ক্রম ঠিক করতে নামের আগে 1, 2, 3 দিন)",acc:".pdf,application/pdf,image/*",multi:1},{k:"size",t:"sel",l:"পাতার মাপ",o:[["a4","সব পাতা একই মাপে (A4), ছোট-বড় সমান হবে"],["orig","আসল মাপে"]]}],go:v=>build(v.files,v.size==="orig"?null:"a4","merged.pdf")},
@@ -110,6 +183,8 @@ const TOOLS={
    d.getPages().forEach(p=>{const{width:w,height:h}=p.getSize(),size=Math.min(130,.75*Math.hypot(w,h)/(Math.max(2,T.length)*.6)),tw=ft.widthOfTextAtSize(T,size);p.drawText(T,{x:w/2-tw/2*Math.cos(th)+size/3*Math.sin(th),y:h/2-tw/2*Math.sin(th)-size/3*Math.cos(th),size,font:ft,color:rgb(.5,.5,.5),opacity:+v.op,rotate:degrees(45)})});return[{name:base(f)+"-watermark.pdf",blob:pb(await d.save())}]}},
  meta:{in:[FP,{k:"t",t:"txt",l:"শিরোনাম (Title)"},{k:"a",t:"txt",l:"লেখক (Author)"},{k:"s",t:"txt",l:"বিষয় (Subject)"},{k:"k",t:"txt",l:"কীওয়ার্ড (কমা দিয়ে)"}],go:meta(0)},
  rmmeta:{in:[FP],go:meta(1)},
+ editpdf:{lib:["pdflib","pdfjs"],in:[FP,{k:"find",t:"txt",l:"যে লেখা খুঁজবেন (যেমন Shihab)",ph:"Shihab"},{k:"rep",t:"txt",l:"তার বদলে যা বসবে (যেমন Shahriar)",ph:"Shahriar"},{k:"ci",t:"sel",l:"বড়-ছোট হাতের অক্ষর",o:[["1","গুরুত্ব দেবে না (SHIHAB, Shihab, shihab সব ধরবে; মূল লেখা বড় হাতের হলে নতুনটাও বড় হাতের হবে)"],["0","হুবহু যেভাবে লিখেছেন সেভাবে খুঁজবে"]]},{k:"font",t:"sel",l:"নতুন লেখার ফন্ট",o:[["carlito","Calibri-র মতো (Carlito), Excel থেকে বানানো PDF-এর জন্য"],["helv","Arial-র মতো (Helvetica)"]]},{k:"al",t:"sel",l:"নতুন লেখা কোথা থেকে বসবে",o:[["l","আগের লেখার বাম প্রান্ত থেকে"],["r","আগের লেখার ডান প্রান্ত ধরে (সংখ্যার কলামে)"]]},{k:"pg",t:"txt",l:"কোন পাতায় (ফাঁকা = সব পাতায়)",ph:"1-2"},{k:"mode",t:"sel",l:"ফলাফল কেমন হবে",o:[["n","সাধারণ: লেখা কপি বা খোঁজা যায়। (পুরোনো লেখা শুধু ঢাকা পড়ে, ভেতরে থেকে যায়)"],["s","নিরাপদ: পাতাগুলো ছবি হয়ে যায়, পুরোনো লেখা পুরোপুরি বাদ"]]}],go:editPdf},
+ ocr:{lib:["pdflib","pdfjs"],in:[{k:"files",t:"file",l:"স্ক্যান করা PDF বা ছবি বাছুন (একাধিক হলে একসাথে)",acc:".pdf,application/pdf,image/*",multi:1},{k:"lang",t:"sel",l:"লেখার ভাষা",o:[["eng","English"],["ben","বাংলা"],["eng+ben","English + বাংলা (ধীর)"]]},{k:"q",t:"sel",l:"পড়ার মান",o:[["2","সাধারণ (দ্রুত)"],["3","ভালো (ধীর, ফোনে বেশি মেমরি লাগে)"]]}],go:ocrGo},
  qr:{lib:["qr"],in:[{k:"txt",t:"area",l:"লেখা বা লিংক",ph:"https://jahoss-tracker.web.app"},{k:"px",t:"sel",l:"ছবির সাইজ",o:[["512","মাঝারি"],["1024","বড়"]]}],go:async v=>{if(!v.txt.trim())throw new Error("লেখা বা লিংক দিন");qrcode.stringToBytes=s=>Array.from(new TextEncoder().encode(s));const q=qrcode(0,"M");q.addData(v.txt,"Byte");q.make();const n=q.getModuleCount(),m=4,cs=Math.max(2,Math.floor(+v.px/(n+2*m))),[c,x]=cv(cs*(n+2*m),cs*(n+2*m));x.fillStyle="#000";for(let r=0;r<n;r++)for(let k=0;k<n;k++)if(q.isDark(r,k))x.fillRect((k+m)*cs,(r+m)*cs,cs,cs);return[{name:"qr-code.png",blob:await cb(c,"image/png")}]}}
 };
 // ---------- টুলের তালিকা: [id, নাম, বাংলা বিবরণ, ধরন, আইকন, L|X|A, লিংক, soon]
@@ -135,9 +210,9 @@ const T=[
 ["frompdf","Convert PDF to ...","PDF থেকে Word, Excel, ছবি ইত্যাদিতে রূপান্তর করে।","conv","📤","X","convert-from-pdf"],
 ["w2p","Word to PDF","Word ফাইলকে PDF বানায়।","conv","📘","X","word-to-pdf"],
 ["p2w","PDF to Word","PDF-কে বদলানোর মতো Word ফাইলে রূপান্তর করে।","conv","📝","X","pdf-to-word"],
-["w2j","Word to JPG","Word থেকে ছবি: আগে Word→PDF করুন (এই লিংকে), তারপর এখানকার 'PDF to images' দিয়ে ছবি করুন।","conv","🌄","X","word-to-pdf"],
-["ocr","PDF OCR","স্ক্যান করা PDF বা ছবির লেখা চিনে খোঁজার মতো PDF বানায়।","conv","🔍","X","ocr-pdf",1],
-["editpdf","Edit PDF","PDF-এর ভেতরের লেখা বদলানো (যেমন Shihab মুছে Shahriar), লেখা বা ছবি যোগ করা।","edit","✏️","X","edit-pdf",1],
+["w2j","Word to JPG","Word ফাইল সরাসরি JPG ছবিতে বদলায়। বাইরের সাইট (Online2PDF) খুলবে।","conv","🌄","X","https://online2pdf.com/convert-word-to-jpg"],
+["ocr","PDF OCR","স্ক্যান করা PDF বা ছবির লেখা চিনে খোঁজা যায় এমন PDF আর লেখার ফাইল (TXT) বানায়। ইংরেজি ও বাংলা। ফাইল আপনার ফোনেই থাকে।","conv","🔍","L"],
+["editpdf","Edit PDF","PDF-এর ভেতরের লেখা খুঁজে বদলায় (যেমন Shihab মুছে Shahriar), Calibri-র মতো ফন্টে। ফাইল আপনার ফোনেই থাকে।","edit","✏️","L"],
 ["sign","Sign PDF","PDF-এ সই বসায়।","edit","🖋️","X","sign-pdf",1],
 ["compare","Compare PDFs","দুটো PDF মিলিয়ে কোথায় কী বদলেছে দেখায়।","edit","⚖️","X","compare-pdf"],
 ["flatten","Flatten PDF","ফর্ম আর লেখা স্থায়ী করে, যাতে আর বদলানো না যায়।","edit","📌","X","flatten-pdf"],
@@ -161,9 +236,11 @@ const T=[
 let cat="all";
 $("#ch").innerHTML=CATS.map(c=>`<button class="chip${c[0]==="all"?" on":""}" data-c="${c[0]}">${c[1]}</button>`).join("");
 const url=a=>a.startsWith("http")?a:"https://tools.pdf24.org/en/"+a;
+const isX=t=>t[5]==="X"||t[5]==="A";
 function draw(){const q=$("#q").value.trim().toLowerCase();
-  $("#g").innerHTML=T.filter(t=>(cat==="all"||t[3]===cat)&&(!q||(t[1]+" "+t[2]).toLowerCase().includes(q))).map(([id,en,bn,c,ic,k,a,soon])=>
-  `<div class="c"><div class="ic">${ic}</div><h3>${en}</h3><p>${bn}</p><span class="bd${k==="L"||k==="I"?"":" x"}">${k==="L"||k==="I"?"এখানেই কাজ হয়":"বাইরের সাইট ↗"}</span>${soon?'<span class="bd s">পরে এখানেই আসবে</span>':""}<div class="bs">${k==="L"?`<button class="b" data-o="${id}">খুলুন</button>`:k==="I"?`<button class="b" data-e="1">খুলুন</button>`:k==="X"?`<a class="b o" target="_blank" rel="noopener noreferrer" href="${url(a)}">সাইটে খুলুন ↗</a>`:a.map(([n,u])=>`<a class="b o" target="_blank" rel="noopener noreferrer" href="${u}">${n} ↗</a>`).join("")}</div></div>`).join("")||"<p>কিছু পাওয়া যায়নি।</p>"}
+  const L=T.filter(t=>(cat==="all"||t[3]===cat)&&(!q||(t[1]+" "+t[2]).toLowerCase().includes(q))).sort((a,b)=>isX(a)-isX(b)),fx=L.findIndex(isX);
+  $("#g").innerHTML=L.map(t=>{const[id,en,bn,c,ic,k,a,soon]=t;return(fx>0&&t===L[fx]?'<h3 style="grid-column:1/-1;margin:14px 0 0;color:var(--n);border-bottom:2px solid var(--r);padding-bottom:6px">বাইরের সাইটে হয় এমন টুল</h3>':"")+
+  `<div class="c"><div class="ic">${ic}</div><h3>${en}</h3><p>${bn}</p><span class="bd${k==="L"||k==="I"?"":" x"}">${k==="L"||k==="I"?"এখানেই কাজ হয়":"বাইরের সাইট ↗"}</span>${soon?'<span class="bd s">পরে এখানেই আসবে</span>':""}<div class="bs">${k==="L"?`<button class="b" data-o="${id}">খুলুন</button>`:k==="I"?`<button class="b" data-e="1">খুলুন</button>`:k==="X"?`<a class="b o" target="_blank" rel="noopener noreferrer" href="${url(a)}">সাইটে খুলুন ↗</a>`:a.map(([n,u])=>`<a class="b o" target="_blank" rel="noopener noreferrer" href="${u}">${n} ↗</a>`).join("")}</div></div>`}).join("")||"<p>কিছু পাওয়া যায়নি।</p>"}
 $("#q").oninput=draw;
 $("#ch").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;cat=b.dataset.c;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));draw()};
 $("#g").onclick=e=>{const b=e.target.closest("[data-o]");if(b)openTool(b.dataset.o);if(e.target.closest("[data-e]"))$("#ie").classList.remove("hide")};
@@ -240,7 +317,7 @@ $("#mg").onclick=async()=>{const S=TOOLS[cur],v={};
   document.querySelectorAll("#mf [data-k]").forEach(e=>v[e.dataset.k]=e.type==="file"?[...e.files]:e.value);
   if(S.in.some(f=>f.t==="file"&&!v[f.k].length)){st("আগে ফাইল বাছুন।",1);return}
   st("কাজ চলছে, একটু অপেক্ষা করুন...");$("#mr").innerHTML="";$("#mg").disabled=true;
-  try{await Promise.all((S.lib||["pdflib"]).map(lib));const res=await S.go(v);show(res);st("হয়ে গেছে। নিচের বাটনে চেপে ফাইল নামান।")}
+  try{await Promise.all((S.lib||["pdflib"]).map(lib));const res=await S.go(v);show(res);st("হয়ে গেছে। নিচের বাটনে চেপে ফাইল নামান।"+(res.note?" "+res.note:""))}
   catch(e){st("ত্রুটি: "+(e&&e.message||e),1)}
   $("#mg").disabled=false};
 </script></body></html>
