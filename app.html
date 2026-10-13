@@ -394,7 +394,30 @@ function excel(){
   <div class="bar" style="margin-top:8px"><select id="ik"><option value="entries">ALL ENTRY (পাসপোর্ট এন্ট্রি)</option><option value="returns">RETURNS</option><option value="deposits">DEPOSIT LIST (এক বা একাধিক ফাইল)</option></select><input id="fi" type="file" accept=".xlsx,.xls" multiple><button class="btn" data-act="readF">ফাইল পড়ুন</button></div><div id="ip"></div></div>`:`<div class="note">আপলোডের অনুমতি আপনার নেই।</div>`);
   drawImp();
 }
-const VIEWS={dash,list,rets:rets_,dep,track,excel,adm:admin};
+// ---------- Gemini ছবি এডিট (শুধু অ্যাডমিন ও অনুমতি পাওয়া স্টাফ)
+// নতুন প্রম্পট যোগ করতে GEMS-এ একটা {n,d,p} বসান। n = নাম, d = বিবরণ, p = প্রম্পট।
+const GEMS=[
+ {n:"ছবি সুন্দর করা (পোর্ট্রেট এনহান্স)",d:"চেহারা আর ব্যাকগ্রাউন্ড একই রেখে ছবির আলো, রং আর স্পষ্টতা উন্নত করে। পাসপোর্ট বা ভিসার ছবির জন্য নয়।",p:`Edit the attached photo using the instructions below and return the edited image as the result. Do not just describe it.
+Enhance the portrait while strictly preserving the subject’s identity, with precise facial geometry. Do not alter the expression or face shape. Only subtle refinements are allowed to clean up details, without changing who the person is. Keep exactly the same background as the reference image.
+No replacements, no alterations, no new objects, no composition changes, and no element shifts. The environment must appear identical. The image should be recreated as if it were captured with a Sony A1, using an 85mm f/1.4 lens at f/1.6, ISO 100, shutter speed 1/200, with a shallow cinematic depth of field, perfect focus on the face, and a neutral editorial color profile. This Sony A1 + 85mm f/1.4 setup is mandatory. The final result must clearly convey the premium quality of a Sony A1 full-frame.
+The lighting must exactly match the direction, angle, and emotional mood of the reference photo.
+Elevate the lighting to a cinematic subject-focused style: soft directional light, warm highlights, cool shadows, deeper contrast, increased dynamic range, enhanced micro-contrast, smooth gradation, and zero harsh shadows.
+Maintain a neutral and premium color tone, cinematic contrast curve, natural saturation, real skin texture with no plastic effect, and subtle film grain. No artificial glow, no runway lighting, no excessive smoothing. Render in 4K resolution, 10-bit color, cinematic editorial style, premium sharpness, portrait framing, and fully preserve the original atmosphere of the environment.
+Re-render the subject with greater realism, depth, texture, and lighting, while fully preserving identity and background.
+NEGATIVE INSTRUCTIONS:
+No new background.
+No background alteration.
+No overly dramatic lighting.
+No facial deformation.
+No artificial glow.
+No flat lighting.
+No overly smoothed skin.`}
+];
+async function gemCopy(t){try{await navigator.clipboard.writeText(t)}catch(_){const a=document.createElement("textarea");a.value=t;a.style.cssText="position:fixed;opacity:0";document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(__){}a.remove()}}
+const gemOK=()=>isAdm||(ROLE!=="agent"&&!!PROF&&PROF.gem===true);
+function gemHTML(){return `<div class="sh" style="margin-top:6px"><small>Gemini-তে ছবি এডিট</small></div><div class="note">"প্রম্পট কপি করে Gemini খুলুন" চাপলে প্রম্পট কপি হবে আর Gemini খুলবে। সেখানে ছবি দিন, তারপর প্রম্পট পেস্ট করে পাঠান। ছবি Google-এর Gemini-তে যায়। ছবি বানানোর দৈনিক সীমা আছে, তাই শুধু দরকারে ব্যবহার করুন।</div>`+GEMS.map((x,i)=>`<div class="note" style="display:grid;gap:8px"><b>✨ ${esc(x.n)}</b><span>${esc(x.d)}</span><span class="bar"><a class="btn" href="https://gemini.google.com/app" target="_blank" rel="noopener" data-act="gemgo" data-i="${i}">প্রম্পট কপি করে Gemini খুলুন ↗</a><button class="btn" data-act="gemcp" data-i="${i}">শুধু প্রম্পট কপি</button></span></div>`).join("")}
+function gemView(){V.innerHTML=sheetTitle("Gemini ছবি এডিট")+(gemOK()?gemHTML():`<div class="note">এই সুবিধা ব্যবহারের অনুমতি আপনার নেই। অ্যাডমিনকে জানান।</div>`)}
+const VIEWS={dash,list,rets:rets_,dep,track,excel,adm:admin,gem:gemView};
 const TABS=[["dash","AGENT BALANCE"],["list","ALL ENTRY"],["rets","RETURNS"],["dep","DEPOSIT LIST"],["track","অবস্থা খুঁজুন"],["excel","EXCEL আপলোড/ডাউনলোড"]];
 function render(){if(tab.startsWith("c:")&&!countries().includes(tab.slice(2)))tab="list";nav();if(tab==="tools"){if(V.dataset.t!=="tools"){V.dataset.t="tools";toolbox()}return}V.dataset.t="";if(got.size<4){V.textContent="লোড হচ্ছে...";return}if(tab.startsWith("c:")){curC=tab.slice(2);list()}else{curC=null;VIEWS[tab]()}}
 function nav(){$("nav").innerHTML=tabsList().map(([k,l])=>`<button class="${k===tab?"on":""}" data-act="tab" data-k="${k}">${l}</button>`).join("")+'<a class="tbx" href="tools.html">টুলস বক্স</a>'}
@@ -545,7 +568,7 @@ async function start(){
    isAdm=ROLE==="admin";canW=ROLE!=="agent"&&ROLE!=="viewer";if(ROLE==="viewer")document.body.classList.add("ro");myId=fbUser.uid;
    const ur=fbDb.collection("users").doc(fbUser.uid);
    ur.set(isAdm?{name:PROF.name,role:"admin",email:em,last:Date.now()}:{last:Date.now()},{merge:true}).catch(()=>{});
-   ur.onSnapshot(s=>{const x=s.data();if(!isAdm&&(!x||x.disabled))kickOut("আপনাকে সাইট থেকে বের করে দেওয়া হয়েছে।")},()=>{});
+   ur.onSnapshot(s=>{const x=s.data();if(!isAdm&&(!x||x.disabled))kickOut("আপনাকে সাইট থেকে বের করে দেওয়া হয়েছে।");else if(!isAdm&&x){const g=x.gem===true;if(PROF.gem!==g){PROF.gem=g;nav();if(tab==="gem")render()}}},()=>{});
    logA("LOGIN","");try{localStorage.setItem("jstaff","1")}catch(e){}}
   if(ROLE==="agent"){agentPortal();return}
   nav();
@@ -575,10 +598,10 @@ function admSub(){if(admOn||!fbDb)return;admOn=true;
 const logRows=()=>LOGS.filter(l=>(!LF.u||l.u===LF.u)&&(!LF.k||l.a===LF.k)&&(!LF.d||fT(l.t).startsWith(LF.d)));
 function admin(){
   admSub();const L=logRows(),us=[...new Set(LOGS.map(l=>l.u))],ks=[...new Set(LOGS.map(l=>l.a))];
-  V.innerHTML=sheetTitle("ADMIN (শুধু অ্যাডমিন দেখতে পারবে)")+
+  V.innerHTML=sheetTitle("ADMIN (শুধু অ্যাডমিন দেখতে পারবে)")+gemHTML()+
   `<div class="sh"><small>নতুন ব্যবহারকারী তৈরি করুন</small></div><form id="fu"><input name="n" placeholder="নাম" required><input name="e" placeholder="ইউজারনেম, যেমন nabil (ইংরেজি ছোট অক্ষর)" pattern="[a-z0-9._]{3,}" title="ইংরেজি ছোট অক্ষর, সংখ্যা, . বা _ ; কমপক্ষে ৩ অক্ষর" autocapitalize="none" required><input name="p" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" minlength="6" required><label>পদ<select name="r"><option value="accountant">অ্যাকাউন্টস ম্যানেজার</option><option value="reception">রিসেপশনিস্ট</option><option value="staff">প্রসেসিং স্টাফ</option><option value="viewer">দর্শক (শুধু দেখা)</option><option value="agent">এজেন্ট</option></select></label><label>এজেন্ট হলে কোন এজেন্ট<select name="a">${opts(["",...agents])}</select></label><button>তৈরি করুন</button></form>`+
   `<div class="bar"><button class="btn" data-act="sync">এজেন্টদের তথ্য এখনই আপডেট করুন</button></div>`+
-  table(["নাম","ইউজারনেম","পদ","এজেন্ট","শেষ লগইন","অবস্থা",""],USERS.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(un(u.email))}</td><td>${esc(ROLE_BN[u.role]||u.role)}</td><td>${esc(u.agent||"")}</td><td>${u.last?fT(u.last):""}</td><td>${u.disabled?'<b class="pend">বন্ধ</b>':"চালু"}</td><td>${u.role==="admin"?"":(u.disabled?`<button class="btn sm" data-act="unkick" data-id="${u.id}">আবার চালু</button>`:`<button class="btn red sm" data-act="kick" data-id="${u.id}">বের করুন</button>`)}${u.role==="admin"?"":` <button class="btn red sm" data-act="rmu" data-id="${u.id}">সরিয়ে দিন</button>`}${/@jahoss\.local$/.test(u.email||"")||u.role==="admin"?"":` <button class="btn sm" data-act="rst" data-e="${esc(u.email)}">পাসওয়ার্ড রিসেট মেইল</button>`}</td></tr>`).join(""))+
+  table(["নাম","ইউজারনেম","পদ","এজেন্ট","শেষ লগইন","অবস্থা","Gemini ছবি এডিট",""],USERS.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(un(u.email))}</td><td>${esc(ROLE_BN[u.role]||u.role)}</td><td>${esc(u.agent||"")}</td><td>${u.last?fT(u.last):""}</td><td>${u.disabled?'<b class="pend">বন্ধ</b>':"চালু"}</td><td>${u.role==="admin"?"সবসময় আছে":u.role==="agent"?"":(u.gem===true?`<b>অনুমতি আছে</b> <button class="btn red sm" data-act="gemOff" data-id="${u.id}">বন্ধ করুন</button>`:`<button class="btn sm" data-act="gemOn" data-id="${u.id}">অনুমতি দিন</button>`)}</td><td>${u.role==="admin"?"":(u.disabled?`<button class="btn sm" data-act="unkick" data-id="${u.id}">আবার চালু</button>`:`<button class="btn red sm" data-act="kick" data-id="${u.id}">বের করুন</button>`)}${u.role==="admin"?"":` <button class="btn red sm" data-act="rmu" data-id="${u.id}">সরিয়ে দিন</button>`}${/@jahoss\.local$/.test(u.email||"")||u.role==="admin"?"":` <button class="btn sm" data-act="rst" data-e="${esc(u.email)}">পাসওয়ার্ড রিসেট মেইল</button>`}</td></tr>`).join(""))+
   `<div class="sh" style="margin-top:22px"><small>ACTIVITY LOG (কে কখন কী করেছে)</small></div><div class="bar"><select data-ch="lu">${opts(["",...us],LF.u)}</select><select data-ch="lk">${opts(["",...ks],LF.k)}</select><input data-ch="ld" value="${esc(LF.d)}" placeholder="তারিখ DD/MM/YYYY" style="width:150px"><button class="btn" data-act="lx">Excel</button><button class="btn" data-act="lp">PDF</button><button class="btn" data-act="li">ছবি (PNG)</button></div><div id="lgt">`+
   table(["TIME","USER","ROLE","ACTION","DETAIL"],L.slice(0,200).map(l=>`<tr><td>${fT(l.t)}</td><td>${esc(l.n||"")} ${esc(un(l.u))}</td><td>${esc(l.r)}</td><td>${esc(l.a)}</td><td style="white-space:normal">${esc(l.d)}</td></tr>`).join(""))+
   `</div><div class="note">${fm(L.length)} টি লগ (সর্বশেষ ১০০০টির মধ্যে)। টেবিলে প্রথম ২০০টি দেখানো হয়েছে, Excel-এ সব আসবে।</div>`}
@@ -605,6 +628,12 @@ Object.assign(ACT,{
   lp(){const w=window.open("","_blank");if(!w){say("পপআপ বন্ধ আছে, অনুমতি দিন।");return}w.document.write('<title>Activity Log</title><style>body{font:12px sans-serif}table{border-collapse:collapse;width:100%}td,th{border:1px solid #888;padding:3px 5px;text-align:left}</style><h3>JAHOSS ENTERPRISE LIMITED - Activity Log</h3>'+$("lgt").innerHTML);w.document.close();w.focus();w.print()},
   li(){if(!window.html2canvas){say("ছবি তৈরির টুল লোড হয়নি।");return}html2canvas($("lgt"),{backgroundColor:"#ffffff"}).then(c=>c.toBlob(bl=>{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="activity-log.png";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}))}
 });
+Object.assign(ACT,{
+  async gemgo(b){const g=GEMS[+b.dataset.i];if(!g||!gemOK())return;await gemCopy(g.p);logA("GEMINI PROMPT COPY",g.n)},
+  async gemcp(b){const g=GEMS[+b.dataset.i];if(!g||!gemOK())return;await gemCopy(g.p);const o=b.textContent;b.textContent="কপি হয়েছে ✔";setTimeout(()=>b.textContent=o,2000);logA("GEMINI PROMPT COPY",g.n)},
+  async gemOn(b){if(!isAdm)return;await uRef(b.dataset.id).set({gem:true},{merge:true});logA("GEMINI ALLOW",un(uOf(b.dataset.id).email));say("Gemini ছবি এডিটের অনুমতি দেওয়া হয়েছে।")},
+  async gemOff(b){if(!isAdm)return;await uRef(b.dataset.id).set({gem:false},{merge:true});logA("GEMINI BLOCK",un(uOf(b.dataset.id).email));say("Gemini ছবি এডিটের অনুমতি বন্ধ করা হয়েছে।")}
+});
 // ---- agent data mirror (agents see only their own doc)
 const lastH={};let _sy;
 function syncSoon(){if(got.size<4||!(isAdm||ROLE==="accountant"))return;clearTimeout(_sy);_sy=setTimeout(()=>syncAgents(false),8000)}
@@ -629,7 +658,7 @@ function agentPortal(){
 // ---- excel-style column filters
 const RO=()=>ROLE==="viewer",cn=c=>String(c||"").trim().toUpperCase();let curC=null;
 const countries=()=>[...new Set(ppl.map(p=>cn(p.country)).filter(Boolean))].sort();
-function tabsList(){const t=[["list","ALL ENTRY"],["rets","RETURNS"],...countries().map(c=>["c:"+c,c]),["dep","DEPOSIT LIST"],["dash","TOTAL AGENT"],["track","অবস্থা খুঁজুন"],["tools","টুলস বক্স"]];if(!RO())t.push(["excel","EXCEL আপলোড/ডাউনলোড"]);if(isAdm)t.push(["adm","ADMIN"]);return t}
+function tabsList(){const t=[["list","ALL ENTRY"],["rets","RETURNS"],...countries().map(c=>["c:"+c,c]),["dep","DEPOSIT LIST"],["dash","TOTAL AGENT"],["track","অবস্থা খুঁজুন"],["tools","টুলস বক্স"]];if(!RO())t.push(["excel","EXCEL আপলোড/ডাউনলোড"]);if(isAdm)t.push(["adm","ADMIN"]);else if(gemOK())t.push(["gem","Gemini ছবি এডিট"]);return t}
 const CF={list:{},ret:{}};
 const cfRows=t=>t==="list"?ppl.map((p,i)=>rowOf(p,i)).filter((r,i)=>!curC||cn(ppl[i].country)===curC):rets.map(retRow),cfCols=t=>t==="list"?COLS:RCOLS;
 function cfOK(t,row){const f=CF[t];for(const c in f){if(!f[c].has(String(row[c]==null?"":row[c])))return false}return true}
