@@ -420,7 +420,7 @@ function gemView(){V.innerHTML=sheetTitle("Gemini ছবি এডিট")+(gemO
 const VIEWS={dash,list,rets:rets_,dep,track,excel,adm:admin,gem:gemView};
 const TABS=[["dash","AGENT BALANCE"],["list","ALL ENTRY"],["rets","RETURNS"],["dep","DEPOSIT LIST"],["track","অবস্থা খুঁজুন"],["excel","EXCEL আপলোড/ডাউনলোড"]];
 function render(){if(tab.startsWith("c:")&&!countries().includes(tab.slice(2)))tab="list";nav();if(tab==="tools"){if(V.dataset.t!=="tools"){V.dataset.t="tools";toolbox()}return}V.dataset.t="";if(got.size<4){V.textContent="লোড হচ্ছে...";return}if(tab.startsWith("c:")){curC=tab.slice(2);list()}else{curC=null;VIEWS[tab]()}}
-function nav(){$("nav").innerHTML=tabsList().map(([k,l])=>`<button class="${k===tab?"on":""}" data-act="tab" data-k="${k}">${l}</button>`).join("")+'<a class="tbx" href="tools.html">টুলস বক্স</a>'}
+function nav(){$("nav").innerHTML=tabsList().map(([k,l])=>`<button class="${k===tab?"on":""}" data-act="tab" data-k="${k}">${l}</button>`).join("")+'<a class="tbx" href="tools.html">টুলস বক্স</a><a class="tbx" href="ai.html">AI</a>'}
 const inField=()=>{const a=document.activeElement;return!!a&&V.contains(a)&&/INPUT|SELECT|TEXTAREA/.test(a.tagName)&&a.type!=="button"&&a.type!=="file"};
 function sched(){derive();syncSoon();if(inField()){pending=true;return}render()}
 document.addEventListener("focusout",()=>{if(pending)setTimeout(()=>{if(!inField()){pending=false;render()}},80)});
